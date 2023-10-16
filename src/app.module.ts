@@ -8,6 +8,7 @@ import { StateModule } from './state/state.module';
 import { CityModule } from './city/city.module';
 import { AddressModule } from './address/address.module';
 import { TemplateModule } from './template/template.module';
+import { CampoModule } from './campo/campo.module';
 
  
 @Module({
@@ -32,7 +33,8 @@ import { TemplateModule } from './template/template.module';
     StateModule,
     CityModule,
     AddressModule,
-    TemplateModule
+    TemplateModule,
+    CampoModule
     
   ],
   controllers: [],

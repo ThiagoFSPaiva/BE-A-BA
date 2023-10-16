@@ -47,7 +47,7 @@ export class UserService {
             where: {
                 id: userId
             },
-            relations: ['addresses', 'templates']
+            relations: ['templates.campo', 'templates']
         });
 
         if(!user) {

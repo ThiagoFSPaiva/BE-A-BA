@@ -17,7 +17,7 @@ export class TemplateService {
     async createTemplate(createTemplate: CreateTemplateDto,userId: number): Promise<TemplateEntity> {
         return this.templateRepository.save({
             ...createTemplate,
-            userId
+            userId,
         });
         
     }
@@ -28,6 +28,14 @@ export class TemplateService {
         return this.templateRepository.findOne({
             where: {
                 userId: id
+            },
+        });
+    }
+
+    async getTemplatesAtivos(): Promise<TemplateEntity[]> {
+        return this.templateRepository.find({
+            where: {
+                status: 'ativo'
             },
         });
     }
