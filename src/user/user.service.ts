@@ -62,7 +62,6 @@ export class UserService {
             where: {
                 matricula: matricula
             },
-            relations: ['addresses', 'templates']
         });
 
         if(!user) {
@@ -70,15 +69,6 @@ export class UserService {
         }
 
         return user;
-    }
-
-    async getUserByKCT(user_id:number): Promise<UserEntity> {
-        return this.userRepository.findOne({
-            where: {
-                id: user_id
-            },
-            relations: ['templates']
-        });
     }
 
 }

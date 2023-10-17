@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     TypeOrmModule.forFeature([CampoEntity]),
   ],
   controllers: [CampoController],
-  providers: [CampoService]
+  providers: [CampoService],
+  exports: [CampoService]
 })
 export class CampoModule {}

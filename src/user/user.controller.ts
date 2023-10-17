@@ -38,10 +38,5 @@ export class UserController {
       );
     }
 
-
-    @Get('/:userId/templates')
-    async getUserByKCT(@Param('userId') userId: number): Promise<UserEntity> {
-        return this.userService.getUserByKCT(userId);
-    }
     
 }

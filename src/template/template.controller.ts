@@ -9,18 +9,17 @@ export class TemplateController {
         private readonly templateService: TemplateService
     ) {}
 
-
-    @Post('/:userId')
+    @Post('criar-template/:userId')
     async createTemplate(@Body() createTemplate: CreateTemplateDto, @Param('userId') userId: number) {
         return this.templateService.createTemplate(createTemplate,userId);
     }
 
-    @Get('/:userId')
+    @Get('listar-templates-por-id/:userId')
     async getTemplateByUser(@Param('userId') userId: number) {
         return this.templateService.getTemplateByUser(userId);
     }
 
-    @Get('/ativos')
+    @Get('/listar-templates-ativos')
     async getTemplatesAtivos() : Promise<TemplateEntity[]> {
         return this.templateService.getTemplatesAtivos();
     }
