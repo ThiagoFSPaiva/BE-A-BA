@@ -1,10 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadGatewayException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dtos/createUser.dto'; 
-import { hash } from 'bcrypt';
-
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from './entity/user.entity';
+import { UserType } from './enum/user-type.enum';
+import { createPasswordHashed } from 'src/utils/password';
 
 @Injectable()
 export class UserService {
@@ -16,7 +16,6 @@ export class UserService {
 
     async createUser(createUserDto: CreateUserDto) : Promise<UserEntity> {
         const matricula = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
-        
         const matriculaExiste = await this.userRepository.findOne({
             where: {
                 matricula: matricula.toString()
@@ -26,14 +25,29 @@ export class UserService {
         if(matriculaExiste) {
             return this.createUser(createUserDto);
         }
+        
+        const passwordHashed = await createPasswordHashed(createUserDto.password);
 
-        const saltOrRounds = 10;
-        const senhaCriptografada = await hash(createUserDto.password, saltOrRounds);
+        const existingUserByEmail = await this.findUserByEmail(createUserDto.email).catch(
+            () => undefined,
+        );
+    
+        if (existingUserByEmail) {
+            throw new BadGatewayException('E-mail já registrado no sistema');
+        }
+    
+        const existingUserByCpf = await this.findUserByCpf(createUserDto.cpf).catch(
+            () => undefined,
+        );
+    
+        if (existingUserByCpf) {
+            throw new BadGatewayException('CPF já registrado no sistema');
+        }
 
         return this.userRepository.save({
             ...createUserDto,
-            typeUser: 1,
-            password: senhaCriptografada,
+            typeUser: UserType.Admin,
+            password: passwordHashed,
             matricula: matricula.toString()
         })
     }
@@ -47,7 +61,7 @@ export class UserService {
             where: {
                 id: userId
             },
-            relations: ['templates.campo', 'templates']
+            relations: ['templates.campo', 'templates','addresses']
         });
 
         if(!user) {
@@ -71,5 +85,35 @@ export class UserService {
         return user;
     }
 
+    async findUserByCpf(cpf: string): Promise<UserEntity> {
+        const user = await this.userRepository.findOne({
+            where: {
+            cpf,
+            },
+        });
+
+        if (!user) {
+            throw new NotFoundException(`Email: ${cpf} Not Found`);
+        }
+
+        return user;
+    }
+
+
+    async findUserByEmail(email: string): Promise<UserEntity> {
+        const user = await this.userRepository.findOne({
+            where: {
+            email,
+            },
+        });
+
+        if (!user) {
+            throw new NotFoundException(`Email: ${email} Not Found`);
+        }
+
+        return user;
+    }
+    
+    
 }
 

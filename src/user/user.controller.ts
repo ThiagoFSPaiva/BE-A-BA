@@ -16,7 +16,7 @@ export class UserController {
     async createUser(@Body() createUser: CreateUserDto ) : Promise<UserEntity>{
         return this.userService.createUser(createUser);
     }
-
+    
     @Get()
     async getAllUser(): Promise<ReturnUserDto[]> {
         return (await this.userService.getAllUsers()).map(

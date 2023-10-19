@@ -9,6 +9,9 @@ import { CityModule } from './city/city.module';
 import { AddressModule } from './address/address.module';
 import { TemplateModule } from './template/template.module';
 import { CampoModule } from './campo/campo.module';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './guards/roles.guard';
+import { JwtModule} from '@nestjs/jwt';
 
  
 @Module({
@@ -34,11 +37,17 @@ import { CampoModule } from './campo/campo.module';
     CityModule,
     AddressModule,
     TemplateModule,
-    CampoModule
+    CampoModule,
+    JwtModule
     
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
 
   
 })

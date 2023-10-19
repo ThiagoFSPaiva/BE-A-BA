@@ -16,10 +16,7 @@ export class CampoEntity {
     @Column({name: 'tipo', nullable: true})
     tipo: string;
 
-    @Column({name: 'isNulo', nullable: false, default: false})
-    isNulo: boolean;
-
     @ManyToOne(() => TemplateEntity, template => template.campo)
     @JoinColumn({name:'template_id', referencedColumnName:'id'})
-    template?: TemplateEntity;
+    template: TemplateEntity;
 }

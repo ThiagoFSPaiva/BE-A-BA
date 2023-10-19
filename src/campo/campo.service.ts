@@ -16,7 +16,7 @@ export class CampoService {
         console.log(templateId)
         return this.campoRepository.save(
             {
-                  ...createCampo,
+                ...createCampo,
                 templateId
             }
         );

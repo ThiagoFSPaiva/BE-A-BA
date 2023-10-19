@@ -1,4 +1,4 @@
-import { IsBoolean, IsInt, IsOptional, IsString } from "class-validator";
+import { IsArray, IsBoolean, IsInt, IsOptional, IsString } from "class-validator";
 
 export class CreateCampoDto {
     @IsString()
@@ -8,7 +8,4 @@ export class CreateCampoDto {
     @IsString()
     @IsOptional()
     tipo: string;
-
-    @IsBoolean()
-    isNulo: boolean;
 }

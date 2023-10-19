@@ -1,4 +1,6 @@
-import { IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsArray, IsString, ValidateNested } from "class-validator";
+import { CreateCampoDto } from "src/campo/dtos/createCampo.dto";
 
 export class CreateTemplateDto {
 
@@ -7,5 +9,11 @@ export class CreateTemplateDto {
 
     @IsString()
     extensao: string;
+
+
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => CreateCampoDto)
+    campo: Array<CreateCampoDto>;
 
 }

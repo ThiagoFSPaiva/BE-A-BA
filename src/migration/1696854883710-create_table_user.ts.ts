@@ -5,13 +5,15 @@ export class CreateTableUser1696854883710 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
 
         await queryRunner.query(`
+            CREATE TYPE type_user_enum AS ENUM ('user', 'admin');
+
             CREATE TABLE public.user (
                 id integer NOT NULL,
-                name character varying(255) NOT NULL,
-                email character varying(255) NOT NULL,
-                matricula character varying(6) NOT NULL,
-                cpf character varying(255) NOT NULL,
-                type_user int NOT NULL,
+                name character varying(255) NOT NULL UNIQUE,
+                email character varying(255) NOT NULL UNIQUE,
+                matricula character varying(6) NOT NULL UNIQUE,
+                cpf character varying(255) NOT NULL, 
+                type_user type_user_enum NOT NULL, 
                 password character varying(255) NOT NULL,
                 created_at timestamp without time zone DEFAULT now() NOT NULL,
                 updated_at timestamp without time zone DEFAULT now() NOT NULL,

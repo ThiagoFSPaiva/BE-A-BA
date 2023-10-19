@@ -5,12 +5,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TemplateEntity } from './entity/template.entity';
 import { UserModule } from 'src/user/user.module';
 import { CampoModule } from 'src/campo/campo.module';
+import { CampoEntity } from 'src/campo/entity/campo.entity';
 
 @Module({
   imports: [
     CampoModule,
     UserModule,
-    TypeOrmModule.forFeature([TemplateEntity])
+    TypeOrmModule.forFeature([TemplateEntity,CampoEntity])
   ],
   providers: [TemplateService],
   controllers: [TemplateController]
