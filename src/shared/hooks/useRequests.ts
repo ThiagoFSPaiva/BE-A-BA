@@ -17,8 +17,8 @@ export const useRequests = () => {
     const request = async <T>(
         url: string, 
         method: MethodType, 
+        saveGlobal?: (object: T) => void,
         body?: unknown,
-        saveGlobal?: (Object: T) => void
         ):Promise<T | undefined >  => {
         setLoading(true)
 

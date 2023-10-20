@@ -4,4 +4,4 @@ export enum MethodsEnum {
     DELETE = 'delete',
     PATCH = 'patch',
     PUT = 'put',
-  }
+}

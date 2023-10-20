@@ -13,6 +13,7 @@ import App from './App.tsx'
 import {ThemeProvider } from "@mui/material";
 import { Dark } from './themes';
 import { GlobalProvider } from './shared/hooks/useGlobalContext.tsx';
+import { DataProvider } from './shared/hooks/useDataContext.tsx';
 
 ChartJS.register(
   CategoryScale,
@@ -26,9 +27,11 @@ ChartJS.register(
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <GlobalProvider>
+      <DataProvider>
         <ThemeProvider theme={Dark}>
           <App/>
         </ThemeProvider>
+      </DataProvider>
     </GlobalProvider>
   </React.StrictMode>
 )
