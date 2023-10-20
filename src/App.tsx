@@ -1,6 +1,10 @@
 import { CssBaseline, GlobalStyles} from "@mui/material";
-import { RouterProvider } from "react-router-dom";
-import { router } from "./routes";
+import { RouteObject, RouterProvider, createBrowserRouter, useNavigate } from "react-router-dom";
+import { loginRoutes } from "./modules/login/routes";
+import { templateScreens } from "./modules/template/routes";
+import { firstScreenRoutes } from "./modules/firstScreen/routes";
+import { verifyLoggedIn } from "./shared/functions/connection/auth";
+import { userGlobalContext } from "./shared/hooks/useGlobalContext";
 
 const globalStyles = {
   span: {
@@ -12,8 +16,25 @@ const globalStyles = {
   }
 };
 
+
+
+
 function App() {
 
+  const routes: RouteObject[] = [...loginRoutes];
+  
+const routesLoggedIn: RouteObject[] = [...templateScreens,...firstScreenRoutes].map((route) => ({
+  ...route,
+  loader: verifyLoggedIn
+}));
+
+const router = createBrowserRouter(
+  [
+    ...routes,...routesLoggedIn
+  ]);
+
+  
+  
   return (
     <>
     

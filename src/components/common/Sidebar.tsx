@@ -9,6 +9,7 @@ import { images } from "../../assets";
 import { Animate } from "./Animate";
 import { Link } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
+import { userGlobalContext } from '../../shared/hooks/useGlobalContext';
 
 
 const menus = [
@@ -102,7 +103,7 @@ const MenuItem = (props: MenuItemProps) => {
 export default function ResponsiveDrawer(props: Props) {
   const { window } = props;
   const activeState = location.pathname;
-  
+  const {user} = userGlobalContext();
   const isMobile = useMediaQuery('(max-width: 600px)');
   
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -203,8 +204,8 @@ export default function ResponsiveDrawer(props: Props) {
             sx={{ mr: 2, display: { sm: 'none' } }}
           >
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Responsive drawer
+          <Typography variant="h6" noWrap component="div" sx={{color: "black"}}>
+            {user?.name}
           </Typography>
         </Toolbar>
       </AppBar>

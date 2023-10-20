@@ -3,6 +3,8 @@ import { Header } from "../../../components/common/Header";
 import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useRequests } from "../../../shared/hooks/useRequests";
+import { userGlobalContext } from "../../../shared/hooks/useGlobalContext";
 
 
 interface Template {
@@ -17,21 +19,14 @@ interface Template {
 
 export const Templates = () => {
 
-  const [templates, setTemplates] = useState<Template[]>([]);
+  // const {user} = userGlobalContext();
+  // const [templates, setTemplates] = useState<Template[]>([]);
 
-  useEffect(() => {
-    const fetchTemplates = async () => {
-      try {
-        const response = await axios.get<Template[]>('http://localhost:3000/template/listar-templates-ativos');
-        setTemplates(response.data);
-        console.log(response.data)
-      } catch (error) {
-        console.error('Erro ao buscar os templates:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const template = getRequest('http://localhost:3000/template/listar-templates-por-id');
 
-    fetchTemplates();
-  }, []);
+  //   console.log(template)
+  // }, []);
 
   const theme = useTheme();
 
@@ -40,7 +35,7 @@ export const Templates = () => {
       <Header title="Meus templates" icon={<TableChartOutlinedIcon sx={{color: theme.palette.primary.contrastText ,fontSize: 60}} />}>
       </Header>
 
-      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+      {/* <div style={{ display: 'flex', flexWrap: 'wrap' }}>
       {templates && templates.length > 0 ? (
         templates.map((template) => (
           <div key={template.id} style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '10px', margin: '10px' }}>
@@ -53,7 +48,7 @@ export const Templates = () => {
       ) : (
         <p>Nenhum template encontrado.</p>
       )}
-    </div>
+    </div> */}
     
     
     </>

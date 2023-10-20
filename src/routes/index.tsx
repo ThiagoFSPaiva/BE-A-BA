@@ -1,22 +1,11 @@
 import { RouteObject, createBrowserRouter } from "react-router-dom";
-import AppLayout from "../layout/AppLayout";
-import LoginPage from "../modules/login/screens/LoginPage";
-import MainLayout from "../layout/MainLayout";
-import DashboardPage from "../modules/Dashboard/screens/DashboardPage";
-import Templates from "../modules/template/screens/TemplatesPage";
-import { UploadsPage } from "../modules/Uploads/screens/UploadsPage";
-import { GerenciarTemplatesPage } from "../modules/template/screens/GerenciarTemplatesPage";
-import { UsuariosPage } from "../modules/user/screens/UsuariosPage";
 import { loginRoutes } from "../modules/login/routes";
-import { mainRoutes } from "../modules/Dashboard/routes";
+import { templateScreens } from "../modules/template/routes";
+import { firstScreenRoutes } from "../modules/firstScreen/routes";
 
 
 
-export const router = createBrowserRouter(
-  [
-    ...mainRoutes, 
-    ...loginRoutes,
-  ]);
+
 
 // export const router = createBrowserRouter([
 //   {

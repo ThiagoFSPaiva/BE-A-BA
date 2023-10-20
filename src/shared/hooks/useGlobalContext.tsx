@@ -1,16 +1,20 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
+import { getAuthorizationToken, setAuthorizationToken } from "../functions/connection/auth";
+import { UserType } from "../../modules/login/types/UserType";
+
+
 
 interface GlobalData {
-    accessToken?: string;
+    user?: UserType;
 }
 
 interface GlobalContextProps {
     globalData: GlobalData;
-    setGlobalData: (GlobalData: GlobalData) => void;
-    
+    setGlobalData: (data: GlobalData) => void;
 }
-const GlobalContext =  createContext({} as GlobalContextProps)
 
+
+const GlobalContext =  createContext({} as GlobalContextProps)
 
 interface GlobalProviderProps {
     children: React.ReactNode;
@@ -18,7 +22,7 @@ interface GlobalProviderProps {
 
 export const GlobalProvider = ({children}: GlobalProviderProps) => {
 
-    const [globalData, setGlobalData] = useState<GlobalData>({});
+    const [globalData,setGlobalData] = useState({});
 
     return (
         <GlobalContext.Provider value={{globalData,setGlobalData}}>
@@ -26,20 +30,20 @@ export const GlobalProvider = ({children}: GlobalProviderProps) => {
         </GlobalContext.Provider>
     )
 
-}
+};
 
- export const useGlobalContext = () => {
-    const {globalData, setGlobalData} = useContext(GlobalContext);
+export const userGlobalContext = () => {
+    const {globalData,setGlobalData} = useContext(GlobalContext);
 
-    const setAccessToken  = (accessToken: string) => {
+    const setUser = (user: UserType) => {
         setGlobalData({
             ...globalData,
-            accessToken: accessToken,
+            user,
         })
     }
 
     return {
-        accessToken: globalData.accessToken,
-        setAccessToken
+        user: globalData?.user,
+        setUser,
     }
- }
+}

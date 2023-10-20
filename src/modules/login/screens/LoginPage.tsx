@@ -5,25 +5,21 @@ import { Link } from "react-router-dom";
 import { Animate } from "../../../components/common/Animate";
 import SVG from "../../../assets/images/login-template.svg";
 import { useRequests } from "../../../shared/hooks/useRequests";
-import { useGlobalContext } from "../../../shared/hooks/useGlobalContext";
+import { UserType } from "../types/UserType";
 
 const LoginPage = () => {
-
-  const { accessToken, setAccessToken } = useGlobalContext();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const { postRequest, loading } = useRequests();
+  const { authRequest, loading } = useRequests();
 
 
-  const handleLogin = async (e:any) => {
-    e.preventDefault();
-
-    setAccessToken('testandotoken');
-       
-    postRequest('http://localhost:3000/auth/login',{
+  const handleLogin = async () => {
+ 
+    authRequest({
       matricula: username,
       password: password,
     });
+    
   };
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -180,7 +176,6 @@ const LoginPage = () => {
                     <Typography color="#2e7d32">
                       <Link to="#">
                         Esqueceu a senha?
-                        ({accessToken})
                       </Link>
                     </Typography>
                   </Stack>

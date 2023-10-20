@@ -1,44 +1,86 @@
-import axios from "axios"
 import { useState } from "react"
-
+import ConnectionAPI, { MethodType, connectionAPIGet, connectionAPIPost } from "../functions/connection/connectionAPI"
+import { URL_AUTH } from "../constants/urls"
+import { ERROR_INVALID_PASSOWORD } from "../constants/errosStatus"
+import { useNavigate } from "react-router-dom"
+import { TemplateRoutesEnum } from "../../modules/template/routes"
+import { setAuthorizationToken } from "../functions/connection/auth"
+import { AuthType } from "../../modules/login/types/AuthType"
+import { userGlobalContext } from "./useGlobalContext"
 
 export const useRequests = () => {
-    const [loading,setLoading] = useState(false)
+    const [loading,setLoading] = useState(false);
+    const {setUser} = userGlobalContext();
+    const navigate = useNavigate()
 
-    const getRequest = async (url: string) => {
+
+    const request = async <T>(
+        url: string, 
+        method: MethodType, 
+        body?: unknown,
+        saveGlobal?: (Object: T) => void
+        ):Promise<T | undefined >  => {
         setLoading(true)
 
-        return await axios.post(url)
-        .then(response => {
-            setLoading(false)
-            return response.data
-        }).catch((erro) => {
-            setLoading(false)
-          alert(erro.response.data.message)
-          return undefined
-    
-        })
-    }
+        const returnObject: T | undefined = await ConnectionAPI.connect<T>(url,method,body)
+            .then((response) => {
+                if(saveGlobal) {
+                    saveGlobal(response)
+                }
+                return response;
+            })
+            .catch((erro)=> {
+                console.log(erro.message)
+                return undefined
+            })
 
-    const postRequest = async (url: string,body: any) => {
+           return returnObject;
+
+    };
+
+    const postRequest = async<T> (url: string,body: unknown): Promise<T | undefined> => {
         setLoading(true)
 
-        return await axios.post(url,body)
-            .then(response => {
-                setLoading(false)
-                return response.data
-            }).catch((erro) => {
-                setLoading(false)
-            alert(erro.response.data.message)
-            return undefined
-    
-        })
-
+        const returnData = await connectionAPIPost<T>(url,body)
+            .then((response) => {
+                return response
+            })
+            .catch((erro:Error) => {
+                console.log(erro)
+                alert(erro.message)
+                return undefined
+            })
+        
+        setLoading(false)
+        return returnData
     }
+
+    const authRequest = async (body: unknown): Promise<void> => {
+        setLoading(true)
+
+         await connectionAPIPost<AuthType>(URL_AUTH,body)
+            .then((response) => {
+                setUser(response.user)
+                setAuthorizationToken(response.accessToken)
+                navigate(TemplateRoutesEnum.TEMPLATE)
+                return response
+            })
+            .catch(() => {
+                alert(ERROR_INVALID_PASSOWORD)
+                return undefined
+            })
+        
+        setLoading(false)
+        
+    }
+
+
+
 
     return {
         loading,
-        getRequest,
+        authRequest,
+        request,
         postRequest
     }
 
