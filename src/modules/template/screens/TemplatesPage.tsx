@@ -8,7 +8,6 @@ import { MethodsEnum } from "../../../shared/enums/methods.enum";
 import { TemplateType } from "../types/TemplateType";
 import { URL_TEMPLATE } from "../../../shared/constants/urls";
 
-
 export const Templates = () => {
   const { template, setTemplate } = userDataContext();
   const { request } = useRequests();
@@ -18,7 +17,6 @@ export const Templates = () => {
       .then((response) => {
         console.log(response)
       })
-    console.log(template)
   },[])
 
 
@@ -29,8 +27,6 @@ export const Templates = () => {
       <Header title="Meus templates" icon={<TableChartOutlinedIcon sx={{color: theme.palette.primary.contrastText ,fontSize: 60}} />}>
       </Header>
 
-
-      
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
       {template && template.length > 0 ? (
         template.map((template) => (

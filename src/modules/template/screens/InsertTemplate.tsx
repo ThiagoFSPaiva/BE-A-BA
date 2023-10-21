@@ -50,15 +50,7 @@ export const InsertTemplate = () => {
               },
             ],
           };
-
-          // request('http://localhost:3000/template/criar-template', MethodsEnum.POST, setTemplate)
-          //   .then((response) => {
-          //     console.log(response)
-          //   })
-          //   .catch((error) => {
-          //     console.log(error);
-          //   });
-
+          
           connectionAPIPost('http://localhost:3000/template/criar-template', novoTemplate)
             .then((response) => {
               console.log(response)
