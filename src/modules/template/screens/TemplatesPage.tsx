@@ -9,16 +9,6 @@ import { TemplateType } from "../types/TemplateType";
 import { URL_TEMPLATE } from "../../../shared/constants/urls";
 
 
-interface Template {
-  id: number;
-  name: string;
-  extensao: string;
-  campo: { name: string; tipo: string }[];
-  status: string;
-  createdAt: string;
-}
-
-
 export const Templates = () => {
   const { template, setTemplate } = userDataContext();
   const { request } = useRequests();

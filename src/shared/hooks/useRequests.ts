@@ -15,28 +15,29 @@ export const useRequests = () => {
 
 
     const request = async <T>(
-        url: string, 
-        method: MethodType, 
+        url: string,
+        method: MethodType,
         saveGlobal?: (object: T) => void,
         body?: unknown,
-        ):Promise<T | undefined >  => {
-        setLoading(true)
+      ): Promise<T | undefined> => {
+        setLoading(true);
+    
+        const returnObject: T | undefined = await ConnectionAPI.connect<T>(url, method, body)
+          .then((result) => {
+            if (saveGlobal) {
+              saveGlobal(result);
+            }
 
-        const returnObject: T | undefined = await ConnectionAPI.connect<T>(url,method,body)
-            .then((response) => {
-                if(saveGlobal) {
-                    saveGlobal(response)
-                }
-                return response;
-            })
-            .catch((erro)=> {
-                console.log(erro.message)
-                return undefined
-            })
-
-           return returnObject;
-
-    };
+            return result;
+          })
+          .catch((error: Error) => {
+            return undefined;
+          });
+    
+        setLoading(false);
+    
+        return returnObject;
+      };
 
     const postRequest = async<T> (url: string,body: unknown): Promise<T | undefined> => {
         setLoading(true)

@@ -45,4 +45,4 @@ export const userDataContext = () => {
         template: data?.template || [],
         setTemplate,
     }
-}
+};

@@ -25,7 +25,6 @@ ChartJS.register(
 );
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
     <GlobalProvider>
       <DataProvider>
         <ThemeProvider theme={Dark}>
@@ -33,5 +32,4 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         </ThemeProvider>
       </DataProvider>
     </GlobalProvider>
-  </React.StrictMode>
 )

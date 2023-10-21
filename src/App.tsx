@@ -21,11 +21,13 @@ const globalStyles = {
 
 function App() {
 
+  const {user,setUser} = userGlobalContext();
+
   const routes: RouteObject[] = [...loginRoutes];
   
 const routesLoggedIn: RouteObject[] = [...templateScreens,...firstScreenRoutes].map((route) => ({
   ...route,
-  loader: verifyLoggedIn
+  loader: () => verifyLoggedIn(setUser,user),
 }));
 
 const router = createBrowserRouter(

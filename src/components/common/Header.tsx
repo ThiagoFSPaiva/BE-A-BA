@@ -12,7 +12,8 @@ export const Header = (props: HeaderProps) => {
     const theme = useTheme();
     return(
         <Box sx={{
-            py: 4
+            py: 4,
+            paddingTop: "80px",
         }}>
             <Box sx={{
                 display: "flex",

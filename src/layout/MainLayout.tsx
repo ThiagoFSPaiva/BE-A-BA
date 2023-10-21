@@ -24,7 +24,6 @@ const MainLayout = () => {
             width: { sm: `calc(100% - ${sidebarWidth}px)` }
           }}
         >
-          <Perfil/>
           <Outlet />
         </Box>
       </Box>
