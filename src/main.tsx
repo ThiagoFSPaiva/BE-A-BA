@@ -1,4 +1,3 @@
-import React from 'react'
 import ReactDOM from 'react-dom/client'
 import {
   Chart as ChartJS,
@@ -14,6 +13,8 @@ import {ThemeProvider } from "@mui/material";
 import { Dark } from './themes';
 import { GlobalProvider } from './shared/hooks/useGlobalContext.tsx';
 import { DataProvider } from './shared/hooks/useDataContext.tsx';
+import { Provider } from 'react-redux'
+import { store } from './store/index.ts';
 
 ChartJS.register(
   CategoryScale,
@@ -25,6 +26,8 @@ ChartJS.register(
 );
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
+
+  <Provider store={store}>
     <GlobalProvider>
       <DataProvider>
         <ThemeProvider theme={Dark}>
@@ -32,4 +35,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         </ThemeProvider>
       </DataProvider>
     </GlobalProvider>
+  </Provider>
 )

@@ -34,7 +34,7 @@ export const InsertTemplate = () => {
       const [extensao, setExtensao] = useState<string>('');
       const [campo, setCampo] = useState<string>('');
       const [tipo, setTipo] = useState<string>('');
-      const { request } = useRequests();
+      // const { setTemplate, request } = useRequests();
     
       const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -51,7 +51,7 @@ export const InsertTemplate = () => {
             ],
           };
 
-          // request('http://localhost:3000/template/criar-template', MethodsEnum.POST, novoTemplate)
+          // request('http://localhost:3000/template/criar-template', MethodsEnum.POST, setTemplate)
           //   .then((response) => {
           //     console.log(response)
           //   })
@@ -59,13 +59,13 @@ export const InsertTemplate = () => {
           //     console.log(error);
           //   });
 
-          // connectionAPIPost('http://localhost:3000/template/criar-template', novoTemplate)
-          //   .then((response) => {
-          //     console.log(response)
-          //   })
-          //   .catch((error) => {
-          //     console.log(error);
-          //   });
+          connectionAPIPost('http://localhost:3000/template/criar-template', novoTemplate)
+            .then((response) => {
+              console.log(response)
+            })
+            .catch((error) => {
+              console.log(error);
+            });
         
         
         // Aqui, você pode adicionar a lógica para enviar os dados para a rota

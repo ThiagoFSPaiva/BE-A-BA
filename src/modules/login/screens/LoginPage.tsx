@@ -1,21 +1,32 @@
 import { Box, Button, CircularProgress, Stack, TextField, Typography} from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { images } from "../../../assets";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Animate } from "../../../components/common/Animate";
 import SVG from "../../../assets/images/login-template.svg";
 import { useRequests } from "../../../shared/hooks/useRequests";
-import { UserType } from "../types/UserType";
+import { getAuthorizationToken } from "../../../shared/functions/connection/auth";
+import { FirstScreenRoutesEnum } from "../../firstScreen/routes";
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const { authRequest, loading } = useRequests();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = getAuthorizationToken();
+
+    if (token) {
+      navigate(FirstScreenRoutesEnum.FIRST_SCREEN);
+    }
+    
+  }, []);
 
 
   const handleLogin = async () => {
  
-    authRequest({
+    authRequest(navigate,{
       matricula: username,
       password: password,
     });

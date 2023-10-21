@@ -1,18 +1,17 @@
 import { useState } from "react"
-import ConnectionAPI, { MethodType, connectionAPIGet, connectionAPIPost } from "../functions/connection/connectionAPI"
+import ConnectionAPI, { MethodType, connectionAPIPost } from "../functions/connection/connectionAPI"
 import { URL_AUTH } from "../constants/urls"
 import { ERROR_INVALID_PASSOWORD } from "../constants/errosStatus"
-import { useNavigate } from "react-router-dom"
-import { TemplateRoutesEnum } from "../../modules/template/routes"
 import { setAuthorizationToken } from "../functions/connection/auth"
 import { AuthType } from "../../modules/login/types/AuthType"
 import { userGlobalContext } from "./useGlobalContext"
+import { NavigateFunction } from "react-router-dom"
+import { TemplateRoutesEnum } from "../../modules/template/routes"
+import { FirstScreenRoutesEnum } from "../../modules/firstScreen/routes"
 
 export const useRequests = () => {
     const [loading,setLoading] = useState(false);
     const {setUser} = userGlobalContext();
-    const navigate = useNavigate()
-
 
     const request = async <T>(
         url: string,
@@ -56,14 +55,14 @@ export const useRequests = () => {
         return returnData
     }
 
-    const authRequest = async (body: unknown): Promise<void> => {
+    const authRequest = async (navigate: NavigateFunction ,body: unknown): Promise<void> => {
         setLoading(true)
 
          await connectionAPIPost<AuthType>(URL_AUTH,body)
             .then((response) => {
                 setUser(response.user)
+                navigate(FirstScreenRoutesEnum.FIRST_SCREEN)
                 setAuthorizationToken(response.accessToken)
-                navigate(TemplateRoutesEnum.TEMPLATE)
                 return response
             })
             .catch(() => {
