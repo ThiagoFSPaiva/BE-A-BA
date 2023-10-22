@@ -2,12 +2,12 @@ import { CircularProgress } from "@mui/material"
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { TemplateRoutesEnum } from "../../template/routes"
-import { userGlobalContext } from "../../../shared/hooks/useGlobalContext"
+import { useGlobalReducer } from "../../../store/reducers/globalReducer/useGlobalReducer"
 
 
 export const FirstScreen = () => {
 
-    const { user } = userGlobalContext()
+    const { user } = useGlobalReducer()
     const navigate = useNavigate();
   
     useEffect(() => {

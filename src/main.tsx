@@ -11,8 +11,6 @@ import {
 import App from './App.tsx'
 import {ThemeProvider } from "@mui/material";
 import { Dark } from './themes';
-import { GlobalProvider } from './shared/hooks/useGlobalContext.tsx';
-import { DataProvider } from './shared/hooks/useDataContext.tsx';
 import { Provider } from 'react-redux'
 import { store } from './store/index.ts';
 
@@ -28,12 +26,8 @@ ChartJS.register(
 ReactDOM.createRoot(document.getElementById('root')!).render(
 
   <Provider store={store}>
-    <GlobalProvider>
-      <DataProvider>
         <ThemeProvider theme={Dark}>
           <App/>
         </ThemeProvider>
-      </DataProvider>
-    </GlobalProvider>
   </Provider>
 )

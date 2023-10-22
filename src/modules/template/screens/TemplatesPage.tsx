@@ -7,16 +7,14 @@ import { useRequests } from "../../../shared/hooks/useRequests";
 import { MethodsEnum } from "../../../shared/enums/methods.enum";
 import { TemplateType } from "../types/TemplateType";
 import { URL_TEMPLATE } from "../../../shared/constants/urls";
+import { useTemplateReducer } from "../../../store/reducers/templateReducer/useTemplateReducer";
 
 export const Templates = () => {
-  const { template, setTemplate } = userDataContext();
+  const { template, setTemplate } = useTemplateReducer();
   const { request } = useRequests();
 
   useEffect(() => {
     request<TemplateType[]>(URL_TEMPLATE,MethodsEnum.GET,setTemplate)
-      .then((response) => {
-        console.log(response)
-      })
   },[])
 
 

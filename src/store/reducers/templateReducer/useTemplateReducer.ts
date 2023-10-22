@@ -9,8 +9,8 @@ export const useTemplateReducer = () => {
     const { template } = useAppSelector(state => state.templateReducer);
 
     const setTemplate = (template: TemplateType[]) => {
-        dispatch(setTemplateAction(template)
-    )}
+        dispatch(setTemplateAction(template))
+    }
     
     return {
         template,

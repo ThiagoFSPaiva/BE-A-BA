@@ -14,7 +14,6 @@ export const loginRoutes: RouteObject[] = [
             {
                 path: LoginRoutesEnum.LOGIN,
                 element: <LoginPage />,
-                errorElement: <PageNotFound />
             },
         ]
     }

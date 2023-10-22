@@ -16,12 +16,10 @@ export const templateScreens: RouteObject[] = [
             {
                 path: TemplateRoutesEnum.TEMPLATE,
                 element: <Templates />,
-                errorElement: <PageNotFound />
             },
             {
                 path: TemplateRoutesEnum.TEMPLATE_INSERT,
                 element: <InsertTemplate />,
-                errorElement: <PageNotFound />
             },
         ]
     }

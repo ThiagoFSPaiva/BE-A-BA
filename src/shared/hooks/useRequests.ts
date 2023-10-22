@@ -4,14 +4,14 @@ import { URL_AUTH } from "../constants/urls"
 import { ERROR_INVALID_PASSOWORD } from "../constants/errosStatus"
 import { setAuthorizationToken } from "../functions/connection/auth"
 import { AuthType } from "../../modules/login/types/AuthType"
-import { userGlobalContext } from "./useGlobalContext"
 import { NavigateFunction } from "react-router-dom"
 import { TemplateRoutesEnum } from "../../modules/template/routes"
 import { FirstScreenRoutesEnum } from "../../modules/firstScreen/routes"
+import { useGlobalReducer } from "../../store/reducers/globalReducer/useGlobalReducer"
 
 export const useRequests = () => {
     const [loading,setLoading] = useState(false);
-    const {setUser} = userGlobalContext();
+    const {setUser} = useGlobalReducer();
 
     const request = async <T>(
         url: string,
@@ -61,8 +61,8 @@ export const useRequests = () => {
          await connectionAPIPost<AuthType>(URL_AUTH,body)
             .then((response) => {
                 setUser(response.user)
-                navigate(FirstScreenRoutesEnum.FIRST_SCREEN)
                 setAuthorizationToken(response.accessToken)
+                navigate(FirstScreenRoutesEnum.FIRST_SCREEN)
                 return response
             })
             .catch(() => {

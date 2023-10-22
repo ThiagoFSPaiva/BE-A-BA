@@ -4,11 +4,11 @@ import { loginRoutes } from "./modules/login/routes";
 import { templateScreens } from "./modules/template/routes";
 import { firstScreenRoutes } from "./modules/firstScreen/routes";
 import { getAuthorizationToken, verifyLoggedIn } from "./shared/functions/connection/auth";
-import { userGlobalContext } from "./shared/hooks/useGlobalContext";
 import { useEffect } from "react";
 import { useRequests } from "./shared/hooks/useRequests";
 import { URL_USER } from "./shared/constants/urls";
 import { MethodsEnum } from "./shared/enums/methods.enum";
+import { useGlobalReducer } from "./store/reducers/globalReducer/useGlobalReducer";
 
 const globalStyles = {
   span: {
@@ -19,29 +19,25 @@ const globalStyles = {
     textDecoration: "none"
   }
 };
+const routes: RouteObject[] = [...loginRoutes];
+ 
+ const routesLoggedIn: RouteObject[] = [...templateScreens,...firstScreenRoutes].map((route) => ({
+   ...route,
+   loader: verifyLoggedIn
+ }));
+
+ const router = createBrowserRouter(
+   [
+     ...routes,...routesLoggedIn
+   ]);
 
 function App() {
   
-  const routes: RouteObject[] = [...loginRoutes];
-   
-   const routesLoggedIn: RouteObject[] = [...templateScreens,...firstScreenRoutes].map((route) => ({
-     ...route,
-     loader: verifyLoggedIn
-   }));
-  
-   const router = createBrowserRouter(
-     [
-       ...routes,...routesLoggedIn
-     ]);
      
-  const {setUser} = userGlobalContext();
+  const {setUser} = useGlobalReducer();
   const { request } = useRequests();
 
  
-
-
-
-
   useEffect(() => {
     const token = getAuthorizationToken();
     if(token){
@@ -64,4 +60,5 @@ function App() {
   );
 }
 
-export default App
+export default App;
+

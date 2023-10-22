@@ -8,8 +8,7 @@ import { AppBar, Box, CssBaseline, Drawer, IconButton, List, ListItem, ListItemB
 import { images } from "../../assets";
 import { Animate } from "./Animate";
 import { Link } from "react-router-dom";
-import { useLocation } from 'react-router-dom';
-import { userGlobalContext } from '../../shared/hooks/useGlobalContext';
+import { useGlobalReducer } from '../../store/reducers/globalReducer/useGlobalReducer';
 
 
 const menus = [
@@ -101,9 +100,8 @@ const MenuItem = (props: MenuItemProps) => {
 
 
 export default function ResponsiveDrawer(props: Props) {
-  const { window } = props;
   const activeState = location.pathname;
-  const {user} = userGlobalContext();
+  const {user} = useGlobalReducer();
   const isMobile = useMediaQuery('(max-width: 600px)');
   
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -262,5 +260,4 @@ export default function ResponsiveDrawer(props: Props) {
       
   );
 }
-  
- 
+

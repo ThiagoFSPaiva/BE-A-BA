@@ -14,7 +14,7 @@ export const firstScreenRoutes: RouteObject[] = [
     {
         path: FirstScreenRoutesEnum.FIRST_SCREEN,
         element: <FirstScreen />,
-        errorElement: <PageNotFound />
+        errorElement: <div>Pagina não encontrada</div>
     }
 
 ]

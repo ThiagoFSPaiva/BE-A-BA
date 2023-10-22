@@ -14,16 +14,6 @@ const LoginPage = () => {
   const { authRequest, loading } = useRequests();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = getAuthorizationToken();
-
-    if (token) {
-      navigate(FirstScreenRoutesEnum.FIRST_SCREEN);
-    }
-    
-  }, []);
-
-
   const handleLogin = async () => {
  
     authRequest(navigate,{
