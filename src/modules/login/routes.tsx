@@ -10,6 +10,7 @@ export enum LoginRoutesEnum {
 export const loginRoutes: RouteObject[] = [
     {
         element: <AppLayout />,
+        errorElement: <PageNotFound />,
         children: [
             {
                 path: LoginRoutesEnum.LOGIN,

@@ -15,7 +15,7 @@ export const FirstScreen = () => {
         navigate(TemplateRoutesEnum.TEMPLATE);
       }
       
-    }, []);
+    }, [user]);
 
     return (
       <CircularProgress/>  

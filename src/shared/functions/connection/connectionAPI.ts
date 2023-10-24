@@ -26,7 +26,7 @@ export default class ConnectionAPI {
     }
   }
 
-  static async connect<T>(url: string, method: MethodType, body?: unknown): Promise<T> {
+  static async connect<T>(url: string, method: MethodType, body?: any): Promise<T> {
     return ConnectionAPI.call<T>(url, method, body).catch((error) => {
       if (error.response) {
         switch (error.response.status) {

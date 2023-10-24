@@ -13,7 +13,6 @@ export const Header = (props: HeaderProps) => {
     return(
         <Box sx={{
             py: 4,
-            paddingTop: "80px",
         }}>
             <Box sx={{
                 display: "flex",

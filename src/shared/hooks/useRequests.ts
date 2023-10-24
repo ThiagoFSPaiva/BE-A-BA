@@ -5,7 +5,6 @@ import { ERROR_INVALID_PASSOWORD } from "../constants/errosStatus"
 import { setAuthorizationToken } from "../functions/connection/auth"
 import { AuthType } from "../../modules/login/types/AuthType"
 import { NavigateFunction } from "react-router-dom"
-import { TemplateRoutesEnum } from "../../modules/template/routes"
 import { FirstScreenRoutesEnum } from "../../modules/firstScreen/routes"
 import { useGlobalReducer } from "../../store/reducers/globalReducer/useGlobalReducer"
 
@@ -29,7 +28,7 @@ export const useRequests = () => {
 
             return result;
           })
-          .catch((error: Error) => {
+          .catch(() => {
             return undefined;
           });
     
@@ -73,10 +72,6 @@ export const useRequests = () => {
         setLoading(false)
         
     }
-
-
-
-
     return {
         loading,
         authRequest,

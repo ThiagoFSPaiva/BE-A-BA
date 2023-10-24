@@ -5,14 +5,26 @@ import { Link, useNavigate } from "react-router-dom";
 import { Animate } from "../../../components/common/Animate";
 import SVG from "../../../assets/images/login-template.svg";
 import { useRequests } from "../../../shared/hooks/useRequests";
-import { getAuthorizationToken } from "../../../shared/functions/connection/auth";
 import { FirstScreenRoutesEnum } from "../../firstScreen/routes";
+import { getAuthorizationToken } from "../../../shared/functions/connection/auth";
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const { authRequest, loading } = useRequests();
   const navigate = useNavigate();
+
+
+  useEffect(() => {
+    const token = getAuthorizationToken();
+    if (token) {
+      navigate(FirstScreenRoutesEnum.FIRST_SCREEN);
+    }
+  }, []);
+
+  if (getAuthorizationToken()) {
+    return null;
+  }
 
   const handleLogin = async () => {
  

@@ -2,7 +2,6 @@ import { RouteObject } from "react-router-dom";
 import MainLayout from "../../layout/MainLayout";
 import Templates from "./screens/TemplatesPage";
 import { InsertTemplate } from "./screens/InsertTemplate";
-import { PageNotFound } from "../firstScreen/screens/PageNotFound";
 
 export enum TemplateRoutesEnum {
     TEMPLATE = '/templates',

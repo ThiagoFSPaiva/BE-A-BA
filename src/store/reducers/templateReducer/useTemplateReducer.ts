@@ -1,19 +1,25 @@
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../hooks";
 import { TemplateType } from "../../../modules/template/types/TemplateType";
-import { setTemplateAction } from ".";
+import { setMeusTemplatesAction, setTemplatesAtivosAction } from ".";
+
 
 
 export const useTemplateReducer = () => {
     const dispatch = useDispatch();
-    const { template } = useAppSelector(state => state.templateReducer);
+    const { templateAtivos,meusTemplates } = useAppSelector(state => state.templateReducer);
 
-    const setTemplate = (template: TemplateType[]) => {
-        dispatch(setTemplateAction(template))
+    const setTemplateAtivo = (template: TemplateType[]) => {
+        dispatch(setTemplatesAtivosAction(template))
+    }
+    const setMeusTemplates = (template: TemplateType[]) => {
+        dispatch(setMeusTemplatesAction(template))
     }
     
     return {
-        template,
-        setTemplate
+        templateAtivos,
+        setTemplateAtivo,
+        meusTemplates,
+        setMeusTemplates
     }
 }

@@ -1,8 +1,6 @@
 import { Box } from '@mui/material';
-import React from 'react';
 import Sidebar from '../components/common//Sidebar';
 import { Outlet } from 'react-router-dom';
-import {Perfil} from '../components/common/Perfil';
 
 const sidebarWidth = 350;
 
@@ -21,7 +19,9 @@ const MainLayout = () => {
             paddingLeft: 3,
             paddingRight: 3,
             height: "100vh",
-            width: { sm: `calc(100% - ${sidebarWidth}px)` }
+            width: { sm: `calc(100% - ${sidebarWidth}px)` },
+            marginTop: "100px",
+            
           }}
         >
           <Outlet />

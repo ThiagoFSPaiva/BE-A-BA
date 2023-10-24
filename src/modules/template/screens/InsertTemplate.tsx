@@ -1,107 +1,135 @@
-import { Box, Button, MenuItem, Stack, TextField } from "@mui/material"
-import { useState } from "react";
-import { useRequests } from "../../../shared/hooks/useRequests";
-import axios from "axios";
-import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
-import { MethodsEnum } from "../../../shared/enums/methods.enum";
-
+import React, { useState } from 'react';
+import {
+  Box,
+  Stack,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Button,
+} from '@mui/material';
+import { connectionAPIPost } from '../../../shared/functions/connection/connectionAPI';
 
 interface Extension {
-    value: string;
-    label: string;
-  }
-  
-  interface Type {
-    value: string;
-    label: string;
-  }
+  value: string;
+  label: string;
+}
+
+interface Type {
+  value: string;
+  label: string;
+}
 
 export const InsertTemplate = () => {
+  const extensoes: Extension[] = [
+    { value: 'xlsx', label: 'xlsx' },
+    { value: 'xls', label: 'xls' },
+    { value: 'csv', label: 'csv' },
+  ];
 
-    const extensoes: Extension[] = [
-        { value: 'extensao1', label: 'Extensão 1' },
-        { value: 'extensao2', label: 'Extensão 2' },
-        { value: 'extensao3', label: 'Extensão 3' },
-      ];
-    
-      const tipos: Type[] = [
-        { value: 'tipo1', label: 'Tipo 1' },
-        { value: 'tipo2', label: 'Tipo 2' },
-        { value: 'tipo3', label: 'Tipo 3' },
-      ];
-    
-      const [nome, setNome] = useState<string>('');
-      const [extensao, setExtensao] = useState<string>('');
-      const [campo, setCampo] = useState<string>('');
-      const [tipo, setTipo] = useState<string>('');
-      // const { setTemplate, request } = useRequests();
-    
-      const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+  const tipos: Type[] = [
+    { value: 'texto', label: 'texto' },
+    { value: 'inteiro', label: 'inteiro' },
+    { value: 'decimal', label: 'decimal' },
+    { value: 'data', label: 'data' },
+    { value: 'booleano', label: 'booleano' },
+  ];
 
-  
-        const novoTemplate = {
-            name: nome,
-            extensao: extensao,
-            campo: [
-              {
-                name: campo,
-                tipo: tipo,
-              },
-            ],
-          };
-          
-          connectionAPIPost('http://localhost:3000/template/criar-template', novoTemplate)
-            .then((response) => {
-              console.log(response)
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        
-        
-        // Aqui, você pode adicionar a lógica para enviar os dados para a rota
-        console.log('Dados a serem enviados:', { nome, extensao, campo, tipo });
-      };
-    
-      return (
-        <Box component="form" maxWidth={400} width="100%" onSubmit={handleSubmit}>
-          <Stack spacing={3}>
-            <TextField label="Nome" fullWidth value={nome} onChange={(e) => setNome(e.target.value)} />
-            <TextField
-              fullWidth
-              select
-              label="Select"
-              value={extensao}
-              onChange={(e) => setExtensao(e.target.value)}
-            >
-              {extensoes.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
-            <TextField label="Campo" fullWidth value={campo} onChange={(e) => setCampo(e.target.value)} />
-            <TextField
-              select
-              label="Tipo"
-              fullWidth
-              value={tipo}
-              onChange={(e) => setTipo(e.target.value)}
-            >
-              {tipos.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
-    
-            <Button type="submit" size="large" variant="contained" color="success">
-              Cadastrar
-            </Button>
-          </Stack>
-        </Box>
-      );
-    
+  const [nome, setNome] = useState<string>('');
+  const [extensao, setExtensao] = useState<string>('');
+  const [campos, setCampos] = useState<{ name: string; tipo: string }[]>([{ name: '', tipo: '' }]);
+
+  const handleAddCampo = () => {
+    const novosCampos = [...campos, { name: '', tipo: '' }];
+    setCampos(novosCampos);
+  };
+
+  const handleCampoChange = (index: number, campoKey: keyof typeof campos[0], value: string) => {
+    const novosCampos = [...campos];
+    novosCampos[index] = { ...novosCampos[index], [campoKey]: value };
+    setCampos(novosCampos);
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const novoTemplate = {
+      name: nome,
+      extensao: extensao,
+      campo: campos
     };
-    
+
+
+    connectionAPIPost('http://localhost:3000/template/criar-template', novoTemplate)
+    .then((response) => {
+      console.log(response)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+  };
+
+  return (
+    <Box component="form" maxWidth={400} width="100%" onSubmit={handleSubmit}>
+      <Stack spacing={3}>
+
+        <TextField label="Nome do Template" fullWidth value={nome} onChange={(e) => setNome(e.target.value)} />
+
+        <FormControl sx={{ m: 1, minWidth: 120 }}>
+          <InputLabel id="extensao">Extensao</InputLabel>
+          <Select
+            labelId="extensao"
+            id="select-extensao"
+            value={extensao}
+            label="Extensao"
+            onChange={(e) => setExtensao(e.target.value as string)}
+          >
+            {extensoes.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        {campos.map((campo, index) => (
+          <div key={index}>
+            <TextField
+              label={`Campo ${index + 1}`}
+              fullWidth
+              value={campo.name}
+              onChange={(e) => handleCampoChange(index, 'name', e.target.value)}
+            />
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <InputLabel id={`tipo-${index}`}>Tipo</InputLabel>
+              <Select
+                labelId={`tipo-${index}`}
+                value={campo.tipo}
+                label="Tipo"
+                onChange={(e) => handleCampoChange(index, 'tipo', e.target.value)}
+              >
+                {tipos.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+        ))}
+
+        <Button onClick={handleAddCampo} variant="outlined">
+          +
+        </Button>
+
+        <Button type="submit" size="large" variant="contained" color="success">
+          Cadastrar
+        </Button>
+      </Stack>
+    </Box>
+  );
+};
+
+export default InsertTemplate;

@@ -9,6 +9,7 @@ import { useRequests } from "./shared/hooks/useRequests";
 import { URL_USER } from "./shared/constants/urls";
 import { MethodsEnum } from "./shared/enums/methods.enum";
 import { useGlobalReducer } from "./store/reducers/globalReducer/useGlobalReducer";
+import { mainRoutes } from "./modules/Dashboard/routes";
 
 const globalStyles = {
   span: {
@@ -21,7 +22,7 @@ const globalStyles = {
 };
 const routes: RouteObject[] = [...loginRoutes];
  
- const routesLoggedIn: RouteObject[] = [...templateScreens,...firstScreenRoutes].map((route) => ({
+ const routesLoggedIn: RouteObject[] = [...mainRoutes,...templateScreens,...firstScreenRoutes].map((route) => ({
    ...route,
    loader: verifyLoggedIn
  }));

@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import DashboardCustomizeOutlinedIcon from '@mui/icons-material/DashboardCustomizeOutlined';
 import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
 import BackupTableOutlinedIcon from '@mui/icons-material/BackupTableOutlined';
 import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-import { AppBar, Box, CssBaseline, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Toolbar, Typography, colors,useTheme, useMediaQuery } from '@mui/material';
+import { AppBar, Box, Button, CssBaseline, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Toolbar, Typography, colors, useMediaQuery } from '@mui/material';
 import { images } from "../../assets";
 import { Animate } from "./Animate";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useGlobalReducer } from '../../store/reducers/globalReducer/useGlobalReducer';
-
+import MenuIcon from '@mui/icons-material/Menu';
+import { logout } from '../../shared/functions/connection/auth';
 
 const menus = [
   {
@@ -49,10 +50,6 @@ const menuAdmin = [
 
 
 interface Props {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
   sidebarWidth: number;
   window?: () => Window;
 }
@@ -103,6 +100,7 @@ export default function ResponsiveDrawer(props: Props) {
   const activeState = location.pathname;
   const {user} = useGlobalReducer();
   const isMobile = useMediaQuery('(max-width: 600px)');
+  const navigate = useNavigate();
   
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -137,7 +135,7 @@ export default function ResponsiveDrawer(props: Props) {
           elevation={0}
           square
           sx={{
-            backgroundColor: "black",
+            backgroundColor: "#202125",
             borderTopRightRadius: "10px",
             borderTopLeftRadius: "10px",
             p: 2,
@@ -182,9 +180,6 @@ export default function ResponsiveDrawer(props: Props) {
 
   return (
     <>
-    
-    
-    
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -193,7 +188,7 @@ export default function ResponsiveDrawer(props: Props) {
           ml: { sm: `${props.sidebarWidth}px` },
         }}
       >
-        <Toolbar>
+        <Toolbar style={{ backgroundColor: 'transparent' }}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -201,10 +196,13 @@ export default function ResponsiveDrawer(props: Props) {
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { sm: 'none' } }}
           >
+            <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div" sx={{color: "black"}}>
             {user?.name}
           </Typography>
+
+          <Button variant= "contained" onClick={()=>logout(navigate)}>Deslogar</Button>
         </Toolbar>
       </AppBar>
       <Box
@@ -228,7 +226,7 @@ export default function ResponsiveDrawer(props: Props) {
               boxSizing: "border-box",
               width: 300,
               borderWidth: 0,
-              bgcolor: "black",
+              bgcolor: "#202125",
               "::-webkit-scrollbar": {
                 display: "none"
               }
