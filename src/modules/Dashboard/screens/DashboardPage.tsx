@@ -19,15 +19,10 @@ const DashboardPage = () => {
       <Grid item xs={12}>
         <SummaryGrid />
       </Grid>
-      <Grid item xs={12} md={6} lg={7}>
+      <Grid item xs={12} md={6} lg={7} paddingBottom={2}>
             <Animate delay={2.5}>
               <StatisticData />
             </Animate>
-          </Grid>
-      <Grid item xs={12} md={6} lg={4}>
-        <Animate type="fade" delay={2}>
-          <BookedData/>
-        </Animate>
       </Grid>
     </Grid>
     

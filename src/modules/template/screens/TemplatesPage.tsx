@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardActions, CardContent, Grid, Link, Pagination, Paper, Stack, Tab, Tabs, TextField, Typography, useTheme } from "@mui/material";
+import { Box, Button, Grid, Pagination,Stack, Tab, TextField, Typography, useTheme } from "@mui/material";
 import { Header } from "../../../components/common/Header";
 import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
 import { useEffect, useState } from "react";
@@ -20,7 +20,7 @@ export const Templates = () => {
   const { handleOnClickInsert } = useTemplate();
   const { templateAtivos, setTemplateAtivo } = useTemplateReducer();
   const [value, setValue] = React.useState('1');
-  const { request, postRequest } = useRequests();
+  const { request } = useRequests();
   const [templatesFiltered, setTemplatesFiltered] = useState<TemplateType[]>(templateAtivos);
   const [searchValue, setSearchValue] = useState('');
   const [originalTemplates, setOriginalTemplates] = useState<TemplateType[]>(templateAtivos);
@@ -116,19 +116,36 @@ export const Templates = () => {
               {currentTemplates.map((template, index) => (
                 <Grid item key={index} xs={12} sm={6} md={4}>
                   <MPaper>
-                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
-                      <Typography variant="body1">{template.name}</Typography>
-                      <Typography variant="body1">Extensão: {template.extensao}</Typography>
-                      <Typography variant="body1">Criado em: {template.createdAt}</Typography>
-                      <Typography variant="body1">Status: {template.status}</Typography>
-                      <Typography variant="body1">Número de campos: {template.campo.length}</Typography>
-                      <Button
-                        variant="contained"
-                        onClick={() => handleDownloadTemplate(template)}
-                      >
-                        Download
-                      </Button>
-                    </Box>
+                      <Stack spacing={2} alignItems={"center"}>
+                        <Typography variant="body1">{template.name}</Typography>
+
+                        <Typography variant="body1">Criado em: {template.createdAt}</Typography>
+                        <Typography variant="body1">Status: {template.status}</Typography>
+                        <Stack direction="row" spacing={2}>
+                          <Stack alignItems="center" direction="column" spacing={2}>
+                            <Typography variant="body1">Extensão:</Typography>
+                            <Typography variant="body1">{template.extensao}</Typography>
+                          </Stack>
+                          <Stack alignItems="center" direction="column" spacing={2}>
+                            <Typography variant="body1">Campos:</Typography>
+                            <Typography variant="body1">{template.campo.length}</Typography>
+                          </Stack>
+                        </Stack>
+                        <Stack direction="row" spacing={2}>
+                        <Button
+                          variant="contained"
+                          onClick={() => handleDownloadTemplate(template)}
+                        >
+                          Download
+                        </Button>
+                        <Button
+                          variant="contained"
+                        >
+                          Upload
+                        </Button>
+                        </Stack>
+                      </Stack>
+       
                   </MPaper>
                 </Grid>
               ))}
@@ -136,7 +153,7 @@ export const Templates = () => {
 
             <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
             <Stack spacing={2}>
-              <Pagination count={totalPages} page={currentPage} onChange={handlePageChange} />
+              <Pagination color="secondary" count={totalPages} page={currentPage} onChange={handlePageChange} />
             </Stack>
             </Box>
           </TabPanel>

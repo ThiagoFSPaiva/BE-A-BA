@@ -29,11 +29,12 @@ export const InsertTemplate = () => {
   ];
 
   const tipos: Type[] = [
-    { value: 'texto', label: 'texto' },
-    { value: 'inteiro', label: 'inteiro' },
-    { value: 'decimal', label: 'decimal' },
-    { value: 'data', label: 'data' },
-    { value: 'booleano', label: 'booleano' },
+    { value: 'object', label: 'texto' },
+    { value: 'float64', label: 'decimal' },
+    { value: 'datetime64[ns]', label: 'data' },
+    { value: 'bool', label: 'booleano'},
+    { value: 'int64', label: 'inteiro'}
+
   ];
 
   const [nome, setNome] = useState<string>('');

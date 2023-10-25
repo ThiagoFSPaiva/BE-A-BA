@@ -4,20 +4,12 @@ import { Box, Stack, Typography, useTheme } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
 
 
-const dataFromDatabase = [
-  { mes: '2023-01', extensao: 'xls' },
-  { mes: '2023-01', extensao: 'xlsx' },
-  { mes: '2023-02', extensao: 'csv' },
-  { mes: '2023-02', extensao: 'xls' },
-  { mes: '2023-03', extensao: 'csv' },
-];
-
 const chartData = {
-  labels: ["Semana","Feb", "Mar", "Apr", "May", "Semana"],
+  labels: ["Setembro", "Agosto", "Outubro"],
   datasets: [
     {
       label: "xls",
-      data: [100, 0],
+      data: [10,40,20],
       stack: "stack 0",
       backgroundColor: "#105B35",
       barPercentage: 0.6,
@@ -25,7 +17,7 @@ const chartData = {
     },
     {
       label: "xlsx",
-      data: [0],
+      data: [40,100,80],
       stack: "stack 1",
       backgroundColor: "#43a047",
       barPercentage: 0.6,
@@ -33,7 +25,7 @@ const chartData = {
     },
     {
         label: "csv",
-        data: [0],
+        data: [5,20,20],
         stack: "stack 2",
         backgroundColor: "#14dd1c",
         barPercentage: 0.6,
