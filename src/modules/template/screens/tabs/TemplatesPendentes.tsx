@@ -1,20 +1,12 @@
-import { useEffect } from "react";
-import { MethodsEnum } from "../../../../shared/enums/methods.enum";
-import { useRequests } from "../../../../shared/hooks/useRequests";
-import { useTemplateReducer } from "../../../../store/reducers/templateReducer/useTemplateReducer";
 import { TemplateType } from "../../types/TemplateType";
-import { URL_MYTEMPLATES_PENDENTES } from "../../../../shared/constants/urls";
 import { Box, Grid, Typography } from "@mui/material";
 import MPaper from "../../../../components/common/MPaper";
 
-export const TemplatePendente = () => {
+interface TemplatePendenteProps {
+  meusTemplates: TemplateType[];
+}
 
-    const { meusTemplates, setMeusTemplates } = useTemplateReducer();
-    const { request } = useRequests();
-
-    useEffect(() => {
-            request<TemplateType[]>(URL_MYTEMPLATES_PENDENTES, MethodsEnum.GET, setMeusTemplates);
-    }, []);
+export const TemplatePendente: React.FC<TemplatePendenteProps> = ({ meusTemplates }) => {
 
     return(
         <Grid container spacing={2}>

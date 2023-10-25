@@ -1,7 +1,6 @@
 import { Grid, useTheme } from '@mui/material';
 import SummaryGrid from '../../../components/common/SummaryGrid';
 import {Animate} from '../../../components/common/Animate';
-import BookedData from '../../../components/common/BookedData';
 import { Header } from '../../../components/common/Header';
 import DashboardCustomizeOutlinedIcon from '@mui/icons-material/DashboardCustomizeOutlined';
 import { StatisticData } from '../../../components/common/StatisticData';

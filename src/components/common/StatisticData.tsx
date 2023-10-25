@@ -1,4 +1,3 @@
-import React from 'react';
 import MPaper from './MPaper';
 import { Box, Stack, Typography, useTheme } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
