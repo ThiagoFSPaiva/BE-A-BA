@@ -32,7 +32,7 @@ export class UserController {
       }
 
     @Get('/:userId')
-    async getUserById(@Param('userId') userId: number): Promise<ReturnUserDto> {
+    async getUserById(@Param('userId') userId: string): Promise<ReturnUserDto> {
         return new ReturnUserDto(
           await this.userService.getUserById(userId),
         );
@@ -46,7 +46,7 @@ export class UserController {
     }
 
     @Get()
-    async getInfoUser(@UserId() userId: number): Promise<ReturnUserDto> {
+    async getInfoUser(@UserId() userId: string): Promise<ReturnUserDto> {
       return new ReturnUserDto(
         await this.userService.getUserById(userId),
       );

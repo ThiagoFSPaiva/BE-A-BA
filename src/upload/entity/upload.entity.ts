@@ -8,7 +8,7 @@ export class UploadEntity {
     id: number;
 
     @Column({name: 'user_id', nullable: false})
-    userId: number
+    userId: string
 
     @Column({name: 'template_id', nullable: false})
     templateId: number
@@ -20,7 +20,7 @@ export class UploadEntity {
     path: string;
 
     @CreateDateColumn({name: 'created_at', nullable: false})
-    createdAt: Date;
+    createdAt: Date; 
 
     @ManyToOne(() => UserEntity, user => user.templates)
     @JoinColumn({name:'user_id', referencedColumnName:'id'})

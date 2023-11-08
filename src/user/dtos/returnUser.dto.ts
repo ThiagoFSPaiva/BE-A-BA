@@ -2,7 +2,7 @@ import { UserEntity } from "../entity/user.entity";
 import { UserType } from "../enum/user-type.enum";
 
 export class ReturnUserDto {
-    id: number;
+    id: string;
     name: string;
     email: string;
     cpf: string;

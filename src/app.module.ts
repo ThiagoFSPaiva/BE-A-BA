@@ -2,11 +2,7 @@ import { Module } from '@nestjs/common';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from './user/entity/user.entity';
 import { AuthModule } from './auth/auth.module';
-import { StateModule } from './state/state.module';
-import { CityModule } from './city/city.module';
-import { AddressModule } from './address/address.module';
 import { TemplateModule } from './template/template.module';
 import { CampoModule } from './campo/campo.module';
 import { APP_GUARD } from '@nestjs/core';
@@ -29,13 +25,8 @@ import { JwtModule} from '@nestjs/jwt';
       database: process.env.DB_DATABASE,
       synchronize: true,
       entities: [`${__dirname}/**/*.entity{.ts,.js}`], 
-      migrations: [`${__dirname}/migration/*{.ts,.js}`],
-      migrationsRun: true,
     }),
     AuthModule,
-    StateModule,
-    CityModule,
-    AddressModule,
     TemplateModule,
     CampoModule,
     JwtModule
@@ -48,7 +39,6 @@ import { JwtModule} from '@nestjs/jwt';
       useClass: RolesGuard,
     },
   ],
-
   
 })
 export class AppModule {}

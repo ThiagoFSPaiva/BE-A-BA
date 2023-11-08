@@ -18,13 +18,13 @@ export class TemplateController {
 
     @Post('criar-template')
     @UsePipes(ValidationPipe)
-    async createTemplateWithCampos(@Body() createTemplate: CreateTemplateDto, @UserId() userId: number) {
+    async createTemplateWithCampos(@Body() createTemplate: CreateTemplateDto, @UserId() userId: string) {
         console.log(userId, 'userId');
         return this.templateService.createTemplateWithFields(createTemplate,userId); 
     }
 
     @Get('listar-templates-por-id')
-    async getTemplateByUser(@UserId() userId: number): Promise<ReturnTemplateDto[]> {
+    async getTemplateByUser(@UserId() userId: string): Promise<ReturnTemplateDto[]> {
         return (await this.templateService.getTemplateByUser(userId)).map(template => new ReturnTemplateDto(template));
     }
     

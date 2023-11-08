@@ -1,12 +1,11 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { AddressEntity } from "src/address/entity/address.entity";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { TemplateEntity } from "src/template/entity/template.entity";
 import { UserType } from "../enum/user-type.enum";
 
 @Entity({name:'user'})
 export class UserEntity {
-    @PrimaryGeneratedColumn('rowid')
-    id: number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
  
     @Column({name:'name', nullable: false})
     name: string;
@@ -32,10 +31,8 @@ export class UserEntity {
     @UpdateDateColumn({name:'updated_at', nullable: false})
     updatedAt: Date;
 
-    @OneToMany(() => AddressEntity, address => address.user)
-    addresses?: AddressEntity[];
-
     @OneToMany(() => TemplateEntity, templates => templates.user)
     templates?: TemplateEntity[]; 
 
 }
+

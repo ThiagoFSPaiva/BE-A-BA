@@ -19,13 +19,13 @@ export class TemplateService {
         private readonly campoService: CampoService
     ) {}
 
-    async createTemplate(createTemplate: CreateTemplateDto, userId: number): Promise<TemplateEntity> {
+    async createTemplate(createTemplate: CreateTemplateDto, userId: string): Promise<TemplateEntity> {
         return this.templateRepository.save({
             ...createTemplate,
             userId,
         });  
     }
-    async createTemplateWithFields(createTemplateDto: CreateTemplateDto, userId: number): Promise<TemplateEntity> {
+    async createTemplateWithFields(createTemplateDto: CreateTemplateDto, userId: string): Promise<TemplateEntity> {
         const { campo } = createTemplateDto;
 
         const template = await this.createTemplate(createTemplateDto, userId);
@@ -46,7 +46,7 @@ export class TemplateService {
         return this.templateRepository
           .createQueryBuilder('template')
           .leftJoinAndSelect('template.user', 'user')
-          .where('template.status = :status', { status: StatusType.Ativo })
+          .where('template.status = :status', { status: StatusType.Pendente })
           .select([
             'template.id',
             'template.name',
@@ -61,7 +61,7 @@ export class TemplateService {
 
 
 
-    async getTemplateByUser(id: number): Promise<TemplateEntity[]> {
+    async getTemplateByUser(id: string): Promise<TemplateEntity[]> {
 
         await this.userService.getUserById(id);
     
