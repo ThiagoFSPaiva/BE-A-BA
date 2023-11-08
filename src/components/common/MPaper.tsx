@@ -16,7 +16,8 @@ const MPaper = (props: MPaperProps) => {
         bgcolor: theme.palette.primary.dark,
         p: 3,
         height: props.fullHeight ? "100%" : "unset",
-        border: "1px solid #5a5a5a52"
+        border: "1px solid #5a5a5a52",
+        overflow: 'auto', // Add this line to enable scrolling
       }}
     >
       {props.title && (

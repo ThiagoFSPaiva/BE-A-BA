@@ -32,7 +32,8 @@ export default class ConnectionAPI {
         switch (error.response.status) {
           case 401:
           case 403:
-            throw new Error(ERROR_ACCESS_DENIED);
+          case 404:
+            throw new Error(error.response.data.message || ERROR_ACCESS_DENIED);
           default:
             throw new Error(ERROR_CONNECTION);
         }

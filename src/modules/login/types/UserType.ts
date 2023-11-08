@@ -1,8 +1,11 @@
+import { UserTypeEnum } from "../../../shared/enums/userType.enum";
+
 export interface UserType {
     accessToken: string;
-    id: number;
+    id: string;
     name: string;
     matricula: string;
     email: string;
     cpf: string;
+    typeUser: UserTypeEnum;
 }

@@ -25,6 +25,11 @@ export const Templates = () => {
   const theme = useTheme();
 
 
+  const handleFileUpload = (file: File) => {
+    console.log('Arquivo enviado: ', file);
+  };
+
+
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
@@ -57,12 +62,12 @@ export const Templates = () => {
               value={searchValue}
               onChange={handleSearchChange}
             />
-            <TemplatesAtivos currentTemplates={currentTemplates} />
+            <TemplatesAtivos currentTemplates={currentTemplates} onFileUpload={handleFileUpload} />
 
             <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
-              <Stack spacing={2}>
-                <Pagination color="secondary" count={totalPages} page={currentPage} onChange={handlePageChange} />
-              </Stack>
+             
+                <Pagination color="secondary" siblingCount={0} count={totalPages} page={currentPage} onChange={handlePageChange} />
+             
             </Box>
           </TabPanel>
           <TabPanel value="2">

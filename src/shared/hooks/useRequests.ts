@@ -1,7 +1,6 @@
 import { useState } from "react"
 import ConnectionAPI, { MethodType, connectionAPIPost } from "../functions/connection/connectionAPI"
 import { URL_AUTH } from "../constants/urls"
-import { ERROR_INVALID_PASSOWORD } from "../constants/errosStatus"
 import { setAuthorizationToken } from "../functions/connection/auth"
 import { AuthType } from "../../modules/login/types/AuthType"
 import { NavigateFunction } from "react-router-dom"
@@ -64,8 +63,8 @@ export const useRequests = () => {
                 navigate(FirstScreenRoutesEnum.FIRST_SCREEN)
                 return response
             })
-            .catch(() => {
-                alert(ERROR_INVALID_PASSOWORD)
+            .catch((erro) => {
+                alert(erro.message)
                 return undefined
             })
         

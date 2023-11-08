@@ -15,7 +15,7 @@ export const useTemplate = () => {
     const [templatesFiltered, setTemplatesFiltered] = useState<TemplateType[]>(templateAtivos);
     const [currentPage, setCurrentPage] = useState(1);
     const { request } = useRequests();
-    const itemsPerPage = 6;
+    const itemsPerPage = 9;
   
   
     useEffect(() => {

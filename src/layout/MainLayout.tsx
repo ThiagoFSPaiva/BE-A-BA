@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
-import Sidebar from '../components/common//Sidebar';
 import { Outlet } from 'react-router-dom';
+import Sidebar from '../components/common/sidebar/Sidebar';
 
 const sidebarWidth = 350;
 

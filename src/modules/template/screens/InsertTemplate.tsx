@@ -61,7 +61,6 @@ export const InsertTemplate = () => {
       campo: campos
     };
 
-
     connectionAPIPost('http://localhost:3000/template/criar-template', novoTemplate)
     .then((response) => {
       console.log(response)
@@ -81,6 +80,12 @@ export const InsertTemplate = () => {
         <FormControl sx={{ m: 1, minWidth: 120 }}>
           <InputLabel id="extensao">Extensao</InputLabel>
           <Select
+          sx={{
+            "& .MuiMenuItem-root": {
+              backgroundColor: 'lightgrey', // Defina a cor de fundo do MenuItem aqui
+              color: 'black', // Defina a cor do texto do MenuItem aqui
+            },
+          }}
             labelId="extensao"
             id="select-extensao"
             value={extensao}
@@ -88,7 +93,12 @@ export const InsertTemplate = () => {
             onChange={(e) => setExtensao(e.target.value as string)}
           >
             {extensoes.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
+              <MenuItem             
+                sx={{
+                  backgroundColor: "black"
+                }}
+                key={option.value} 
+                value={option.value}>
                 {option.label}
               </MenuItem>
             ))}

@@ -4,7 +4,8 @@ import LoginPage from "./screens/LoginPage";
 import { PageNotFound } from "../firstScreen/screens/PageNotFound";
 
 export enum LoginRoutesEnum {
-    LOGIN = '/login'
+    LOGIN = '/login',
+    NOT_FOUND = '/not-found'
 }
 
 export const loginRoutes: RouteObject[] = [
@@ -16,6 +17,10 @@ export const loginRoutes: RouteObject[] = [
                 path: LoginRoutesEnum.LOGIN,
                 element: <LoginPage />,
             },
+            {
+                path: '/not-found',
+                element: <PageNotFound/>
+            }
         ]
     }
 

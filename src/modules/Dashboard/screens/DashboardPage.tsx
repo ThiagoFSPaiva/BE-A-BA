@@ -19,7 +19,7 @@ const DashboardPage = () => {
         <SummaryGrid />
       </Grid>
       <Grid item xs={12} md={6} lg={7} paddingBottom={2}>
-            <Animate delay={2.5}>
+            <Animate delay={0.5}>
               <StatisticData />
             </Animate>
       </Grid>
