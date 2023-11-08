@@ -7,6 +7,7 @@ import { UserService } from 'src/user/user.service';
 import { CampoService } from 'src/campo/campo.service';
 import { CreateCampoDto } from 'src/campo/dtos/createCampo.dto';
 import { StatusType } from 'src/user/enum/status-type.enum';
+import { ReturnCampoDto } from 'src/campo/dtos/returnCampo.dto';
 
 @Injectable()
 export class TemplateService {
@@ -23,7 +24,7 @@ export class TemplateService {
             ...createTemplate,
             userId,
         });  
-    }    
+    }
     async createTemplateWithFields(createTemplateDto: CreateTemplateDto, userId: number): Promise<TemplateEntity> {
         const { campo } = createTemplateDto;
 
@@ -41,19 +42,42 @@ export class TemplateService {
         return template;
       }
 
+      async findAllActiveTemplatesWithAuthors(): Promise<TemplateEntity[]> {
+        return this.templateRepository
+          .createQueryBuilder('template')
+          .leftJoinAndSelect('template.user', 'user')
+          .where('template.status = :status', { status: StatusType.Ativo })
+          .select([
+            'template.id',
+            'template.name',
+            'template.extensao',
+            'template.status',
+            'template.createdAt',
+            'template.updatedAt',
+            'user.name',
+          ])
+          .getMany();
+      }
+
+
+
     async getTemplateByUser(id: number): Promise<TemplateEntity[]> {
 
         await this.userService.getUserById(id);
     
         const template = await this.templateRepository.find({
             where: {
-                userId: id
+                userId: id,
+                status: StatusType.Pendente
             },
-            relations: ['campo']
+            relations: ['campo'],
+            order: {
+                createdAt: "DESC"
+            }
         });
 
         if(!template || template.length === 0) {
-            throw new NotFoundException('No template found');
+            throw new NotFoundException('Não foi encontrado Templates para este usuário');
         }
 
         return template;
@@ -64,13 +88,33 @@ export class TemplateService {
             where: {
                 status: StatusType.Ativo
             },
+            relations: ['campo'],
+            order: {
+                createdAt: "DESC"
+            }
         });
 
         if(!ativos || ativos.length === 0) {
-            throw new NotFoundException('No template found');
+            throw new NotFoundException('Não foi encontrado Templates ativos');
         }
-
+     
         return ativos;
+  
     }
 
+  
+    async updateStatus(id: number, status: StatusType): Promise<TemplateEntity> {
+        const template = await this.templateRepository.findOne({
+            where: {
+                id: id
+            }
+        });
+    
+        if (!template) {
+          throw new NotFoundException('Template não encontrado');
+        }
+    
+        template.status = status;
+        return this.templateRepository.save(template);
+      }
 }

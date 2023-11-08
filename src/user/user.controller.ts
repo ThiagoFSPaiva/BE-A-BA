@@ -3,6 +3,9 @@ import { CreateUserDto } from './dtos/createUser.dto';
 import { UserService } from './user.service';
 import { UserEntity } from './entity/user.entity';
 import { ReturnUserDto } from './dtos/returnUser.dto';
+import { UserType } from './enum/user-type.enum';
+import { UserId } from 'src/decorators/user-id.decorator';
+import { Roles } from 'src/decorators/role.decorator';
 
 
 
@@ -11,13 +14,17 @@ export class UserController {
 
     constructor(private readonly userService: UserService) {}
 
+
+    @Roles(UserType.Admin)
     @UsePipes(ValidationPipe)
     @Post()
     async createUser(@Body() createUser: CreateUserDto ) : Promise<UserEntity>{
         return this.userService.createUser(createUser);
     }
     
-    @Get()
+
+    @Roles(UserType.Admin)
+    @Get('/getAllUsers')
     async getAllUser(): Promise<ReturnUserDto[]> {
         return (await this.userService.getAllUsers()).map(
           (userEntity) => new ReturnUserDto(userEntity),
@@ -35,6 +42,13 @@ export class UserController {
     async getUserByMatricula(matricula: string) : Promise<ReturnUserDto> {
       return new ReturnUserDto(
         await this.userService.getUserByMatricula(matricula),
+      );
+    }
+
+    @Get()
+    async getInfoUser(@UserId() userId: number): Promise<ReturnUserDto> {
+      return new ReturnUserDto(
+        await this.userService.getUserById(userId),
       );
     }
 

@@ -46,7 +46,7 @@ export class UserService {
 
         return this.userRepository.save({
             ...createUserDto,
-            typeUser: UserType.Admin,
+            typeUser: UserType.User,
             password: passwordHashed,
             matricula: matricula.toString()
         })
@@ -61,11 +61,10 @@ export class UserService {
             where: {
                 id: userId
             },
-            relations: ['templates.campo', 'templates','addresses']
         });
 
         if(!user) {
-            throw new NotFoundException('User not found');
+            throw new NotFoundException('Usuário não encontrado');
         }
 
         return user;
@@ -79,7 +78,7 @@ export class UserService {
         });
 
         if(!user) {
-            throw new NotFoundException('User not found');
+            throw new NotFoundException('Usuário não encontrado');
         }
 
         return user;
@@ -93,7 +92,7 @@ export class UserService {
         });
 
         if (!user) {
-            throw new NotFoundException(`Email: ${cpf} Not Found`);
+            throw new NotFoundException(`CPF: ${cpf} não encontrado`);
         }
 
         return user;
@@ -108,7 +107,7 @@ export class UserService {
         });
 
         if (!user) {
-            throw new NotFoundException(`Email: ${email} Not Found`);
+            throw new NotFoundException(`Email: ${email} não encontrado`);
         }
 
         return user;

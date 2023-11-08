@@ -1,4 +1,5 @@
 import { CampoEntity } from "src/campo/entity/campo.entity";
+import { UploadEntity } from "src/upload/entity/upload.entity";
 import { UserEntity } from "src/user/entity/user.entity";
 import { StatusType } from "src/user/enum/status-type.enum";
 import { Column, CreateDateColumn, Entity,JoinColumn,ManyToOne,OneToMany,PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
@@ -9,7 +10,7 @@ export class TemplateEntity {
     id: number;
 
     @Column({name: 'user_id', nullable: false})
-    userId: number;
+    userId: number
 
     @Column({name: 'name', nullable: false})
     name: string;
@@ -32,4 +33,7 @@ export class TemplateEntity {
 
     @OneToMany(() => CampoEntity, campo => campo.template)
     campo: CampoEntity[];
+
+    @OneToMany(() => UploadEntity, upload => upload.template)
+    uploads: UploadEntity[];
 }

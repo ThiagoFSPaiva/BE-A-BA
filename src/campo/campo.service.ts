@@ -13,7 +13,7 @@ export class CampoService {
     ) {}
 
     async createCampo(createCampo: CreateCampoDto, templateId: number): Promise<CampoEntity> {
-        console.log(templateId)
+       
         return this.campoRepository.save(
             {
                 ...createCampo,
@@ -21,7 +21,5 @@ export class CampoService {
             }
         );
     }
-
-    
 
 }

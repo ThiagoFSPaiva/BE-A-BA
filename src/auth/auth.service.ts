@@ -2,11 +2,11 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserEntity } from 'src/user/entity/user.entity';
 import { LoginDto } from './dtos/login.dto';
 import { UserService } from 'src/user/user.service';
-import { compare } from 'bcrypt';
 import { ReturnUserDto } from 'src/user/dtos/returnUser.dto';
 import { LoginPayload } from './dtos/loginPayload.dto';
 import { ReturnLogin } from './dtos/returnLogin.dto';
 import { JwtService } from '@nestjs/jwt';
+import { validatePassword } from 'src/utils/password';
 
 @Injectable()
 export class AuthService {
@@ -23,8 +23,11 @@ export class AuthService {
         .getUserByMatricula(loginDto.matricula)
         .catch(() => undefined);
 
-        const isMatch = await compare(loginDto.password, user?.password || '');
-
+        const isMatch = await validatePassword(
+            loginDto.password,
+            user?.password || '',
+          );
+      
         if(!user || !isMatch) {
             throw new NotFoundException('Matricula ou senha incorreta');
         }
