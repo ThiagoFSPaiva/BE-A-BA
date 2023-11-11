@@ -1,8 +1,8 @@
-import { Box, Button, Pagination, Stack, Tab, TextField, useTheme } from "@mui/material";
+import { Box, Button, Pagination, Tab, TextField, useTheme } from "@mui/material";
 import { Header } from "../../../components/common/Header";
 import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
 import React from "react";
-import { useTemplate } from "../hooks/useTemplate";
+import { useTemplate } from "../hooks/states/useTemplate";
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
@@ -36,8 +36,11 @@ export const Templates = () => {
 
   return (
     <>
-      <Box sx={{ width: '100%', typography: 'body1' }}>
-        <Header title="Meus templates" icon={<TableChartOutlinedIcon sx={{ color: theme.palette.primary.contrastText, fontSize: 60 }} />}>
+        <Header 
+            title="Meus templates"
+            description="Visualize e gerencie todos templates, podendo ativar ou desativar cada um."
+            icon={<TableChartOutlinedIcon sx={{ color: theme.palette.primary.contrastText, fontSize: 60 }}/>
+           }>
           <Button variant="contained" onClick={handleOnClickInsert}>Cadastrar</Button>
         </Header>
 
@@ -55,7 +58,7 @@ export const Templates = () => {
               <Tab label="Pendentes" value="2" />
             </TabList>
           </Box>
-          <TabPanel value="1">
+          <TabPanel sx={{p: 0, py: 2}} value="1">
             <TextField
               label="Search Templates"
               variant="outlined"
@@ -65,16 +68,14 @@ export const Templates = () => {
             <TemplatesAtivos currentTemplates={currentTemplates} onFileUpload={handleFileUpload} />
 
             <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
-             
                 <Pagination color="secondary" siblingCount={0} count={totalPages} page={currentPage} onChange={handlePageChange} />
-             
             </Box>
           </TabPanel>
           <TabPanel value="2">
             <TemplatePendente meusTemplates={meusTemplates} />
           </TabPanel>
         </TabContext>
-      </Box>
+
     </>
   );
 }

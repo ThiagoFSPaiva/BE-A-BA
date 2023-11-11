@@ -6,6 +6,7 @@ interface HeaderProps {
     title: string;
     icon: ReactNode; // Defina o tipo para a prop "icon" como ReactNode
     children?: ReactNode; // Torne a propriedade "children" opcional
+    description?: string;
 }
 
 export const Header = (props: HeaderProps) => {
@@ -35,7 +36,7 @@ export const Header = (props: HeaderProps) => {
                             {props.title}
                         </Typography>
                         <Typography variant="h2" color={colors.green[600]} fontSize="0.8rem" fontWeight={500}>
-                            Visualize e gerencie todos templates, podendo ativar ou desativar cada um.
+                            {props.description}
                         </Typography>
                     </Box>
                 </Box>

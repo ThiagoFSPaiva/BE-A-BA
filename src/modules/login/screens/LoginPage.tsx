@@ -29,7 +29,7 @@ const LoginPage = () => {
   const handleLogin = async () => {
  
     authRequest(navigate,{
-      matricula: username,
+      identifier: username,
       password: password,
     });
     

@@ -16,12 +16,12 @@ const MainLayout = () => {
           component="main"
           sx={{
             flexGrow: 1,
-            paddingLeft: 3,
-            paddingRight: 3,
-            height: "100vh",
+            px: 3,
+            paddingBottom: 3,
+            maxWidth: "1200px",
+            margin: "auto",
             width: { sm: `calc(100% - ${sidebarWidth}px)` },
             marginTop: "100px",
-            
           }}
         >
           <Outlet />

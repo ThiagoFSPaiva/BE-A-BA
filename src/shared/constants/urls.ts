@@ -4,3 +4,5 @@ export const URL_TEMPLATE = 'http://localhost:3000/template/listar-templates-ati
 export const URL_MYTEMPLATES_PENDENTES = 'http://localhost:3000/template/listar-templates-por-id';
 export const URL_TEMPLATE_DOWNLOAD = 'http://localhost:5000/download_excel/';
 export const URL_UPLOAD_DOWNLOAD = 'http://localhost:5000/download'
+export const URL_UPLOAD_GET_ALL = 'http://localhost:5000/getAllUploads'
+export const URL_UPLOAD_GET_ALL_USERS = 'http://localhost:3000/user/getAllUsers'

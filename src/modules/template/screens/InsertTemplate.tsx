@@ -8,138 +8,125 @@ import {
   Select,
   MenuItem,
   Button,
+  Grid,
 } from '@mui/material';
 import { connectionAPIPost } from '../../../shared/functions/connection/connectionAPI';
+import { useTemplateInsert } from '../hooks/useInsertTemplate';
+import MPaper from '../../../components/common/MPaper';
 
-interface Extension {
-  value: string;
-  label: string;
-}
 
-interface Type {
-  value: string;
-  label: string;
-}
 
 export const InsertTemplate = () => {
-  const extensoes: Extension[] = [
-    { value: 'xlsx', label: 'xlsx' },
-    { value: 'xls', label: 'xls' },
-    { value: 'csv', label: 'csv' },
-  ];
 
-  const tipos: Type[] = [
+  const tipos = [
     { value: 'object', label: 'texto' },
     { value: 'float64', label: 'decimal' },
     { value: 'datetime64[ns]', label: 'data' },
-    { value: 'bool', label: 'booleano'},
-    { value: 'int64', label: 'inteiro'}
+    { value: 'bool', label: 'booleano' },
+    { value: 'int64', label: 'inteiro' }
 
   ];
-
-  const [nome, setNome] = useState<string>('');
-  const [extensao, setExtensao] = useState<string>('');
-  const [campos, setCampos] = useState<{ name: string; tipo: string }[]>([{ name: '', tipo: '' }]);
-
-  const handleAddCampo = () => {
-    const novosCampos = [...campos, { name: '', tipo: '' }];
-    setCampos(novosCampos);
-  };
-
-  const handleCampoChange = (index: number, campoKey: keyof typeof campos[0], value: string) => {
-    const novosCampos = [...campos];
-    novosCampos[index] = { ...novosCampos[index], [campoKey]: value };
-    setCampos(novosCampos);
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const novoTemplate = {
-      name: nome,
-      extensao: extensao,
-      campo: campos
-    };
-
-    connectionAPIPost('http://localhost:3000/template/criar-template', novoTemplate)
-    .then((response) => {
-      console.log(response)
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-
-  };
+  const {
+    template,
+    disabledButton,
+    handleAddCampo,
+    handleInsertTemplate,
+    handleOnChangeInput
+  } = useTemplateInsert();
 
   return (
-    <Box component="form" maxWidth={400} width="100%" onSubmit={handleSubmit}>
-      <Stack spacing={3}>
 
-        <TextField label="Nome do Template" fullWidth value={nome} onChange={(e) => setNome(e.target.value)} />
-
-        <FormControl sx={{ m: 1, minWidth: 120 }}>
-          <InputLabel id="extensao">Extensao</InputLabel>
-          <Select
-          sx={{
-            "& .MuiMenuItem-root": {
-              backgroundColor: 'lightgrey', // Defina a cor de fundo do MenuItem aqui
-              color: 'black', // Defina a cor do texto do MenuItem aqui
-            },
-          }}
-            labelId="extensao"
-            id="select-extensao"
-            value={extensao}
-            label="Extensao"
-            onChange={(e) => setExtensao(e.target.value as string)}
-          >
-            {extensoes.map((option) => (
-              <MenuItem             
-                sx={{
-                  backgroundColor: "black"
-                }}
-                key={option.value} 
-                value={option.value}>
-                {option.label}
-              </MenuItem>
+    <>
+      <MPaper>
+        <Box
+          component="form"
+          noValidate
+          autoComplete="off"
+        >
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <FormControl fullWidth>
+                <TextField
+                  value={template.name}
+                  onChange={(event) => handleOnChangeInput(event, 'name')}
+                  label="Nome"
+                  variant="filled"
+                />
+              </FormControl>
+            </Grid>
+            <Grid item xs={6}>
+              <FormControl fullWidth variant="filled">
+                <InputLabel>Extensao</InputLabel>
+                <Select
+                  value={template.extensao}
+                  onChange={(event) => handleOnChangeInput(event, 'extensao')}
+                  id="demo-simple-select-filled"
+                >
+                  <MenuItem value="xls">xls</MenuItem>
+                  <MenuItem value="xlsx">xlsx</MenuItem>
+                  <MenuItem value="csv">csv</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            {template.campo.map((campo, index) => (
+              <Grid key={index} item xs={6}>
+                <FormControl fullWidth>
+                  <TextField
+                    value={campo.name}
+                    onChange={(event) => handleOnChangeInput(event, 'campo', index)}
+                    label="Nome do Campo"
+                    variant="filled"
+                    required
+                  />
+                </FormControl>
+                <FormControl fullWidth variant="filled">
+                  <InputLabel>Tipo</InputLabel>
+                  <Select
+                    value={campo.tipo}
+                    onChange={(event) => handleOnChangeInput(event, 'tipo', index)}
+                  >
+                    {tipos.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
             ))}
-          </Select>
-        </FormControl>
+            <Grid item xs={12}>
+              <Button onClick={handleAddCampo} variant="contained" color="primary">
+                +
+              </Button>
+            </Grid>
 
-        {campos.map((campo, index) => (
-          <div key={index}>
-            <TextField
-              label={`Campo ${index + 1}`}
-              fullWidth
-              value={campo.name}
-              onChange={(e) => handleCampoChange(index, 'name', e.target.value)}
-            />
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
-              <InputLabel id={`tipo-${index}`}>Tipo</InputLabel>
-              <Select
-                labelId={`tipo-${index}`}
-                value={campo.tipo}
-                label="Tipo"
-                onChange={(e) => handleCampoChange(index, 'tipo', e.target.value)}
-              >
-                {tipos.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </div>
-        ))}
 
-        <Button onClick={handleAddCampo} variant="outlined">
-          +
-        </Button>
+          </Grid>
 
-        <Button type="submit" size="large" variant="contained" color="success">
-          Cadastrar
-        </Button>
-      </Stack>
-    </Box>
+
+
+        </Box>
+        <Box sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          paddingTop: 3,
+          gap: 2
+        }}>
+
+          <Button variant="contained" color="primary">
+            Cancelar
+          </Button>
+
+          <Button disabled={disabledButton} onClick={handleInsertTemplate} variant="contained" color="primary">
+            Enviar
+          </Button>
+
+
+
+        </Box>
+      </MPaper>
+    </>
+
   );
 };
 

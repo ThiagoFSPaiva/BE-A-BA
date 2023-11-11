@@ -88,15 +88,21 @@ export const TemplatesAtivos: React.FC<TemplateAtivosProps> = ({ currentTemplate
       const handleDownloadTemplate = (templateId: number) => {
         const formData = { templateId: templateId };
         axios.post(URL_TEMPLATE_DOWNLOAD, formData, { responseType: 'blob' })
+
             .then((response) => {
+
+                const contentDisposition = response.headers['content-disposition'];
+                const match = contentDisposition && contentDisposition.match(/filename="(.+)"$/);
+            
+                // Se houver correspondência, obtenha o nome do arquivo
+                const fileName = match ? match[1] : 'download';
+
+                console.log(response.data.templateName)
                 const mimeType = response.headers['content-type'];
                 const url = window.URL.createObjectURL(new Blob([response.data],{ type: mimeType }));
-                const disposition = response.headers['content-disposition'];
-                const fileName = disposition?.split(';')[1].split('filename=')[1];
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', fileName || 'template');
-                document.body.appendChild(link);
+                link.download = fileName;
                 link.click();
                 link.remove();
             })

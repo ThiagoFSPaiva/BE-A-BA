@@ -1,11 +1,11 @@
-import { useNavigate } from "react-router-dom";
-import { TemplateRoutesEnum } from "../routes";
-import { useRequests } from "../../../shared/hooks/useRequests";
-import { TemplateType } from "../types/TemplateType";
 import { useEffect, useState } from "react";
-import { useTemplateReducer } from "../../../store/reducers/templateReducer/useTemplateReducer";
-import { URL_MYTEMPLATES_PENDENTES, URL_TEMPLATE } from "../../../shared/constants/urls";
-import { MethodsEnum } from "../../../shared/enums/methods.enum";
+import { useNavigate } from "react-router-dom";
+import { TemplateType } from "../../types/TemplateType";
+import { useRequests } from "../../../../shared/hooks/useRequests";
+import { URL_MYTEMPLATES_PENDENTES, URL_TEMPLATE } from "../../../../shared/constants/urls";
+import { MethodsEnum } from "../../../../shared/enums/methods.enum";
+import { useTemplateReducer } from "../../../../store/reducers/templateReducer/useTemplateReducer";
+import { TemplateRoutesEnum } from "../../routes";
 
 export const useTemplate = () => {
 
@@ -48,12 +48,11 @@ export const useTemplate = () => {
     const lastIndex = currentPage * itemsPerPage;
     const firstIndex = lastIndex - itemsPerPage;
     const currentTemplates = templatesFiltered.slice(firstIndex, lastIndex);
-  
     const totalPages = Math.ceil(templatesFiltered.length / itemsPerPage);
 
     const handleOnClickInsert = () => {
         navigate(TemplateRoutesEnum.TEMPLATE_INSERT);
-      };
+    };
     
 
 

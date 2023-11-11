@@ -7,7 +7,7 @@ interface MPaperProps {
   children: ReactNode;
 }
 
-const MPaper = (props: MPaperProps) => {
+const TPaper = (props: MPaperProps) => {
   const theme = useTheme();
   return (
     <Paper
@@ -16,7 +16,7 @@ const MPaper = (props: MPaperProps) => {
         bgcolor: theme.palette.primary.dark,
         height: props.fullHeight ? "100%" : "unset",
         border: "1px solid #5a5a5a52",
-        p: 3
+        overflow: "auto"
       }}
     >
       {props.title && (
@@ -31,4 +31,4 @@ const MPaper = (props: MPaperProps) => {
   );
 };
 
-export default MPaper;
+export default TPaper;

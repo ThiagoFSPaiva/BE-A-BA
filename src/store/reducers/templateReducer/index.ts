@@ -1,13 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { TemplateType } from '../../../modules/template/types/TemplateType'
 
-// Define a type for the slice state
 interface TemplateState {
   templateAtivos: TemplateType[];
   meusTemplates: TemplateType[];
 }
 
-// Define the initial state using that type
 const initialState: TemplateState = {
   templateAtivos: [],
   meusTemplates: []

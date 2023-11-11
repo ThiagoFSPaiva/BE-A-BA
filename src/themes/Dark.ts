@@ -2,6 +2,16 @@ import { createTheme } from "@mui/material";
 
 export const Dark = createTheme({
 
+
+    components: {
+        MuiSelect: {
+            styleOverrides: {
+              icon: {
+                color: '#43a047', // Defina a cor desejada para a seta
+              },
+            },
+        }
+    },
     palette: {
         primary: {
             main: "#757575",
@@ -15,6 +25,7 @@ export const Dark = createTheme({
             main: "#43a047"
         },
         background: {
+            paper: "#35373f",
             default: "#16171B"
         },
         text: {
@@ -23,7 +34,7 @@ export const Dark = createTheme({
         },
     },
     shape: {
-        borderRadius: 8
+        borderRadius: 5
     },
 
 });
