@@ -7,6 +7,7 @@ import { LoginPayload } from './dtos/loginPayload.dto';
 import { ReturnLogin } from './dtos/returnLogin.dto';
 import { JwtService } from '@nestjs/jwt';
 import { validatePassword } from 'src/utils/password';
+import { isEmail } from 'class-validator';
 
 @Injectable()
 export class AuthService {
@@ -15,27 +16,32 @@ export class AuthService {
     constructor(
         private readonly userService: UserService,
         private readonly jwtService: JwtService
-    ) {}
+    ) { }
 
 
     async login(loginDto: LoginDto): Promise<ReturnLogin> {
-        const user: UserEntity | undefined = await this.userService
-        .getUserByMatricula(loginDto.matricula)
-        .catch(() => undefined);
+        let user: UserEntity | undefined;
+        const identifier = loginDto.identifier.toLowerCase();
+        
+        if (isEmail(identifier)) {
+            user = await this.userService.findUserByEmail(identifier).catch(() => undefined);
+        } else {
+            user = await this.userService.getUserByMatricula(identifier).catch(() => undefined);
+        }
 
         const isMatch = await validatePassword(
             loginDto.password,
             user?.password || '',
-          );
-      
-        if(!user || !isMatch) {
+        );
+
+        if (!user || !isMatch) {
             throw new NotFoundException('Matricula ou senha incorreta');
         }
 
         return {
-            accessToken: this.jwtService.sign({...new LoginPayload(user)}),
+            accessToken: this.jwtService.sign({ ...new LoginPayload(user) }),
             user: new ReturnUserDto(user)
         };
-            
+
     }
 }

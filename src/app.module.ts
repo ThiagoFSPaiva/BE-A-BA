@@ -8,6 +8,7 @@ import { CampoModule } from './campo/campo.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './guards/roles.guard';
 import { JwtModule} from '@nestjs/jwt';
+import { EmailModule } from './email/email.module';
 
  
 @Module({
@@ -29,7 +30,8 @@ import { JwtModule} from '@nestjs/jwt';
     AuthModule,
     TemplateModule,
     CampoModule,
-    JwtModule
+    JwtModule,
+    EmailModule
     
   ],
   controllers: [],

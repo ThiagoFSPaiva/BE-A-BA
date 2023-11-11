@@ -5,13 +5,15 @@ import { Repository } from 'typeorm';
 import { UserEntity } from './entity/user.entity';
 import { UserType } from './enum/user-type.enum';
 import { createPasswordHashed } from 'src/utils/password';
+import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class UserService {
 
     constructor(
         @InjectRepository(UserEntity)
-        private readonly userRepository: Repository<UserEntity>
+        private readonly userRepository: Repository<UserEntity>,
+        private readonly emailService: EmailService
     ){}
 
     async createUser(createUserDto: CreateUserDto) : Promise<UserEntity> {
@@ -44,12 +46,16 @@ export class UserService {
             throw new BadGatewayException('CPF já registrado no sistema');
         }
 
-        return this.userRepository.save({
+        const lowercaseEmail = createUserDto.email.toLowerCase();
+    
+        const createdUser = this.userRepository.save({
             ...createUserDto,
-            typeUser: UserType.User,
+            email: lowercaseEmail,
             password: passwordHashed,
             matricula: matricula.toString()
         })
+
+        return createdUser
     }
 
     async getAllUsers() : Promise<UserEntity[]> {

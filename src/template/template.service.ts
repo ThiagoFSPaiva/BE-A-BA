@@ -46,7 +46,7 @@ export class TemplateService {
         return this.templateRepository
           .createQueryBuilder('template')
           .leftJoinAndSelect('template.user', 'user')
-          .where('template.status = :status', { status: StatusType.Pendente })
+          .where('template.status = :status', { status: StatusType.Ativo })
           .select([
             'template.id',
             'template.name',
