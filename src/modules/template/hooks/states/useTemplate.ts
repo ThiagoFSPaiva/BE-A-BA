@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TemplateType } from "../../types/TemplateType";
 import { useRequests } from "../../../../shared/hooks/useRequests";
-import { URL_MYTEMPLATES_PENDENTES, URL_TEMPLATE } from "../../../../shared/constants/urls";
+import { URL_MYTEMPLATES_PENDENTES, URL_TEMPLATE_ATIVO } from "../../../../shared/constants/urls";
 import { MethodsEnum } from "../../../../shared/enums/methods.enum";
 import { useTemplateReducer } from "../../../../store/reducers/templateReducer/useTemplateReducer";
 import { TemplateRoutesEnum } from "../../routes";
@@ -24,7 +24,7 @@ export const useTemplate = () => {
   
     useEffect(() => {
       request<TemplateType[]>(URL_MYTEMPLATES_PENDENTES, MethodsEnum.GET, setMeusTemplates);
-      request<TemplateType[]>(URL_TEMPLATE, MethodsEnum.GET, setTemplateAtivo);
+      request<TemplateType[]>(URL_TEMPLATE_ATIVO, MethodsEnum.GET, setTemplateAtivo);
     }, []);
   
   

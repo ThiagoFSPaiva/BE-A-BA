@@ -1,28 +1,12 @@
-import { Box, IconButton, InputAdornment, Menu, MenuItem, Pagination, Select, Stack, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
-import { useGerenciarAtivos } from "../../../hooks/GerenciarTemplates/states/useGerenciarAtivo";
+import { Box, InputAdornment, MenuItem, Pagination, Select, Stack, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import TPaper from "../../../../../components/common/TPaper";
 import SearchIcon from '@mui/icons-material/Search';
-import { MethodsEnum } from "../../../../../shared/enums/methods.enum";
+import { useGerenciarInativos } from "../../../hooks/GerenciarTemplates/states/useGerenciarInativo";
 import { useRequests } from "../../../../../shared/hooks/useRequests";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { useMenu } from "../../../hooks/GerenciarTemplates/useMenu";
-import { DeleteConfirmationModal } from "../../../components/DeleteConfirmationModal";
+import { MethodsEnum } from "../../../../../shared/enums/methods.enum";
 
-export const GerenciarAtivos = () => {
+export const GerenciarInativos = () => {
     const { request } = useRequests();
-    const {
-        anchorEl,
-        selectedItemId,
-        isDeleteDialogOpen,
-        handleEdit,
-        handleDelete,
-        handleDeactivate,
-        handleMenuClose,
-        handleMenuOpen,
-        handleActivate,
-        handleDeleteConfirm,
-        handleDeleteCancel,
-    } = useMenu();
     const {
         totalPages,
         currentTemplates,
@@ -35,11 +19,11 @@ export const GerenciarAtivos = () => {
         handleChangeRowsPerPage,
         handleChangePage,
         handleSearchByChange,
-        handleSearch,
-    } = useGerenciarAtivos();
+        handleSearch
+    } = useGerenciarInativos();
 
 
-
+    
     const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>, id: number) => {
         const formData = {
             status: event.target.checked ? 'ativo' : 'inativo'
@@ -57,14 +41,6 @@ export const GerenciarAtivos = () => {
 
     return (
         <>
-
-            <DeleteConfirmationModal
-                isOpen={isDeleteDialogOpen}
-                onConfirm={handleDeleteConfirm}
-                onCancel={handleDeleteCancel}
-            />
-
-
 
             <TableContainer component={TPaper}>
                 <Box sx={{
@@ -148,32 +124,20 @@ export const GerenciarAtivos = () => {
                                     </TableCell>
                                     <TableCell align="center">{row.autor}</TableCell>
                                     <TableCell align="center">{row.createdAt}</TableCell>
-                                    <TableCell align="center"><Typography>{row.extensao}</Typography></TableCell>
-                                    <TableCell align="center"><Typography variant="subtitle2" sx={{ bgcolor: "#067906", borderRadius: 1 }}>{row.status}</Typography></TableCell>
+                                    <TableCell align="center">{row.extensao}</TableCell>
+                                    <TableCell align="center"><Typography variant="subtitle2" sx=
+                                        {{
+                                            bgcolor: "#F44336", 
+                                            borderRadius: 1,
+                                            width: "80px",
+                                            margin: "auto"
+                                        }}>
+                                        {row.status}</Typography></TableCell>
                                     <TableCell align="center">
-                          
-                                        <IconButton color="primary"onClick={(event) => handleMenuOpen(event, row.id)}>
-                                            <MoreVertIcon />
-                                        </IconButton>
-
-                                        <Menu
-                                            anchorEl={anchorEl}
-                                            open={Boolean(anchorEl && selectedItemId === row.id)}
-                                            onClose={handleMenuClose}
-                                        >
-                                            <MenuItem onClick={() => handleActivate(row.id)}>
-                                                Ativar
-                                            </MenuItem>
-                                            <MenuItem onClick={() => handleDeactivate(row.id)}>
-                                                Desativar
-                                            </MenuItem>
-                                            <MenuItem onClick={() => handleEdit(row.id)}>
-                                                Editar
-                                            </MenuItem>
-                                            <MenuItem onClick={() => handleDelete(row.id)}>
-                                                Excluir
-                                            </MenuItem>
-                                        </Menu>
+                                        <Switch
+                                            defaultChecked={row.status === 'ativo'}
+                                            onChange={(event) => handleSwitchChange(event, row.id)}
+                                        />
                                     </TableCell>
                                 </TableRow>
                             ))}

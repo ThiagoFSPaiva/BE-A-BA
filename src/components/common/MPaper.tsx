@@ -2,7 +2,7 @@ import { Box, Paper, Typography, useTheme } from '@mui/material';
 import { ReactNode } from 'react';
 
 interface MPaperProps {
-  title?: string; // Torna a prop "title" opcional
+  title?: string;
   fullHeight?: boolean;
   children: ReactNode;
 }
@@ -16,7 +16,7 @@ const MPaper = (props: MPaperProps) => {
         bgcolor: theme.palette.primary.dark,
         height: props.fullHeight ? "100%" : "unset",
         border: "1px solid #5a5a5a52",
-        p: 3
+        boxShadow: theme.palette.primary.light ? '0px 3px 6px rgba(0, 0, 0, 0.1)' : 'none',
       }}
     >
       {props.title && (
@@ -24,7 +24,7 @@ const MPaper = (props: MPaperProps) => {
           {props.title}
         </Typography>
       )}
-      <Box>
+      <Box p={3}>
         {props.children}
       </Box>
     </Paper>

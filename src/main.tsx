@@ -10,7 +10,7 @@ import {
 } from 'chart.js';
 import App from './App.tsx'
 import {ThemeProvider } from "@mui/material";
-import { Dark } from './themes';
+import { Dark, Light } from './themes';
 import { Provider } from 'react-redux'
 import { store } from './store/index.ts';
 

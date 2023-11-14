@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useTemplateAdminReducer } from "../../../../../store/reducers/templateAdminReducer/useTemplateAdminReducer";
 import { TemplateType } from "../../../types/TemplateType";
 import { useRequests } from "../../../../../shared/hooks/useRequests";
-import { URL_TEMPLATEADMIN_PENDENTE } from "../../../../../shared/constants/urls";
 import { MethodsEnum } from "../../../../../shared/enums/methods.enum";
+import { URL_TEMPLATEADMIN_INATIVO } from "../../../../../shared/constants/urls";
 
-export const useGerenciarPendentes = () => {
-    const { templatesPendentes,setTemplatesPendentes} = useTemplateAdminReducer();
-    const [templatesFiltered, setTemplatesFiltered] = useState<TemplateType[]>(templatesPendentes);
+export const useGerenciarInativos = () => {
+    const { templatesInativos,setTemplatesInativos} = useTemplateAdminReducer();
+    const [templatesFiltered, setTemplatesFiltered] = useState<TemplateType[]>(templatesInativos);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [page, setPage] = useState(1);
     const [searchText, setSearchText] = useState('');
@@ -17,12 +17,12 @@ export const useGerenciarPendentes = () => {
 
 
     useEffect(() => {
-        setTemplatesFiltered(templatesPendentes);
-      }, [templatesPendentes]);
+        setTemplatesFiltered(templatesInativos);
+      }, [templatesInativos]);
 
 
     useEffect(() => {
-    request<TemplateType[]>(URL_TEMPLATEADMIN_PENDENTE, MethodsEnum.GET, setTemplatesPendentes);
+    request<TemplateType[]>(URL_TEMPLATEADMIN_INATIVO, MethodsEnum.GET, setTemplatesInativos);
     }, []);
 
     const handleChangePage = (event: any, newPage: number) => {

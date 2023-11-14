@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { URL_USER } from "../../../shared/constants/urls";
 import { MethodsEnum } from "../../../shared/enums/methods.enum";
 import { useRequests } from "../../../shared/hooks/useRequests";
 import { useNavigate } from "react-router-dom";
@@ -27,8 +26,6 @@ export const useTemplateInsert = () => {
 
     const handleOnChangeInput = (event:any, name:string, index?:number) => {
         
-
-
         if (name === 'name' || name === 'extensao') {
             setTemplate((currentTemplate) => ({
                 ...currentTemplate,
@@ -61,8 +58,6 @@ export const useTemplateInsert = () => {
 
 
     const handleInsertTemplate = async () => {
-
-        console.log(template)
 
             request('http://localhost:3000/template/criar-template', MethodsEnum.POST, undefined, template)
             .then((response) => {
