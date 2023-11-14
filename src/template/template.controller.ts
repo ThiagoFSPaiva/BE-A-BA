@@ -1,7 +1,6 @@
 import { Body, Controller, Get, Param, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { TemplateService } from './template.service';
 import { CreateTemplateDto } from './dtos/createTemplate.dto';
-import { TemplateEntity } from './entity/template.entity';
 import { Roles } from 'src/decorators/role.decorator';
 import { UserType } from 'src/user/enum/user-type.enum';
 import { UserId } from 'src/decorators/user-id.decorator';
@@ -36,12 +35,25 @@ export class TemplateController {
     @Roles(UserType.Admin)
     @Get('ativos')
     async findAllActiveTemplatesWithAuthors(): Promise<ReturnTemplateAdminDto[]> {
-      return (await this.templateService.findAllActiveTemplatesWithAuthors()).map(template => new ReturnTemplateAdminDto(template));
+      return (await this.templateService.getTemplatesActiveWithAuthors()).map(template => new ReturnTemplateAdminDto(template));
+    }
+
+    @Roles(UserType.Admin)
+    @Get('pendentes')
+    async findAllPendingTemplatesWithAuthors(): Promise<ReturnTemplateAdminDto[]> {
+      return (await this.templateService.getTemplatesPendingWithAuthors()).map(template => new ReturnTemplateAdminDto(template));
+    }
+
+
+    @Roles(UserType.Admin)
+    @Get('inativos')
+    async findAllInactiveTemplatesWithAuthors(): Promise<ReturnTemplateAdminDto[]> {
+      return (await this.templateService.getTemplatesInactiveWithAuthors()).map(template => new ReturnTemplateAdminDto(template));
     }
 
     @Patch(':id')
     async updateStatus(@Param('id') id: number, @Body() body: { status: StatusType }) {
       const { status } = body;
-      return this.templateService.updateStatus(id, status);
+      return this.templateService.updateStatus(id, status); 
     }
 }

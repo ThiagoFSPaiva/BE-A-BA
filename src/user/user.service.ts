@@ -62,6 +62,22 @@ export class UserService {
         return this.userRepository.find();
     }
 
+    async getUserAdmin(userId:string) : Promise<UserEntity> {
+        const user = await this.userRepository.findOne({
+            where: {
+                id: userId,
+                typeUser: UserType.Admin
+            },
+        });
+
+        if(!user) {
+            throw new NotFoundException('Usuário não encontrado');
+        }
+
+        return user;
+    }
+
+
     async getUserById(userId:string) : Promise<UserEntity> {
         const user = await this.userRepository.findOne({
             where: {
