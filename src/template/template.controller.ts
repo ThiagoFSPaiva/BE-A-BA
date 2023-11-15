@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, UsePipes, ValidationPipe } from '@nestjs/common';
 import { TemplateService } from './template.service';
 import { CreateTemplateDto } from './dtos/createTemplate.dto';
 import { Roles } from 'src/decorators/role.decorator';
@@ -7,6 +7,9 @@ import { UserId } from 'src/decorators/user-id.decorator';
 import { ReturnTemplateDto } from './dtos/returnTemplate.dto';
 import { ReturnTemplateAdminDto } from './dtos/returnTemplateAdmin.dto';
 import { StatusType } from 'src/user/enum/status-type.enum';
+import { DeleteResult } from 'typeorm';
+import { UpdateTemplateDto } from './dtos/update-template.dto';
+import { TemplateEntity } from './entity/template.entity';
 
 
 @Controller('template')
@@ -55,5 +58,20 @@ export class TemplateController {
     async updateStatus(@Param('id') id: number, @Body() body: { status: StatusType }) {
       const { status } = body;
       return this.templateService.updateStatus(id, status); 
+    }
+
+
+    @Roles(UserType.Admin)
+    @Delete('/:templateId')
+    @UsePipes(ValidationPipe)
+    async deleteTemplate( @Param('templateId') templateId: number): Promise<DeleteResult> {
+        return this.templateService.deleteTemplate(templateId); 
+    }
+
+    @Roles(UserType.Admin)
+    @Put('/:templateId')
+    @UsePipes(ValidationPipe)
+    async updateTemplate(@Body() updateTemplate: UpdateTemplateDto, @Param('templateId') templateId: number): Promise<TemplateEntity> {
+        return this.templateService.updateTemplate(updateTemplate,templateId); 
     }
 }

@@ -19,7 +19,7 @@ export class CampoEntity {
     @Column({name: 'isNull', nullable: false, default: false})
     isNull: boolean;
 
-    @ManyToOne(() => TemplateEntity, template => template.campo)
+    @ManyToOne(() => TemplateEntity, template => template.campo, { onDelete: 'CASCADE' })
     @JoinColumn({name:'template_id', referencedColumnName:'id'})
     template: TemplateEntity;
 }

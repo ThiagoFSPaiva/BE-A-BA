@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TemplateEntity } from './entity/template.entity';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { CreateTemplateDto } from './dtos/createTemplate.dto';
 import { UserService } from 'src/user/user.service';
 import { CampoService } from 'src/campo/campo.service';
@@ -9,6 +9,7 @@ import { CreateCampoDto } from 'src/campo/dtos/createCampo.dto';
 import { StatusType } from 'src/user/enum/status-type.enum';
 import { ReturnCampoDto } from 'src/campo/dtos/returnCampo.dto';
 import { UserType } from 'src/user/enum/user-type.enum';
+import { UpdateTemplateDto } from './dtos/update-template.dto';
 
 @Injectable()
 export class TemplateService {
@@ -155,10 +156,19 @@ export class TemplateService {
     }
 
 
-    async updateStatus(id: number, status: StatusType): Promise<TemplateEntity> {
+    async updateStatus(templateId: number, status: StatusType): Promise<Boolean> {
+        const template = await this.findTemplateById(templateId)
+
+        template.status = status;
+        this.templateRepository.save(template);
+
+        return true
+    }
+
+    async findTemplateById (templateId: number): Promise<TemplateEntity> {
         const template = await this.templateRepository.findOne({
             where: {
-                id: id
+                id: templateId
             }
         });
 
@@ -166,7 +176,22 @@ export class TemplateService {
             throw new NotFoundException('Template não encontrado');
         }
 
-        template.status = status;
-        return this.templateRepository.save(template);
+        return template
+
+    }
+
+    async deleteTemplate(templateId: number) : Promise<DeleteResult> {
+        const template = await this.findTemplateById(templateId)
+
+        return this.templateRepository.delete({id: template.id})
+    }
+
+    async updateTemplate(updateTemplate: UpdateTemplateDto, templateId: number) : Promise<TemplateEntity> {
+        const template = await this.findTemplateById(templateId)
+
+        return this.templateRepository.save({
+            ...template,
+            ...updateTemplate
+        })
     }
 }

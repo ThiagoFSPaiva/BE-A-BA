@@ -26,7 +26,7 @@ export class UploadEntity {
     @JoinColumn({name:'user_id', referencedColumnName:'id'})
     user: UserEntity;
 
-    @ManyToOne(() => TemplateEntity, template=> template.uploads)
+    @ManyToOne(() => TemplateEntity, template=> template.uploads, { onDelete: 'CASCADE' } )
     @JoinColumn({name:'template_id', referencedColumnName:'id'})
     template: TemplateEntity;
 }

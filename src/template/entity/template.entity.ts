@@ -12,6 +12,9 @@ export class TemplateEntity {
     @Column({name: 'user_id', nullable: false})
     userId: string
 
+    // @Column({ name: 'category_id', nullable: false})
+    // categoryId: number;
+
     @Column({name: 'name', nullable: false})
     name: string;
 
@@ -36,4 +39,5 @@ export class TemplateEntity {
 
     @OneToMany(() => UploadEntity, upload => upload.template)
     uploads: UploadEntity[];
+
 }
