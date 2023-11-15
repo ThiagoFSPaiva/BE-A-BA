@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ReturnCategory } from './dtos/return-category.dot';
 import { CategoryService } from './category.service';
 import { Roles } from 'src/decorators/role.decorator';
@@ -20,12 +20,16 @@ export class CategoryController {
             (category) => new ReturnCategory(category),
         ) 
     }
-    
+
+
     @Roles(UserType.Admin)
     @UsePipes(ValidationPipe)
     @Post()
     async createCategory( @Body() createCategory: CreateCategory): Promise<CategoryEntity> {
         return this.categoryService.createCategory(createCategory)
     }
+
+
+
 
 }

@@ -15,7 +15,7 @@ export class CreateTemplateDto {
 
 
     @IsArray()
-    @ValidateNested({ each: true })
+    @ValidateNested({ each: true }) 
     @Type(() => CreateCampoDto)
     campo: CreateCampoDto[];
 

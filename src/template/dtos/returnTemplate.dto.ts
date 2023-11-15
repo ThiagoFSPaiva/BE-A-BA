@@ -7,7 +7,7 @@ export class ReturnTemplateDto {
     extensao: string;
     status: StatusType;
     createdAt: string;
-    campo: any[];
+    campo: any;
     autor: string;
     id: number;
 

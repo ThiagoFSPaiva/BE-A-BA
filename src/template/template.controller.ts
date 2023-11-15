@@ -20,9 +20,8 @@ export class TemplateController {
 
     @Post('criar-template')
     @UsePipes(ValidationPipe)
-    async createTemplateWithCampos(@Body() createTemplate: CreateTemplateDto, @UserId() userId: string) {
-        console.log(userId, 'userId');
-        return this.templateService.createTemplateWithFields(createTemplate,userId); 
+    async createTemplateWithCampos(@Body() createTemplate: CreateTemplateDto, @UserId() userId: string): Promise<ReturnTemplateDto> {
+        return new ReturnTemplateDto( await this.templateService.createTemplateWithFields(createTemplate,userId)); 
     }
 
     @Get('listar-templates-por-id')

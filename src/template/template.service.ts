@@ -10,6 +10,7 @@ import { StatusType } from 'src/user/enum/status-type.enum';
 import { ReturnCampoDto } from 'src/campo/dtos/returnCampo.dto';
 import { UserType } from 'src/user/enum/user-type.enum';
 import { UpdateTemplateDto } from './dtos/update-template.dto';
+import { CategoryService } from 'src/category/category.service';
 
 @Injectable()
 export class TemplateService {
@@ -18,10 +19,14 @@ export class TemplateService {
         @InjectRepository(TemplateEntity)
         private templateRepository: Repository<TemplateEntity>,
         private readonly userService: UserService,
-        private readonly campoService: CampoService
+        private readonly campoService: CampoService,
+        private readonly categoryService: CategoryService
     ) { }
 
     async createTemplate(createTemplate: CreateTemplateDto, userId: string): Promise<TemplateEntity> {
+
+        await this.categoryService.findCategoryById(createTemplate.categoryId)
+
 
         const userAdmin = await this.userService.getUserAdmin(userId).catch(
             () => undefined,
