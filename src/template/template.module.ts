@@ -6,12 +6,15 @@ import { TemplateEntity } from './entity/template.entity';
 import { UserModule } from 'src/user/user.module';
 import { CampoModule } from 'src/campo/campo.module';
 import { CampoEntity } from 'src/campo/entity/campo.entity';
+import { CategoryEntity } from 'src/category/entity/category.entity';
+import { CategoryModule } from 'src/category/category.module';
 
 @Module({
   imports: [
     CampoModule,
     UserModule,
-    TypeOrmModule.forFeature([TemplateEntity,CampoEntity])
+    CategoryModule,
+    TypeOrmModule.forFeature([TemplateEntity,CampoEntity,CategoryEntity])
   ],
   providers: [TemplateService],
   controllers: [TemplateController]

@@ -1,4 +1,5 @@
 import { CampoEntity } from "src/campo/entity/campo.entity";
+import { CategoryEntity } from "src/category/entity/category.entity";
 import { UploadEntity } from "src/upload/entity/upload.entity";
 import { UserEntity } from "src/user/entity/user.entity";
 import { StatusType } from "src/user/enum/status-type.enum";
@@ -12,8 +13,8 @@ export class TemplateEntity {
     @Column({name: 'user_id', nullable: false})
     userId: string
 
-    // @Column({ name: 'category_id', nullable: false})
-    // categoryId: number;
+    @Column({ name: 'category_id', nullable: false})
+    categoryId: number;
 
     @Column({name: 'name', nullable: false})
     name: string;
@@ -40,4 +41,7 @@ export class TemplateEntity {
     @OneToMany(() => UploadEntity, upload => upload.template)
     uploads: UploadEntity[];
 
+    @ManyToOne(() => CategoryEntity, (category: CategoryEntity) => category.templates)
+    @JoinColumn( { name: 'category_id', referencedColumnName: 'id'})
+    category?: CategoryEntity
 }

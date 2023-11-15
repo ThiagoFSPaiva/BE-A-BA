@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsArray, IsNotEmpty, IsString, Length, ValidateNested } from "class-validator";
+import { IsArray, IsNotEmpty, IsNumber, IsString, Length, ValidateNested } from "class-validator";
 import { CreateCampoDto } from "src/campo/dtos/createCampo.dto";
 
 export class CreateTemplateDto {
@@ -9,7 +9,7 @@ export class CreateTemplateDto {
     name: string;
 
 
-    @IsNotEmpty({ message: 'Nome não pode ser vazio' })
+    @IsNotEmpty({ message: 'Extensao não pode ser vazio' })
     @IsString()
     extensao: string;
 
@@ -19,4 +19,6 @@ export class CreateTemplateDto {
     @Type(() => CreateCampoDto)
     campo: CreateCampoDto[];
 
+    @IsNumber()
+    categoryId: number;
 }
