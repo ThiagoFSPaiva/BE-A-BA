@@ -12,6 +12,7 @@ import { useGlobalReducer } from "./store/reducers/globalReducer/useGlobalReduce
 import { dashboardRoute } from "./modules/Dashboard/routes";
 import { uploadsScreen } from "./modules/Uploads/routes";
 import { usuarioScreen } from "./modules/user/screens/routes";
+import { categoryScreens } from "./modules/category/routes";
 
 const globalStyles = {
   span: {
@@ -38,7 +39,8 @@ const routesAdmin: RouteObject[] =
     ...usuarioScreen,
     ...dashboardRoute, 
     ...uploadsScreen, 
-    ...gerenciarScreen
+    ...gerenciarScreen,
+    ...categoryScreens
   ].map((route) => ({
   ...route,
   loader: verifyAdmin

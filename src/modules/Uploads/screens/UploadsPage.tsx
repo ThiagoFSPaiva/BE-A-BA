@@ -51,11 +51,11 @@ export const UploadsPage = () => {
                         <TextField
                             value={searchText}
                             onChange={handleSearch}
-                            placeholder="Search"
+                            placeholder="Pesquisar"
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">
-                                        <SearchIcon sx={{ color: "white" }} />
+                                        <SearchIcon/>
                                     </InputAdornment>
                                 ),
                             }}
@@ -87,12 +87,12 @@ export const UploadsPage = () => {
                 <Table sx={{ minWidth: 300 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Nome</TableCell>
-                            <TableCell align="center">Autor</TableCell>
-                            <TableCell align="center">Matricula</TableCell>
-                            <TableCell align="center">Data de criação</TableCell>
-                            <TableCell align="center">Extensão</TableCell>
-                            <TableCell align="center">Template</TableCell>
+                            <TableCell><Typography variant="subtitle2" color={theme => theme.palette.text.secondary}>Nome</Typography></TableCell>
+                            <TableCell align="center"><Typography variant="subtitle2" color={theme => theme.palette.text.secondary}>Autor</Typography></TableCell>
+                            <TableCell align="center"><Typography variant="subtitle2" color={theme => theme.palette.text.secondary}>Matricula</Typography></TableCell>
+                            <TableCell align="center"><Typography variant="subtitle2" color={theme => theme.palette.text.secondary}>Data de criação</Typography></TableCell>
+                            <TableCell align="center"><Typography variant="subtitle2" color={theme => theme.palette.text.secondary}>Extensão</Typography></TableCell>
+                            <TableCell align="center"><Typography variant="subtitle2" color={theme => theme.palette.text.secondary}>Template</Typography></TableCell>
                             <TableCell align="center"></TableCell>
                         </TableRow>
                     </TableHead>
@@ -103,7 +103,7 @@ export const UploadsPage = () => {
                                     <TableCell align="right">
                                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: "center" }}>
                                             <Stack direction="row" spacing={2} sx={fileNameStyle}>
-                                                <Typography>{row.nomeArquivo}</Typography>
+                                                <Typography variant="subtitle2" fontWeight={700} noWrap>{row.nomeArquivo}</Typography>
                                             </Stack>
                                             <Stack direction="row" spacing={2}>
                                                 <IconButton color="secondary" aria-label="delete" onClick={() => handleDownload(row.id)}>
@@ -112,11 +112,11 @@ export const UploadsPage = () => {
                                             </Stack>
                                         </Box>
                                     </TableCell>
-                                    <TableCell align="center">{row.user_name}</TableCell>
-                                    <TableCell align="center">{row.matricula}</TableCell>
-                                    <TableCell align="center">{row.created_at}</TableCell>
-                                    <TableCell align="center">{row.extensao}</TableCell>
-                                    <TableCell align="center">{row.template_name}</TableCell>
+                                    <TableCell align="center"><Typography variant="subtitle2" noWrap color={theme => theme.palette.text.primary}>{row.user_name}</Typography></TableCell>
+                                    <TableCell align="center"><Typography variant="subtitle2" noWrap color={theme => theme.palette.text.primary}>{row.matricula}</Typography></TableCell>
+                                    <TableCell align="center"><Typography variant="subtitle2" noWrap color={theme => theme.palette.text.primary}>{row.created_at}</Typography></TableCell>
+                                    <TableCell align="center"><Typography variant="subtitle2" noWrap color={theme => theme.palette.text.primary}>{row.extensao}</Typography></TableCell>
+                                    <TableCell align="center"><Typography variant="subtitle2" noWrap >{row.template_name}</Typography></TableCell>
                                     <TableCell align="center"></TableCell>
                                 </TableRow>
                             ))}

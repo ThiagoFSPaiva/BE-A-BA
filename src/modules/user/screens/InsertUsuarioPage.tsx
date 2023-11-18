@@ -101,7 +101,7 @@ export const InsertUsuarioPage = () => {
                     gap: 2
                 }}>
 
-                    <Button variant="contained" color="primary">
+                    <Button variant="contained"  color="secondary">
                         Cancelar
                     </Button>
 
@@ -113,11 +113,6 @@ export const InsertUsuarioPage = () => {
 
                 </Box>
             </MPaper>
-
-
-
-
-
 
         </>
     )

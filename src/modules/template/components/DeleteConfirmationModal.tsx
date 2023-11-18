@@ -1,19 +1,24 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
+import { ReactNode } from "react";
 
 export const DeleteConfirmationModal = ({
-    isOpen,
-    onConfirm,
-    onCancel,
-  }: {
-    isOpen: boolean;
-    onConfirm: () => void;
-    onCancel: () => void;
-  }) => {
-    return (
-      <Dialog open={isOpen} onClose={onCancel}>
-        <DialogTitle>Confirmar Exclusão</DialogTitle>
-        <DialogContent>
-          Deseja realmente excluir o item selecionado?
+  children,
+  isOpen,
+  onConfirm,
+  onCancel,
+
+}: {
+  isOpen: boolean;
+  onConfirm: () => void;
+  onCancel: () => void;
+  children?: ReactNode;
+}) => {
+  return (
+    <Dialog open={isOpen} onClose={onCancel}>
+      <Box sx={{bgcolor: theme => theme.palette.background.paper, p: 1}}>
+        <DialogTitle variant="h6">Tem certeza de que deseja excluir este item?</DialogTitle>
+        <DialogContent >
+          {children}
         </DialogContent>
         <DialogActions>
           <Button variant="contained" onClick={onCancel} color="primary">
@@ -23,6 +28,8 @@ export const DeleteConfirmationModal = ({
             Excluir
           </Button>
         </DialogActions>
-      </Dialog>
-    );
-  };
+
+      </Box>
+    </Dialog>
+  );
+};

@@ -9,10 +9,9 @@ import {
   Legend,
 } from 'chart.js';
 import App from './App.tsx'
-import {ThemeProvider } from "@mui/material";
-import { Dark, Light } from './themes';
 import { Provider } from 'react-redux'
 import { store } from './store/index.ts';
+import { AppThemeProvider } from './shared/contexts';
 
 ChartJS.register(
   CategoryScale,
@@ -26,8 +25,8 @@ ChartJS.register(
 ReactDOM.createRoot(document.getElementById('root')!).render(
 
   <Provider store={store}>
-        <ThemeProvider theme={Dark}>
+        <AppThemeProvider>
           <App/>
-        </ThemeProvider>
+        </AppThemeProvider>
   </Provider>
 )

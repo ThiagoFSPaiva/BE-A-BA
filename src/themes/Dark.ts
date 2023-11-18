@@ -2,7 +2,9 @@ import { createTheme } from "@mui/material";
 
 export const Dark = createTheme({
 
-
+    typography: {
+        fontFamily: 'Nunito, sans-serif',
+      },
     components: {
         MuiSelect: {
             styleOverrides: {
@@ -10,27 +12,36 @@ export const Dark = createTheme({
                 color: '#43a047',
               },
             },
+        },
+        MuiButton: {
+            styleOverrides: {
+              root: {
+                color: '#FFFFFF', 
+              },
+            },
         }
     },
     palette: {
+        mode: "dark",
         primary: {
-            main: "#676767",
-            dark: "#202125",
-            light: "#747474",
+            main: "#39a03d",
+            light: "#056f09",
+            dark: "#124514",
             contrastText: "#ffffff",
             textColor: "#757575",
             iconColor: "#757575"
         },
         secondary: {
-            main: "#43a047"
+            main: "#00733B",
+            light: "#056f09"
         },
         background: {
-            paper: "#35373f",
-            default: "#16171B"
+            paper: "#1f2129",
+            default: "#15171e"
         },
         text: {
-            primary: "#ffffff",
-            secondary: "#757575"
+            primary: "#efefef",
+            secondary: "#929292"
         },
     },
     shape: {

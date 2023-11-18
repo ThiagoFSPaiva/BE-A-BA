@@ -9,14 +9,15 @@ interface MPaperProps {
 
 const MPaper = (props: MPaperProps) => {
   const theme = useTheme();
+  const boxShadow = theme.palette.mode === 'light' ? "rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px" : 'none';
   return (
     <Paper
-
+      elevation={0}
       sx={{
-        bgcolor: theme.palette.primary.dark,
+        bgcolor: theme.palette.background.paper,
         height: props.fullHeight ? "100%" : "unset",
-        border: "1px solid #5a5a5a52",
-        boxShadow: theme.palette.primary.light ? '0px 3px 6px rgba(0, 0, 0, 0.1)' : 'none',
+        border: theme.palette.mode === 'dark' ?  "1px solid #5a5a5a52" : 'none',
+        boxShadow: boxShadow,
       }}
     >
       {props.title && (

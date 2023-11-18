@@ -1,3 +1,5 @@
+import { CategoryType } from "../../category/types/CategoryType";
+
 export interface TemplateType {
     id: number;
     name: string;
@@ -7,4 +9,5 @@ export interface TemplateType {
     templateId: number;
     campo: any[];
     autor: string;
+    categoryName: string;
 }

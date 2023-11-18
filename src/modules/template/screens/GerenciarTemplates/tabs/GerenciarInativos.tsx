@@ -1,9 +1,12 @@
-import { Box, InputAdornment, MenuItem, Pagination, Select, Stack, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
+import { Box, IconButton, InputAdornment, Menu, MenuItem, Pagination, Select, Stack, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import TPaper from "../../../../../components/common/TPaper";
 import SearchIcon from '@mui/icons-material/Search';
 import { useGerenciarInativos } from "../../../hooks/GerenciarTemplates/states/useGerenciarInativo";
 import { useRequests } from "../../../../../shared/hooks/useRequests";
 import { MethodsEnum } from "../../../../../shared/enums/methods.enum";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useMenu } from "../../../hooks/GerenciarTemplates/useMenu";
+import { DeleteConfirmationModal } from "../../../components/DeleteConfirmationModal";
 
 export const GerenciarInativos = () => {
     const { request } = useRequests();
@@ -21,26 +24,29 @@ export const GerenciarInativos = () => {
         handleSearchByChange,
         handleSearch
     } = useGerenciarInativos();
-
-
-    
-    const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>, id: number) => {
-        const formData = {
-            status: event.target.checked ? 'ativo' : 'inativo'
-        }
-
-        request(`http://localhost:3000/template/${id}`, MethodsEnum.PATCH, undefined, formData)
-            .then((response) => {
-                console.log(response)
-            })
-            .catch((erro) => {
-                console.log(erro)
-            })
-    };
+    const {
+        anchorEl,
+        selectedItemId,
+        isDeleteDialogOpen,
+        handleEdit,
+        handleDelete,
+        handleDeactivate,
+        handleMenuClose,
+        handleMenuOpen,
+        handleActivate,
+        handleDeleteConfirm,
+        handleDeleteCancel,
+    } = useMenu();
 
 
     return (
         <>
+
+            <DeleteConfirmationModal
+                isOpen={isDeleteDialogOpen}
+                onConfirm={handleDeleteConfirm}
+                onCancel={handleDeleteCancel}
+            />
 
             <TableContainer component={TPaper}>
                 <Box sx={{
@@ -127,17 +133,37 @@ export const GerenciarInativos = () => {
                                     <TableCell align="center">{row.extensao}</TableCell>
                                     <TableCell align="center"><Typography variant="subtitle2" sx=
                                         {{
-                                            bgcolor: "#F44336", 
+                                            color: "#fff",
+                                            bgcolor: "#F44336",
                                             borderRadius: 1,
                                             width: "80px",
                                             margin: "auto"
                                         }}>
                                         {row.status}</Typography></TableCell>
                                     <TableCell align="center">
-                                        <Switch
-                                            defaultChecked={row.status === 'ativo'}
-                                            onChange={(event) => handleSwitchChange(event, row.id)}
-                                        />
+
+                                        <IconButton sx={{ color: "#8d8d8d" }} onClick={(event) => handleMenuOpen(event, row.id)}>
+                                            <MoreVertIcon />
+                                        </IconButton>
+
+                                        <Menu
+                                            anchorEl={anchorEl}
+                                            open={Boolean(anchorEl && selectedItemId === row.id)}
+                                            onClose={handleMenuClose}
+                                        >
+                                            <MenuItem onClick={() => handleActivate(row.id)}>
+                                                Ativar
+                                            </MenuItem>
+                                            <MenuItem onClick={() => handleDeactivate(row.id)}>
+                                                Desativar
+                                            </MenuItem>
+                                            <MenuItem onClick={() => handleEdit(row.id)}>
+                                                Editar
+                                            </MenuItem>
+                                            <MenuItem onClick={() => handleDelete(row.id)}>
+                                                Excluir
+                                            </MenuItem>
+                                        </Menu>
                                     </TableCell>
                                 </TableRow>
                             ))}

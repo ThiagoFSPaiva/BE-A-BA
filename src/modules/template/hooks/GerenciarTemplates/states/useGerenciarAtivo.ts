@@ -4,7 +4,6 @@ import { TemplateType } from "../../../types/TemplateType";
 import { useRequests } from "../../../../../shared/hooks/useRequests";
 import { URL_TEMPLATEADMIN_ATIVO } from "../../../../../shared/constants/urls";
 import { MethodsEnum } from "../../../../../shared/enums/methods.enum";
-import React from "react";
 
 export const useGerenciarAtivos = () => {
     const { templatesAtivos,setTemplatesAtivos} = useTemplateAdminReducer();
@@ -52,7 +51,6 @@ export const useGerenciarAtivos = () => {
     };
 
 
-
     const filteredRows = templatesFiltered.filter((row) => {
         if (formatFilter !== 'all' && row.extensao !== formatFilter) return false;
 
@@ -77,6 +75,7 @@ export const useGerenciarAtivos = () => {
     return {
         totalPages,
         currentTemplates,
+        templatesAtivos,
         rowsPerPage,
         page,
         searchText,
@@ -86,7 +85,7 @@ export const useGerenciarAtivos = () => {
         handleChangeRowsPerPage,
         handleChangePage,
         handleSearchByChange,
-        handleSearch,
+        handleSearch
     };
 
 }

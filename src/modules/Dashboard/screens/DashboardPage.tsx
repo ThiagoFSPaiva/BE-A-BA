@@ -3,16 +3,17 @@ import SummaryGrid from '../../../components/common/SummaryGrid';
 import { Animate } from '../../../components/common/Animate';
 import { Header } from '../../../components/common/Header';
 import DashboardCustomizeOutlinedIcon from '@mui/icons-material/DashboardCustomizeOutlined';
-import { StatisticData } from '../../../components/common/StatisticData';
+import StatisticData from '../../../components/common/StatisticData';
 
 
 const DashboardPage = () => {
   const theme = useTheme();
 
+
   return (
 
     <>
-      <Header 
+      <Header
         title="Dashboard"
         description="Visualize e gerencie todos templates, podendo ativar ou desativar cada um."
         icon={<DashboardCustomizeOutlinedIcon sx={{ color: theme.palette.primary.contrastText, fontSize: 60 }} />

@@ -11,6 +11,7 @@ export enum TemplateRoutesEnum {
 
 export enum GerenciarTemplateRoutesEnum {
     TEMPLATE_GERENCIAR = '/templates/gerenciar',
+    TEMPLATE_EDIT = '/templates/gerenciar/:templateId',
 }
 
 export const templateScreens: RouteObject[] = [
@@ -38,6 +39,10 @@ export const gerenciarScreen: RouteObject[] = [
             {
                 path: GerenciarTemplateRoutesEnum.TEMPLATE_GERENCIAR,
                 element: <GerenciarTemplatesPage />,
+            },
+            {
+                path: GerenciarTemplateRoutesEnum.TEMPLATE_EDIT,
+                element: <InsertTemplate />,
             }
         ]
     }

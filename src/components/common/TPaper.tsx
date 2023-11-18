@@ -9,14 +9,18 @@ interface MPaperProps {
 
 const TPaper = (props: MPaperProps) => {
   const theme = useTheme();
+
+  const boxShadow = theme.palette.mode === 'light' ? "rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px" : 'none';
   return (
-    <Paper
+    <Box
 
       sx={{
-        bgcolor: theme.palette.primary.dark,
+        bgcolor: theme.palette.background.paper,
         height: props.fullHeight ? "100%" : "unset",
-        border: "1px solid #5a5a5a52",
-        overflow: "auto"
+        overflow: "auto",
+        borderRadius: "10px",
+        border: theme.palette.mode === 'dark' ?  "1px solid #5a5a5a52" : 'none',
+        boxShadow: boxShadow,
       }}
     >
       {props.title && (
@@ -27,7 +31,7 @@ const TPaper = (props: MPaperProps) => {
       <Box>
         {props.children}
       </Box>
-    </Paper>
+    </Box>
   );
 };
 

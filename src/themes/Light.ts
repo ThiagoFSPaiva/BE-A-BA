@@ -3,34 +3,47 @@ import { createTheme } from "@mui/material";
 export const Light = createTheme({
 
 
+    typography: {
+        fontFamily: 'Nunito, sans-serif',
+    },
     components: {
         MuiSelect: {
             styleOverrides: {
-              icon: {
-                color: '#43a047',
-              },
+                icon: {
+                    color: '#43a047',
+                },
+            },
+        },
+        MuiButton: {
+            styleOverrides: {
+                root: {
+                    color: '#FFFFFF',
+                },
             },
         }
     },
     palette: {
+        mode: "light",
         primary: {
-            main: "#676767",
-            dark: "#fff",
-            light: "#747474",
-            contrastText: "#676767",
+            main: "#39a03d",
+            light: "#056f09",
+            dark: "#124514",
+            contrastText: "#364a63",
             textColor: "#757575",
             iconColor: "#757575"
         },
         secondary: {
-            main: "#43a047"
+            main: "#00733B",
+            light: "#056f09",
+            dark: "#43a047"
         },
         background: {
-            paper: "#35373f",
-            default: "#16171B"
+            paper: "#fff",
+            default: "#f5f6fa"
         },
         text: {
-            primary: "#ffffff",
-            secondary: "#757575"
+            primary: "#364a63",
+            secondary: "#8094ae",
         },
     },
     shape: {

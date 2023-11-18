@@ -1,4 +1,4 @@
-import { Box, Button, InputAdornment, MenuItem, Pagination, Select, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, useTheme } from "@mui/material";
+import { Box, Button, InputAdornment, MenuItem, Pagination, Select, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, useTheme } from "@mui/material";
 import { Header } from "../../../components/common/Header";
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import SearchIcon from '@mui/icons-material/Search';
@@ -6,6 +6,7 @@ import { useUser } from "./hooks/useUser";
 import { UsuarioRoutesEnum } from "./routes";
 import { useNavigate } from "react-router-dom";
 import TPaper from "../../../components/common/TPaper";
+
 
 
 export const UsuariosPage = () => {

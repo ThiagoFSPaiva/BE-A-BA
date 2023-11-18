@@ -5,15 +5,20 @@ import { useNavigate } from "react-router-dom";
 import { InsertTemplateType } from "../types/InsertTemplateType";
 import { TemplateRoutesEnum } from "../routes";
 
+const DEFAULT_PRODUCT = {
+    name: '',
+    extensao: '',
+    campo: [{ name: '', tipo: '' }]
+};
+
+
 export const useTemplateInsert = () => {
     const navigate = useNavigate();
     const { request } = useRequests();
     const [disabledButton, setDisabledButton] = useState(true);
-    const [template, setTemplate] = useState<InsertTemplateType>({
-        name: '',
-        extensao: '',
-        campo: [{ name: '', tipo: '' }]
-    });
+
+
+    const [template, setTemplate] = useState<InsertTemplateType>(DEFAULT_PRODUCT);
 
 
     useEffect(() => {
@@ -23,6 +28,10 @@ export const useTemplateInsert = () => {
             setDisabledButton(true);
         }
     }, [template]);
+
+
+
+
 
     const handleOnChangeInput = (event:any, name:string, index?:number) => {
         
@@ -57,6 +66,17 @@ export const useTemplateInsert = () => {
     };
 
 
+    const handleChangeSelect = (event: any) => {
+        const categoryId = event.target.value as number;
+      
+        setTemplate((prevTemplate) => ({
+          ...prevTemplate,
+          categoryId,
+        }));
+      
+        console.log(template);
+      };
+
     const handleInsertTemplate = async () => {
 
             request('http://localhost:3000/template/criar-template', MethodsEnum.POST, undefined, template)
@@ -66,6 +86,10 @@ export const useTemplateInsert = () => {
                 }
             }).catch((erro) => erro)
           
+    }
+
+    const handleCancel = async () => {
+        navigate(TemplateRoutesEnum.TEMPLATE);
     }
 
     const handleAddCampo = () => {
@@ -82,5 +106,7 @@ export const useTemplateInsert = () => {
         handleInsertTemplate,
         handleAddCampo,
         handleOnChangeInput,
+        handleCancel,
+        handleChangeSelect
     };
 }

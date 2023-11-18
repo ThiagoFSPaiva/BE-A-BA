@@ -2,70 +2,99 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TemplateType } from "../../types/TemplateType";
 import { useRequests } from "../../../../shared/hooks/useRequests";
-import { URL_MYTEMPLATES_PENDENTES, URL_TEMPLATE_ATIVO } from "../../../../shared/constants/urls";
+import { URL_TEMPLATE_ATIVO, URL_TEMPLATE_DOWNLOAD } from "../../../../shared/constants/urls";
 import { MethodsEnum } from "../../../../shared/enums/methods.enum";
 import { useTemplateReducer } from "../../../../store/reducers/templateReducer/useTemplateReducer";
 import { TemplateRoutesEnum } from "../../routes";
 
 export const useTemplate = () => {
 
-    const navigate = useNavigate();
-    const [searchValue, setSearchValue] = useState("");
-    const { templateAtivos, setTemplateAtivo,meusTemplates,setMeusTemplates} = useTemplateReducer();
-    const [templatesFiltered, setTemplatesFiltered] = useState<TemplateType[]>(templateAtivos);
-    const [currentPage, setCurrentPage] = useState(1);
-    const { request } = useRequests();
-    const itemsPerPage = 9;
-  
-  
-    useEffect(() => {
-      setTemplatesFiltered(templateAtivos);
-    }, [templateAtivos]);
-  
-    useEffect(() => {
-      request<TemplateType[]>(URL_MYTEMPLATES_PENDENTES, MethodsEnum.GET, setMeusTemplates);
-      request<TemplateType[]>(URL_TEMPLATE_ATIVO, MethodsEnum.GET, setTemplateAtivo);
-    }, []);
-  
-  
-    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const value = event.target.value.toLowerCase(); // Convertendo para minúsculas
-      setSearchValue(value);
-      if (value === '') {
-        setTemplatesFiltered(templateAtivos);
-      } else {
-        const filteredTemplates = templateAtivos.filter(template => template.name.toLowerCase().includes(value)); // Convertendo para minúsculas
-        setTemplatesFiltered(filteredTemplates);
-      }
-      setCurrentPage(1);
-    };
-  
-  
-    const handlePageChange = (event:any, page:any) => {
-      setCurrentPage(page);
-    };
-  
-    const lastIndex = currentPage * itemsPerPage;
-    const firstIndex = lastIndex - itemsPerPage;
-    const currentTemplates = templatesFiltered.slice(firstIndex, lastIndex);
-    const totalPages = Math.ceil(templatesFiltered.length / itemsPerPage);
-
-    const handleOnClickInsert = () => {
-        navigate(TemplateRoutesEnum.TEMPLATE_INSERT);
-    };
-    
+  const navigate = useNavigate();
+  const { templateAtivos, setTemplateAtivo } = useTemplateReducer();
+  const [templatesFiltered, setTemplatesFiltered] = useState<TemplateType[]>(templateAtivos);
+  const [rowsPerPage] = useState(9);
+  const [page, setPage] = useState(1);
+  const [searchText, setSearchText] = useState('');
+  const [searchBy] = useState('nome');
+  const [formatFilter, setFormatFilter] = useState('all');
+  const { request } = useRequests();
 
 
-    return {
-      currentPage,
-      currentTemplates,
-      totalPages,
-      searchValue,
-      handleSearchChange,
-      handlePageChange,
-      handleOnClickInsert,
-      meusTemplates,
+  useEffect(() => {
+    setTemplatesFiltered(templateAtivos);
+  }, [templateAtivos]);
 
-    };
+  useEffect(() => {
+    request<TemplateType[]>(URL_TEMPLATE_ATIVO, MethodsEnum.GET, setTemplateAtivo);
+  }, []);
+
+
+  const handleChangePage = (event: any, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleSearch = (event: any) => {
+    setSearchText(event.target.value);
+    setPage(1);
+  };
+
+
+  const handleFormatFilterChange = (event: any) => {
+    setFormatFilter(event.target.value as string);
+    setPage(1);
+  };
+
+  const handleDownloadTemplate = (templateId: number) => {
+
+    request<any>(`${URL_TEMPLATE_DOWNLOAD}${templateId}`, MethodsEnum.GET)
+      .then((response) => {
+        if (response) {
+          const link = document.createElement('a');
+          link.href = `${URL_TEMPLATE_DOWNLOAD}${templateId}`;
+          link.click();
+        }
+      }).catch((error) => error)
+
+  };
+
+
+
+  const filteredRows = templatesFiltered.filter((row) => {
+    if (formatFilter !== 'all' && row.extensao !== formatFilter) return false;
+
+    if (searchText === '') return true;
+
+    if (searchBy === 'nome' && row.name.toLowerCase().includes(searchText.toLowerCase())) {
+      return true;
+    }
+
+    return false;
+  });
+
+
+  const lastIndex = page * rowsPerPage;
+  const firstIndex = lastIndex - rowsPerPage;
+  const currentTemplates = filteredRows.slice(firstIndex, lastIndex);
+  const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
+
+  const handleOnClickInsert = () => {
+    navigate(TemplateRoutesEnum.TEMPLATE_INSERT);
+  };
+
+
+
+  return {
+    totalPages,
+    currentTemplates,
+    page,
+    searchText,
+    formatFilter,
+    handleFormatFilterChange,
+    handleChangePage,
+    handleSearch,
+    handleOnClickInsert,
+    handleDownloadTemplate,
+    templateAtivos,
+  };
 }
 

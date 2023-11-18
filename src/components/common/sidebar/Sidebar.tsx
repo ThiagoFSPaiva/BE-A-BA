@@ -7,6 +7,7 @@ import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
 import BackupTableOutlinedIcon from '@mui/icons-material/BackupTableOutlined';
 import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import LayersOutlinedIcon from '@mui/icons-material/LayersOutlined';
 import AppHeader from './AppHeader';
 
 interface Props {
@@ -57,6 +58,12 @@ const ResponsiveDrawer: React.FC<Props> = (props) => {
       state: '/usuarios',
       path: 'usuarios',
     },
+    {
+      title: 'Categorias',
+      icon: <LayersOutlinedIcon />,
+      state: '/category',
+      path: 'category',
+    },
   ];
 
   const drawer = (
@@ -71,13 +78,12 @@ const ResponsiveDrawer: React.FC<Props> = (props) => {
         sx={{ width: { sm: props.sidebarWidth }, flexShrink: { sm: 0 }, p: 0 }}
         aria-label="mailbox folders"
       >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Drawer
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
+            keepMounted: true,
           }}
           sx={{
             p: 0,
@@ -86,8 +92,9 @@ const ResponsiveDrawer: React.FC<Props> = (props) => {
               padding: 0,
               boxSizing: 'border-box',
               width: 300,
+              backgroundImage: "none",
               borderWidth: 0,
-              bgcolor: '#202125',
+              bgcolor: theme => theme.palette.background.paper,
               '::-webkit-scrollbar': {
                 display: 'none',
               },

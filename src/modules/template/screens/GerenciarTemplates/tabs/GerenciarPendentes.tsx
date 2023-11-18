@@ -128,7 +128,8 @@ export const GerenciarPendentes = () => {
                                     <TableCell align="center">{row.extensao}</TableCell>
                                     <TableCell align="center"><Typography variant="subtitle2" sx=
                                         {{
-                                            bgcolor: "#b37509", 
+                                            color: "#fff",
+                                            bgcolor: "#c59400", 
                                             borderRadius: 1,
                                             width: "80px",
                                             margin: "auto"

@@ -1,25 +1,21 @@
-import { Box, IconButton, InputAdornment, Menu, MenuItem, Pagination, Select, Stack, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
+import { Box, IconButton, InputAdornment, Menu, MenuItem, Pagination, Select, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import { useGerenciarAtivos } from "../../../hooks/GerenciarTemplates/states/useGerenciarAtivo";
 import TPaper from "../../../../../components/common/TPaper";
 import SearchIcon from '@mui/icons-material/Search';
-import { MethodsEnum } from "../../../../../shared/enums/methods.enum";
-import { useRequests } from "../../../../../shared/hooks/useRequests";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useMenu } from "../../../hooks/GerenciarTemplates/useMenu";
 import { DeleteConfirmationModal } from "../../../components/DeleteConfirmationModal";
 
 export const GerenciarAtivos = () => {
-    const { request } = useRequests();
     const {
         anchorEl,
         selectedItemId,
         isDeleteDialogOpen,
-        handleEdit,
+        handleEditTemplate,
         handleDelete,
         handleDeactivate,
         handleMenuClose,
         handleMenuOpen,
-        handleActivate,
         handleDeleteConfirm,
         handleDeleteCancel,
     } = useMenu();
@@ -31,29 +27,13 @@ export const GerenciarAtivos = () => {
         page,
         searchText,
         searchBy,
+        templatesAtivos,
         handleFormatFilterChange,
         handleChangeRowsPerPage,
         handleChangePage,
         handleSearchByChange,
         handleSearch,
     } = useGerenciarAtivos();
-
-
-
-    const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>, id: number) => {
-        const formData = {
-            status: event.target.checked ? 'ativo' : 'inativo'
-        }
-
-        request(`http://localhost:3000/template/${id}`, MethodsEnum.PATCH, undefined, formData)
-            .then((response) => {
-                console.log(response)
-            })
-            .catch((erro) => {
-                console.log(erro)
-            })
-    };
-
 
     return (
         <>
@@ -62,7 +42,11 @@ export const GerenciarAtivos = () => {
                 isOpen={isDeleteDialogOpen}
                 onConfirm={handleDeleteConfirm}
                 onCancel={handleDeleteCancel}
-            />
+            >
+                <Typography variant="subtitle1" color={theme => theme.palette.text.secondary}>
+                    Ao excluir um template, todos os uploads associados serão apagados permanentemente.
+                </Typography>
+            </DeleteConfirmationModal>
 
 
 
@@ -71,18 +55,18 @@ export const GerenciarAtivos = () => {
                     display: "flex",
                     justifyContent: 'space-between',
                     p: 2,
-                    borderBottom: "1px solid white"
+                    borderBottom: "1px solid #ccc"
                 }}>
                     <Stack direction="row" spacing={2}>
 
                         <TextField
                             value={searchText}
                             onChange={handleSearch}
-                            placeholder="Search"
+                            placeholder="Pesquisar"
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">
-                                        <SearchIcon sx={{ color: "white" }} />
+                                        <SearchIcon />
                                     </InputAdornment>
                                 ),
                             }}
@@ -117,7 +101,7 @@ export const GerenciarAtivos = () => {
                         >
                             <MenuItem value={10}>10</MenuItem>
                             <MenuItem value={100}>100</MenuItem>
-                            <MenuItem value={currentTemplates.length}>Todos</MenuItem>
+                            <MenuItem value={templatesAtivos.length}>Todos</MenuItem>
                         </Select>
 
 
@@ -144,15 +128,15 @@ export const GerenciarAtivos = () => {
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
                                     <TableCell component="th" scope="row">
-                                        {row.name}
+                                        <Typography noWrap>{row.name}</Typography>
                                     </TableCell>
-                                    <TableCell align="center">{row.autor}</TableCell>
-                                    <TableCell align="center">{row.createdAt}</TableCell>
-                                    <TableCell align="center"><Typography>{row.extensao}</Typography></TableCell>
-                                    <TableCell align="center"><Typography variant="subtitle2" sx={{ bgcolor: "#067906", borderRadius: 1 }}>{row.status}</Typography></TableCell>
+                                    <TableCell align="center"><Typography noWrap>{row.autor}</Typography></TableCell>
+                                    <TableCell align="center"><Typography noWrap>{row.createdAt}</Typography></TableCell>
+                                    <TableCell align="center"><Typography noWrap>{row.extensao}</Typography></TableCell>
+                                    <TableCell align="center"><Typography noWrap variant="subtitle2" sx={{ color: "#fff", bgcolor: "#238527", borderRadius: 1 }}>{row.status}</Typography></TableCell>
                                     <TableCell align="center">
-                          
-                                        <IconButton color="primary"onClick={(event) => handleMenuOpen(event, row.id)}>
+
+                                        <IconButton sx={{ color: "#8d8d8d" }} onClick={(event) => handleMenuOpen(event, row.id)}>
                                             <MoreVertIcon />
                                         </IconButton>
 
@@ -161,13 +145,10 @@ export const GerenciarAtivos = () => {
                                             open={Boolean(anchorEl && selectedItemId === row.id)}
                                             onClose={handleMenuClose}
                                         >
-                                            <MenuItem onClick={() => handleActivate(row.id)}>
-                                                Ativar
-                                            </MenuItem>
                                             <MenuItem onClick={() => handleDeactivate(row.id)}>
                                                 Desativar
                                             </MenuItem>
-                                            <MenuItem onClick={() => handleEdit(row.id)}>
+                                            <MenuItem onClick={() => handleEditTemplate(row.id)}>
                                                 Editar
                                             </MenuItem>
                                             <MenuItem onClick={() => handleDelete(row.id)}>

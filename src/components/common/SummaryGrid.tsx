@@ -1,30 +1,46 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { images } from "../../assets";
-import { Box, Grid, Stack, Typography, colors,useTheme } from '@mui/material';
+import { Box, Grid, Stack, Typography,useTheme } from '@mui/material';
 import {Animate} from "./Animate";
 import MPaper from './MPaper';
+import { useRequests } from '../../shared/hooks/useRequests';
+import { MethodsEnum } from '../../shared/enums/methods.enum';
 
-const summaryData = [
-  {
-    title: "Templates cadastrados",
-    value: "714k",
-    image: images.summaryImages.totalBook
-  },
-  {
-    title: "Uploads realizados",
-    value: "311k",
-    image: images.summaryImages.sold
-  },
-  {
-    title: "Total de usuários",
-    value: "333",
-    image: images.summaryImages.cancel
-  }
-];
+
+type TotalType = {
+  total_templates?: string;
+  total_uploads?: string;
+  total_users?: string;
+};
 
 const SummaryGrid = () => {
 
   const theme = useTheme();
+  const { request } = useRequests();
+  const [total, setTotal] = useState<TotalType>({});
+
+  useEffect(() => {
+    	request("http://localhost:5000/totals",MethodsEnum.GET,setTotal)
+  },[])
+
+
+  const summaryData = [
+    {
+      title: "Templates cadastrados",
+      value: total.total_templates,
+      image: images.summaryImages.totalBook
+    },
+    {
+      title: "Uploads realizados",
+      value: total.total_uploads,
+      image: images.summaryImages.sold
+    },
+    {
+      title: "Total de usuários",
+      value: total.total_users,
+      image: images.summaryImages.cancel
+    }
+  ];
 
   return (
     <Grid container spacing={3}>

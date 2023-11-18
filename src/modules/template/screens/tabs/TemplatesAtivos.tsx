@@ -1,17 +1,14 @@
 import { TemplateType } from "../../types/TemplateType";
-import { Box, Button, Grid, Modal,Typography} from "@mui/material";
+import { Box, Button, Grid, InputAdornment, MenuItem, Modal, Pagination, Select, TextField, Typography } from "@mui/material";
 import axios from "axios";
-import { URL_TEMPLATE_DOWNLOAD } from "../../../../shared/constants/urls";
 import { useCallback, useState } from "react";
 import React from "react";
 import { useDropzone } from 'react-dropzone';
 import { getAuthorizationToken } from "../../../../shared/functions/connection/auth";
 import { TemplateCard } from "../../components/TemplateCard";
+import SearchIcon from '@mui/icons-material/Search';
+import { useTemplate } from "../../hooks/states/useTemplate";
 
-interface TemplateAtivosProps {
-    currentTemplates: TemplateType[];
-    onFileUpload: (file: File) => void;
-}
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -19,13 +16,26 @@ const style = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 400,
-    bgcolor: '#757575',
-    border: '2px solid #000',
+    bgcolor: (theme: any) => theme.palette.background.paper,
     boxShadow: 24,
     p: 4,
 };
 
-export const TemplatesAtivos: React.FC<TemplateAtivosProps> = ({ currentTemplates, onFileUpload }) => {
+
+export const TemplatesAtivos = () => {
+    const {
+
+        totalPages,
+        currentTemplates,
+        formatFilter,
+        page,
+        searchText,
+        handleFormatFilterChange,
+        handleChangePage,
+        handleSearch,
+        handleDownloadTemplate
+    } = useTemplate();
+
     const [selectedTemplate, setSelectedTemplate] = useState<TemplateType | null>(null);
 
 
@@ -41,12 +51,11 @@ export const TemplatesAtivos: React.FC<TemplateAtivosProps> = ({ currentTemplate
             const file = acceptedFiles[0];
             if (allowedFileTypes.includes(file.type)) {
                 setSelectedFile(file);
-                onFileUpload(file);
             } else {
                 console.error("File type not allowed");
             }
         }
-    }, [onFileUpload]);
+    }, []);
 
 
     const { getRootProps, getInputProps } = useDropzone({
@@ -60,76 +69,87 @@ export const TemplatesAtivos: React.FC<TemplateAtivosProps> = ({ currentTemplate
 
     const handleOnSubmit = (templateId: number, extensao: string) => {
         const token = getAuthorizationToken();
-      
+
         if (selectedFile) {
-          const formData = {
-            extensao,
-            templateId: templateId,
-            file: selectedFile,
-          };
-        
-          const config = {
-            headers: {
-                Authorization: token,
-                'Content-Type': 'multipart/form-data',
-              },
-          };
-          
-          axios.post(`http://127.0.0.1:5000/upload`, formData, config)
-            .then((response) => {
-              console.log('File uploaded successfully', response.data);
-            })
-            .catch((error) => {
-              console.error('Error uploading file', error);
-            });
+            const formData = {
+                extensao,
+                templateId: templateId,
+                file: selectedFile,
+            };
+
+            const config = {
+                headers: {
+                    Authorization: token,
+                    'Content-Type': 'multipart/form-data',
+                },
+            };
+
+            axios.post(`http://127.0.0.1:5000/upload`, formData, config)
+                .then((response) => {
+                    console.log('File uploaded successfully', response.data);
+                })
+                .catch((error) => {
+                    console.error('Error uploading file', error);
+                });
         }
-      };
-
-      const handleDownloadTemplate = (templateId: number) => {
-        const formData = { templateId: templateId };
-        axios.post(URL_TEMPLATE_DOWNLOAD, formData, { responseType: 'blob' })
-
-            .then((response) => {
-
-                const contentDisposition = response.headers['content-disposition'];
-                const match = contentDisposition && contentDisposition.match(/filename="(.+)"$/);
-            
-                // Se houver correspondência, obtenha o nome do arquivo
-                const fileName = match ? match[1] : 'download';
-
-                console.log(response.data.templateName)
-                const mimeType = response.headers['content-type'];
-                const url = window.URL.createObjectURL(new Blob([response.data],{ type: mimeType }));
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = fileName;
-                link.click();
-                link.remove();
-            })
-            .catch((error) => {
-                console.error('Error downloading template:', error);
-            });
     };
+
 
     return (
         <>
-            <Grid container spacing={2}>
-                {currentTemplates.length > 0 ? (
-                    currentTemplates.map((template, index) => (
-                        <TemplateCard
-                            key={index}
-                            template={template}
-                            handleDownloadTemplate={handleDownloadTemplate}
-                            handleOpen={() => {
-                                setSelectedTemplate(template);
-                                handleOpen();
-                            }}
-                        />
-                    ))
-                ) : (
-                    <Typography marginBottom={2} variant="body1">Nenhum template encontrado</Typography>
-                )}
-            </Grid>
+            <TextField
+                sx={{ mb: 5 }}
+                value={searchText}
+                onChange={handleSearch}
+                placeholder="Pesquisar"
+                InputProps={{
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            <SearchIcon />
+                        </InputAdornment>
+                    ),
+                }}
+
+            />
+            <Select
+                value={formatFilter}
+                onChange={handleFormatFilterChange}
+                style={{ marginLeft: 10 }}
+            >
+                <MenuItem value="all">Todos</MenuItem>
+                <MenuItem value="csv">CSV</MenuItem>
+                <MenuItem value="xls">XLS</MenuItem>
+                <MenuItem value="xlsx">XLSX</MenuItem>
+            </Select>
+
+            {currentTemplates.length > 0 ? (
+                <Grid container spacing={2}>
+                    {currentTemplates.length > 0 ? (
+                        currentTemplates.map((template, index) => (
+                            <TemplateCard
+                                key={index}
+                                template={template}
+                                handleDownloadTemplate={handleDownloadTemplate}
+                                handleOpen={() => {
+                                    setSelectedTemplate(template);
+                                    handleOpen();
+                                }}
+                            />
+                        ))
+                    ) : (
+                        <Typography marginBottom={2} variant="body1">Nenhum template encontrado</Typography>
+                    )}
+                </Grid>
+            ) : (
+                <Grid item xs={12} sx={{ textAlign: 'center' }}>
+                    <Typography variant="body1">
+                        Nenhum template encontrado
+                    </Typography>
+                </Grid>
+            )}
+            <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
+                <Pagination color="secondary" siblingCount={0} count={totalPages} page={page} onChange={handleChangePage} />
+            </Box>
 
             <Modal
                 open={open}
@@ -147,7 +167,7 @@ export const TemplatesAtivos: React.FC<TemplateAtivosProps> = ({ currentTemplate
                     {selectedFile && <p>Arquivo selecionado: {selectedFile.name}</p>}
                     <Button
                         variant="contained"
-                        onClick={() => selectedTemplate && handleOnSubmit(selectedTemplate.id,selectedTemplate.extensao)}
+                        onClick={() => selectedTemplate && handleOnSubmit(selectedTemplate.id, selectedTemplate.extensao)}
                         disabled={!selectedFile || !selectedTemplate?.id}
                     >
                         Enviar

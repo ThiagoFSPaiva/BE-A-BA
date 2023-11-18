@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
 import {
   Box,
-  Stack,
   TextField,
   FormControl,
   InputLabel,
@@ -9,10 +7,12 @@ import {
   MenuItem,
   Button,
   Grid,
+  Stack,
 } from '@mui/material';
-import { connectionAPIPost } from '../../../shared/functions/connection/connectionAPI';
 import { useTemplateInsert } from '../hooks/useInsertTemplate';
 import MPaper from '../../../components/common/MPaper';
+import { useCategory } from '../../category/hooks/useCategory';
+import { CategoryType } from '../../category/types/CategoryType';
 
 
 
@@ -31,8 +31,11 @@ export const InsertTemplate = () => {
     disabledButton,
     handleAddCampo,
     handleInsertTemplate,
-    handleOnChangeInput
+    handleOnChangeInput,
+    handleCancel,
+    handleChangeSelect
   } = useTemplateInsert();
+  const { categories } = useCategory();
 
   return (
 
@@ -43,8 +46,13 @@ export const InsertTemplate = () => {
           noValidate
           autoComplete="off"
         >
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
+
+
+
+          <Grid container gap={3} alignItems="center">
+
+            {/* Linha 1: Nome do Template */}
+            <Grid item xs={12}>
               <FormControl fullWidth>
                 <TextField
                   value={template.name}
@@ -54,7 +62,25 @@ export const InsertTemplate = () => {
                 />
               </FormControl>
             </Grid>
-            <Grid item xs={6}>
+
+            {/* Linha 2: Categoria e Extensão */}
+            <Grid item xs={5}>
+              <FormControl fullWidth variant="filled">
+                <InputLabel>Categoria</InputLabel>
+                <Select
+                  value={template.categoryId || ''}
+                  onChange={(event) => handleChangeSelect(event)}
+                >
+                  {categories.map((category: CategoryType) => (
+                    <MenuItem key={category.id} value={category.id}>
+                      {category.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={5}>
               <FormControl fullWidth variant="filled">
                 <InputLabel>Extensao</InputLabel>
                 <Select
@@ -68,40 +94,54 @@ export const InsertTemplate = () => {
                 </Select>
               </FormControl>
             </Grid>
+
+            {/* Linha 3: Nome do Campo, Tipo e Botão + */}
             {template.campo.map((campo, index) => (
-              <Grid key={index} item xs={6}>
-                <FormControl fullWidth>
-                  <TextField
-                    value={campo.name}
-                    onChange={(event) => handleOnChangeInput(event, 'campo', index)}
-                    label="Nome do Campo"
-                    variant="filled"
-                    required
-                  />
-                </FormControl>
-                <FormControl fullWidth variant="filled">
-                  <InputLabel>Tipo</InputLabel>
-                  <Select
-                    value={campo.tipo}
-                    onChange={(event) => handleOnChangeInput(event, 'tipo', index)}
+              <Grid container gap={2} key={index} alignItems="center">
+                <Grid item xs={6}>
+                  <FormControl fullWidth>
+                    <TextField
+                      value={campo.name}
+                      onChange={(event) => handleOnChangeInput(event, 'campo', index)}
+                      label="Nome do Campo"
+                      variant="filled"
+                      required
+                    />
+                  </FormControl>
+                </Grid>
+
+                <Grid item xs={4}>
+                  <FormControl variant="filled" fullWidth>
+                    <InputLabel>Tipo</InputLabel>
+                    <Select
+                      value={campo.tipo}
+                      onChange={(event) => handleOnChangeInput(event, 'tipo', index)}
+                    >
+                      {tipos.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+
+                <Grid item xs={1}>
+                  <Button
+                    onClick={handleAddCampo}
+                    variant="contained"
+                    color="primary"
+                    style={{ marginTop: '16px' }}
                   >
-                    {tipos.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                    +
+                  </Button>
+                </Grid>
               </Grid>
             ))}
-            <Grid item xs={12}>
-              <Button onClick={handleAddCampo} variant="contained" color="primary">
-                +
-              </Button>
-            </Grid>
-
 
           </Grid>
+
+
 
 
 
@@ -113,7 +153,7 @@ export const InsertTemplate = () => {
           gap: 2
         }}>
 
-          <Button variant="contained" color="primary">
+          <Button variant="contained" onClick={handleCancel} color="secondary">
             Cancelar
           </Button>
 

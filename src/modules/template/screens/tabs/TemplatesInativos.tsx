@@ -3,38 +3,34 @@ import { Box, Card, CardContent, Grid, Stack, Typography } from "@mui/material";
 import MPaper from "../../../../components/common/MPaper";
 import { useRequests } from "../../../../shared/hooks/useRequests";
 import { useEffect } from "react";
-import { URL_MYTEMPLATES_PENDENTES } from "../../../../shared/constants/urls";
+import { URL_MYTEMPLATES_INATIVOS } from "../../../../shared/constants/urls";
 import { useTemplateReducer } from "../../../../store/reducers/templateReducer/useTemplateReducer";
 import { MethodsEnum } from "../../../../shared/enums/methods.enum";
 import { images } from "../../../../assets";
 
 
 
-export const TemplatePendente = () => {
-  const { meusTemplatesPendentes, setMeusTemplatesPendentes } = useTemplateReducer();
+export const TemplateInativo = () => {
+  const { meusTemplatesInativos, setMeusTemplatesInativos } = useTemplateReducer();
   const { request } = useRequests();
 
 
   useEffect(() => {
-    request<TemplateType[]>(URL_MYTEMPLATES_PENDENTES, MethodsEnum.GET, setMeusTemplatesPendentes);
+    request<TemplateType[]>(URL_MYTEMPLATES_INATIVOS, MethodsEnum.GET, setMeusTemplatesInativos);
   }, []);
 
 
   return (
 
-
-
-
-
     <Grid container spacing={3}>
-      {meusTemplatesPendentes.length === 0 ? (
+      {meusTemplatesInativos.length === 0 ? (
         <Grid item xs={12} sx={{ textAlign: 'center' }}>
           <Typography variant="body1">
             Nenhum template encontrado
           </Typography>
         </Grid>
       ) : (
-        meusTemplatesPendentes.map((template, index) => (
+        meusTemplatesInativos.map((template, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>
             <Card component={MPaper}>
               <Box sx={{

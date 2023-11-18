@@ -18,7 +18,7 @@ const MenuItem: React.FC<MenuItemProps> = (props) => {
         sx={{
           borderRadius: '10px',
           bgcolor: props.isActive ? colors.green[600] : '',
-          color: props.isActive ? '#fff' : '#fff',
+          color: props.isActive ? '#fff' : theme => theme.palette.text.primary,
           textDecoration: 'none',
           '&:hover': {
             bgcolor: props.isActive ? colors.green[600] : '',
@@ -29,7 +29,7 @@ const MenuItem: React.FC<MenuItemProps> = (props) => {
         <ListItemIcon
           sx={{
             minWidth: '40px',
-            color: props.isActive ? colors.common.white : '#fff',
+            color: props.isActive ? colors.common.white : theme => theme.palette.text.primary,
           }}
         >
           {props.item.icon}
