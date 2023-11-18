@@ -6,6 +6,9 @@ class Template(db.Model):
     name = db.Column(db.String(255))
     extensao = db.Column(db.String(10))
     campos = db.relationship('Campo', backref='template', lazy=True)
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+    category = db.relationship('Category', backref=db.backref('templates', lazy=True))
+    created_at = db.Column(db.DateTime)
 
 class Campo(db.Model):
     __tablename__ = 'campo'
@@ -27,7 +30,12 @@ class Upload(db.Model):
 class User(db.Model):
     __tablename__ = 'user'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String, primary_key=True)
+    typeUser = db.Column(db.String)
     name = db.Column(db.String)
     matricula = db.Column(db.String)
     created_at = db.Column(db.DateTime)
+
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)

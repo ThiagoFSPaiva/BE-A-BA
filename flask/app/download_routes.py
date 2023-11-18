@@ -1,4 +1,5 @@
-from flask import Blueprint, jsonify, request, send_file, make_response
+
+from flask import Blueprint, jsonify, request, send_file
 import io
 import pandas as pd
 import xlwt
@@ -10,10 +11,9 @@ from sqlalchemy.orm import joinedload
 
 download_bp = Blueprint('download', __name__)
 
-@download_bp.route('/download_excel/', methods=['POST'])
-def download_excel():
-    data = request.get_json()
-    template_id = data.get('templateId')
+@download_bp.route('/download_excel/<int:template_id>', methods=['GET'])
+def download_excel(template_id):
+
     template = Template.query.options(joinedload(Template.campos)).filter_by(id=template_id).first()
     if not template:
         return jsonify({'error': 'Template não encontrado'}), 404
@@ -42,23 +42,18 @@ def download_excel():
         mimetype = 'application/vnd.ms-excel'
 
     strIO.seek(0)
+    file_name = f"{template.name}.{extensao_template}"
 
-    reponse = make_response (send_file(
+    return send_file(
         strIO,
         mimetype=mimetype,
         as_attachment=True,
-        download_name=f"{template.name}.{extensao_template}"
-    ))
-
-    reponse.headers.set('Content-Disposition', 'attachment', filename=f"{template.name}.{extensao_template}")
-
-    return reponse
-
+        download_name=file_name
+    )
 
 @download_bp.route('/download', methods=['POST'])
 def download_file():
     token = request.headers.get('Authorization')
-
     if token is None:
         return jsonify({'message': 'Token ausente'}), 401
 
