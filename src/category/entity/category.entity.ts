@@ -14,7 +14,7 @@ export class CategoryEntity {
     @CreateDateColumn({name: 'created_at', nullable: false})
     createdAt: Date;
 
-    @OneToMany(() => TemplateEntity, (template: TemplateEntity) => template.category)
-    templates: TemplateEntity
+    @OneToMany(() => TemplateEntity, (template: TemplateEntity) => template.category, { onDelete: 'CASCADE' }) 
+    templates?: TemplateEntity[];
 
 }

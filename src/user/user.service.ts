@@ -18,11 +18,9 @@ export class UserService {
 
     async createUser(createUserDto: CreateUserDto) : Promise<UserEntity> {
         const matricula = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
-        const matriculaExiste = await this.userRepository.findOne({
-            where: {
-                matricula: matricula.toString()
-            }
-        });
+
+
+        const matriculaExiste = await this.getUserByMatricula(matricula.toString()).catch(() => undefined);
 
         if(matriculaExiste) {
             return this.createUser(createUserDto);
@@ -47,7 +45,7 @@ export class UserService {
         }
 
         const lowercaseEmail = createUserDto.email.toLowerCase();
-    
+
         const createdUser = this.userRepository.save({
             ...createUserDto,
             email: lowercaseEmail,

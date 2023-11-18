@@ -11,7 +11,7 @@ export class EmailService {
     async sendMatriculaEmail(email: string, matricula: string): Promise<void> {
         await this.mailerService.sendMail({
             to: email,
-            from: 'thiagofellipe151@gmail.com', // Substitua pelo seu e-mail verificado
+            from: 'thiagofellipe151@gmail.com',
             subject: 'Matrícula',
             text: `Sua matrícula é: ${matricula}`,
             html: `<p>Sua matrícula é: <b>${matricula}</b></p>`,

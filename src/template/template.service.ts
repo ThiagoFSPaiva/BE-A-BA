@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TemplateEntity } from './entity/template.entity';
 import { DeleteResult, Repository } from 'typeorm';
@@ -11,6 +11,7 @@ import { ReturnCampoDto } from 'src/campo/dtos/returnCampo.dto';
 import { UserType } from 'src/user/enum/user-type.enum';
 import { UpdateTemplateDto } from './dtos/update-template.dto';
 import { CategoryService } from 'src/category/category.service';
+import { CountTemplate } from './dtos/count-template.dto';
 
 @Injectable()
 export class TemplateService {
@@ -20,7 +21,9 @@ export class TemplateService {
         private templateRepository: Repository<TemplateEntity>,
         private readonly userService: UserService,
         private readonly campoService: CampoService,
-        private readonly categoryService: CategoryService
+        @Inject(forwardRef(() => CategoryService))
+        private readonly categoryService: CategoryService,
+    
     ) { }
 
     async createTemplate(createTemplate: CreateTemplateDto, userId: string): Promise<TemplateEntity> {
@@ -66,69 +69,53 @@ export class TemplateService {
     }
 
     async getTemplatesActiveWithAuthors(): Promise<TemplateEntity[]> {
-        return this.templateRepository
-            .createQueryBuilder('template')
-            .leftJoinAndSelect('template.user', 'user')
-            .where('template.status = :status', { status: StatusType.Ativo })
-            .select([
-                'template.id',
-                'template.name',
-                'template.extensao',
-                'template.status',
-                'template.createdAt',
-                'template.updatedAt',
-                'user.name',
-            ])
-            .getMany();
+        return this.templateRepository.find({
+            where: {
+                status: StatusType.Ativo
+            },
+            relations: ['user','category'],
+            order: {
+                createdAt: "DESC"
+            }
+        })
     }
 
 
     async getTemplatesPendingWithAuthors(): Promise<TemplateEntity[]> {
-        return this.templateRepository
-            .createQueryBuilder('template')
-            .leftJoinAndSelect('template.user', 'user')
-            .where('template.status = :status', { status: StatusType.Pendente })
-            .select([
-                'template.id',
-                'template.name',
-                'template.extensao',
-                'template.status',
-                'template.createdAt',
-                'template.updatedAt',
-                'user.name',
-            ])
-            .getMany();
+        return this.templateRepository.find({
+            where: {
+                status: StatusType.Pendente
+            },
+            relations: ['user','category'],
+            order: {
+                createdAt: "DESC"
+            }
+        })
     }
 
     async getTemplatesInactiveWithAuthors(): Promise<TemplateEntity[]> {
-        return this.templateRepository
-            .createQueryBuilder('template')
-            .leftJoinAndSelect('template.user', 'user')
-            .where('template.status = :status', { status: StatusType.Inativo })
-            .select([
-                'template.id',
-                'template.name',
-                'template.extensao',
-                'template.status',
-                'template.createdAt',
-                'template.updatedAt',
-                'user.name',
-            ])
-            .getMany();
+        return this.templateRepository.find({
+            where: {
+                status: StatusType.Inativo
+            },
+            relations: ['user','category'],
+            order: {
+                createdAt: "DESC"
+            }
+        })
+
     }
 
-
-
-    async getTemplateByUser(id: string): Promise<TemplateEntity[]> {
+    async getTemplateInactiveByUser(id: string): Promise<TemplateEntity[]> {
 
         await this.userService.getUserById(id);
 
         const template = await this.templateRepository.find({
             where: {
                 userId: id,
-                status: StatusType.Pendente
+                status: StatusType.Inativo
             },
-            relations: ['campo'],
+            relations: ['campo','category'],
             order: {
                 createdAt: "DESC"
             }
@@ -141,12 +128,44 @@ export class TemplateService {
         return template;
     }
 
+
+    async getTemplatePendingByUser(id: string): Promise<TemplateEntity[]> {
+
+        await this.userService.getUserById(id);
+
+        const template = await this.templateRepository.find({
+            where: {
+                userId: id,
+                status: StatusType.Pendente
+            },
+            relations: ['campo','category'],
+            order: {
+                createdAt: "DESC"
+            }
+        });
+
+        if (!template || template.length === 0) {
+            throw new NotFoundException('Não foi encontrado Templates para este usuário');
+        }
+
+        return template;
+    }
+
+    async getTemplatesByCategory(categoryId: number): Promise<any> {
+        return this.templateRepository.count({
+            where: {
+                categoryId: categoryId
+            }
+        })
+    }
+
+
     async getTemplatesAtivos(): Promise<TemplateEntity[]> {
         const ativos = await this.templateRepository.find({
             where: {
-                status: StatusType.Ativo
+                status: StatusType.Ativo,
             },
-            relations: ['campo'],
+            relations: ['campo','category'],
             order: {
                 createdAt: "DESC"
             }
@@ -157,7 +176,6 @@ export class TemplateService {
         }
 
         return ativos;
-
     }
 
 
@@ -199,4 +217,14 @@ export class TemplateService {
             ...updateTemplate
         })
     }
+
+
+
+    async countProdutsByCategoryId(): Promise<CountTemplate[]> {
+        return this.templateRepository
+          .createQueryBuilder('template')
+          .select('template.category_id, COUNT(*) as total')
+          .groupBy('template.category_id')
+          .getRawMany();
+      }
 }

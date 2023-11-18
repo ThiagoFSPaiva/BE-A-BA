@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TemplateService } from './template.service';
 import { TemplateController } from './template.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -6,7 +6,6 @@ import { TemplateEntity } from './entity/template.entity';
 import { UserModule } from 'src/user/user.module';
 import { CampoModule } from 'src/campo/campo.module';
 import { CampoEntity } from 'src/campo/entity/campo.entity';
-import { CategoryEntity } from 'src/category/entity/category.entity';
 import { CategoryModule } from 'src/category/category.module';
 
 @Module({
@@ -14,9 +13,11 @@ import { CategoryModule } from 'src/category/category.module';
     CampoModule,
     UserModule,
     CategoryModule,
-    TypeOrmModule.forFeature([TemplateEntity,CampoEntity,CategoryEntity])
+    forwardRef(() => CategoryModule),
+    TypeOrmModule.forFeature([TemplateEntity,CampoEntity])
   ],
   providers: [TemplateService],
-  controllers: [TemplateController]
+  controllers: [TemplateController],
+  exports: [TemplateService],
 })
 export class TemplateModule {}

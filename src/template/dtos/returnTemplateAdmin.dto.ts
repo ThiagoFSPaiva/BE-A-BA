@@ -9,6 +9,7 @@ export class ReturnTemplateAdminDto {
     createdAt: string;
     campo: any[];
     autor: string;
+    categoryName: string;
     id: number;
 
     constructor(template: TemplateEntity){
@@ -17,7 +18,8 @@ export class ReturnTemplateAdminDto {
         this.status = template.status;
         this.campo = template.campo;
         this.id = template.id
-        this.autor = template.user.name;
+        this.categoryName = template.category.name
+        this.autor = template.user.name.split(' ').filter((_, index, array) => index === 0 || index === array.length - 1).join(' ');
         this.createdAt = template.createdAt.toLocaleDateString('pt-BR') + ' ' + template.createdAt.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'});
     }
 }

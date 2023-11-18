@@ -41,7 +41,7 @@ export class TemplateEntity {
     @OneToMany(() => UploadEntity, upload => upload.template)
     uploads: UploadEntity[];
 
-    @ManyToOne(() => CategoryEntity, (category: CategoryEntity) => category.templates)
+    @ManyToOne(() => CategoryEntity, (category: CategoryEntity) => category.templates, { onDelete: 'CASCADE' })
     @JoinColumn( { name: 'category_id', referencedColumnName: 'id'})
     category?: CategoryEntity
 }

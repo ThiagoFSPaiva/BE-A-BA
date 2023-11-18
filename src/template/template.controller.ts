@@ -20,13 +20,18 @@ export class TemplateController {
 
     @Post('criar-template')
     @UsePipes(ValidationPipe)
-    async createTemplateWithCampos(@Body() createTemplate: CreateTemplateDto, @UserId() userId: string): Promise<ReturnTemplateDto> {
-        return new ReturnTemplateDto( await this.templateService.createTemplateWithFields(createTemplate,userId)); 
+    async createTemplateWithCampos(@Body() createTemplate: CreateTemplateDto, @UserId() userId: string): Promise<TemplateEntity> {
+        return await this.templateService.createTemplateWithFields(createTemplate,userId); 
     }
 
-    @Get('listar-templates-por-id')
-    async getTemplateByUser(@UserId() userId: string): Promise<ReturnTemplateDto[]> {
-        return (await this.templateService.getTemplateByUser(userId)).map(template => new ReturnTemplateDto(template));
+    @Get('meus-templates-pendentes')
+    async getTemplatePendingByUser(@UserId() userId: string): Promise<ReturnTemplateAdminDto[]> {
+        return (await this.templateService.getTemplatePendingByUser(userId)).map(template => new ReturnTemplateAdminDto(template));
+    }
+
+    @Get('meus-templates-inativos')
+    async getTemplateInactiveByUser(@UserId() userId: string): Promise<ReturnTemplateDto[]> {
+        return (await this.templateService.getTemplateInactiveByUser(userId)).map(template => new ReturnTemplateDto(template));
     }
     
     @Get('/listar-templates-ativos')
