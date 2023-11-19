@@ -9,7 +9,6 @@ import { useMenu } from "../../../hooks/GerenciarTemplates/useMenu";
 import { DeleteConfirmationModal } from "../../../components/DeleteConfirmationModal";
 
 export const GerenciarInativos = () => {
-    const { request } = useRequests();
     const {
         totalPages,
         currentTemplates,
@@ -28,9 +27,7 @@ export const GerenciarInativos = () => {
         anchorEl,
         selectedItemId,
         isDeleteDialogOpen,
-        handleEdit,
         handleDelete,
-        handleDeactivate,
         handleMenuClose,
         handleMenuOpen,
         handleActivate,
@@ -154,12 +151,9 @@ export const GerenciarInativos = () => {
                                             <MenuItem onClick={() => handleActivate(row.id)}>
                                                 Ativar
                                             </MenuItem>
-                                            <MenuItem onClick={() => handleDeactivate(row.id)}>
-                                                Desativar
-                                            </MenuItem>
-                                            <MenuItem onClick={() => handleEdit(row.id)}>
+                                            {/* <MenuItem onClick={() => handleEdit(row.id)}>
                                                 Editar
-                                            </MenuItem>
+                                            </MenuItem> */}
                                             <MenuItem onClick={() => handleDelete(row.id)}>
                                                 Excluir
                                             </MenuItem>

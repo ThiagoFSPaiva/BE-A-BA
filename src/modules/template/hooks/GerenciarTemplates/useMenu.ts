@@ -4,11 +4,15 @@ import { MethodsEnum } from "../../../../shared/enums/methods.enum";
 import { useRequests } from "../../../../shared/hooks/useRequests";
 import { GerenciarTemplateRoutesEnum } from "../../routes";
 import { useNavigate } from "react-router-dom";
+import { TemplateType } from "../../types/TemplateType";
+import { useTemplateAdminReducer } from "../../../../store/reducers/templateAdminReducer/useTemplateAdminReducer";
+import { URL_TEMPLATE, URL_TEMPLATEADMIN_ALL } from "../../../../shared/constants/urls";
 
 export const useMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
   const [isDeleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
+  const { setTemplates } = useTemplateAdminReducer();
   const navigate = useNavigate();
   const { request } = useRequests();
 
@@ -22,31 +26,28 @@ export const useMenu = () => {
     setSelectedItemId(null);
   };
 
-  const handleActivate = (id: number) => {
+  const handleActivate = async (id: number) => {
     const formData = {
       status: 'ativo'
     }
 
-    request(`http://localhost:3000/template/${id}`, MethodsEnum.PATCH, undefined, formData)
-      .then((response) => {
-        console.log(response)
-      })
-      .catch((erro) => {
-        console.log(erro)
-      })
+    await request(`${URL_TEMPLATE}/${id}`, MethodsEnum.PATCH, undefined, formData)
+    await request<TemplateType[]>(URL_TEMPLATEADMIN_ALL, MethodsEnum.GET, setTemplates);
 
     handleMenuClose();
   };
 
-  const handleDeactivate = (id: number) => {
+  const handleDesactivate = async (id: number) => {
 
     const formData = {
       status: 'inativo'
     }
 
-    request(`http://localhost:3000/template/${id}`, MethodsEnum.PATCH, undefined, formData)
+    await request(`${URL_TEMPLATE}/${id}`, MethodsEnum.PATCH, undefined, formData)
+    await request<TemplateType[]>(URL_TEMPLATEADMIN_ALL, MethodsEnum.GET, setTemplates);
 
     handleMenuClose();
+
   };
 
 
@@ -54,10 +55,6 @@ export const useMenu = () => {
     navigate(GerenciarTemplateRoutesEnum.TEMPLATE_EDIT.replace(':templateId', `${templateId}`));
   };
 
-  // const handleEdit = (id: number) => {
-  //   console.log("editando " + id)
-  //   handleMenuClose();
-  // };
   const handleDelete = (id: number) => {
     setSelectedItemId(id);
     setDeleteDialogOpen(true);
@@ -65,13 +62,9 @@ export const useMenu = () => {
 
   const handleDeleteConfirm = () => {
 
-    request(`http://localhost:3000/template/${selectedItemId}`, MethodsEnum.DELETE)
-    .then((response) => {
-      console.log(response)
-    })
-    .catch((erro) => {
-      console.log(erro)
-    })
+    request(`${URL_TEMPLATE}/${selectedItemId}`, MethodsEnum.DELETE)
+    request<TemplateType[]>(URL_TEMPLATEADMIN_ALL, MethodsEnum.GET, setTemplates);
+    setSelectedItemId(null)
 
     setDeleteDialogOpen(false);
     handleMenuClose();
@@ -87,7 +80,7 @@ export const useMenu = () => {
     isDeleteDialogOpen,
     handleEditTemplate,
     handleDelete,
-    handleDeactivate,
+    handleDesactivate,
     handleMenuClose,
     handleMenuOpen,
     handleActivate,

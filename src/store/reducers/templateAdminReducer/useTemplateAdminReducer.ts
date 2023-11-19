@@ -1,30 +1,25 @@
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../hooks";
 import { TemplateType } from "../../../modules/template/types/TemplateType";
-import { setAtivosAction, setInativosAction, setPendentesAction } from ".";
+import { setTemplatesAction } from ".";
 
 
 
 export const useTemplateAdminReducer = () => {
     const dispatch = useDispatch();
-    const { templatesAtivos,templatesInativos,templatesPendentes } = useAppSelector(state => state.templateAdminReducer);
+    const { templates, template } = useAppSelector(state => state.templateAdminReducer);
 
-    const setTemplatesAtivos = (template: TemplateType[]) => {
-        dispatch(setAtivosAction(template))
+    const setTemplate = (template: TemplateType[]) => {
+        dispatch(setTemplatesAction(template))
     }
-    const setTemplatesPendentes = (template: TemplateType[]) => {
-        dispatch(setPendentesAction(template))
-    }
-    const setTemplatesInativos = (template: TemplateType[]) => {
-        dispatch(setInativosAction(template))
+    const setTemplates = (template: TemplateType[]) => {
+        dispatch(setTemplatesAction(template))
     }
     
     return {
-        setTemplatesAtivos,
-        setTemplatesPendentes,
-        setTemplatesInativos,
-        templatesAtivos,
-        templatesInativos,
-        templatesPendentes
+        setTemplate,
+        template,
+        setTemplates,
+        templates,
     }
 }

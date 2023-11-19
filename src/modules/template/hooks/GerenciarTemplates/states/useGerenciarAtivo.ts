@@ -1,30 +1,25 @@
 import { useEffect, useState } from "react";
 import { useTemplateAdminReducer } from "../../../../../store/reducers/templateAdminReducer/useTemplateAdminReducer";
 import { TemplateType } from "../../../types/TemplateType";
-import { useRequests } from "../../../../../shared/hooks/useRequests";
-import { URL_TEMPLATEADMIN_ATIVO } from "../../../../../shared/constants/urls";
-import { MethodsEnum } from "../../../../../shared/enums/methods.enum";
 
 export const useGerenciarAtivos = () => {
-    const { templatesAtivos,setTemplatesAtivos} = useTemplateAdminReducer();
-    const [templatesFiltered, setTemplatesFiltered] = useState<TemplateType[]>(templatesAtivos);
+    const { templates } = useTemplateAdminReducer();
+    const [templatesFiltered, setTemplatesFiltered] = useState<TemplateType[]>(templates);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [page, setPage] = useState(1);
     const [searchText, setSearchText] = useState('');
     const [searchBy, setSearchBy] = useState('nome');
     const [formatFilter, setFormatFilter] = useState('all');
 
-    const { request } = useRequests();
-
 
     useEffect(() => {
+        const templatesAtivos = templates.filter(template => template.status === 'ativo');
+        
         setTemplatesFiltered(templatesAtivos);
-      }, [templatesAtivos]);
+      }, [templates]);
 
 
-    useEffect(() => {
-    request<TemplateType[]>(URL_TEMPLATEADMIN_ATIVO, MethodsEnum.GET, setTemplatesAtivos);
-    }, []);
+      console.log(templatesFiltered)
 
     const handleChangePage = (event: any, newPage: number) => {
         setPage(newPage);
@@ -75,12 +70,12 @@ export const useGerenciarAtivos = () => {
     return {
         totalPages,
         currentTemplates,
-        templatesAtivos,
         rowsPerPage,
         page,
         searchText,
         searchBy,
         formatFilter,
+        templatesFiltered,
         handleFormatFilterChange,
         handleChangeRowsPerPage,
         handleChangePage,

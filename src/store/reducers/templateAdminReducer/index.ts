@@ -2,33 +2,30 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { TemplateType } from '../../../modules/template/types/TemplateType'
 
 interface TemplateState {
-  templatesAtivos: TemplateType[];
-  templatesPendentes: TemplateType[];
-  templatesInativos: TemplateType[]
+  templates: TemplateType[];
+  template?: TemplateType;
 }
 
 const initialState: TemplateState = {
-    templatesAtivos: [],
-    templatesPendentes: [],
-    templatesInativos: []
+  templates: [],
+  template: undefined
 }
 
 export const counterSlice = createSlice({
   name: 'templateAdminReducer',
   initialState,
   reducers: {
-    setAtivosAction: (state, action: PayloadAction<TemplateType[]>) => {
-      state.templatesAtivos = action.payload
+
+    setTemplateAction: (state, action: PayloadAction<TemplateType | undefined>) => {
+      state.template = action.payload
     },
-    setPendentesAction: (state, action: PayloadAction<TemplateType[]>) => {
-      state.templatesPendentes = action.payload
-    },
-    setInativosAction: (state, action: PayloadAction<TemplateType[]>) => {
-        state.templatesInativos = action.payload
-      }
+
+    setTemplatesAction: (state, action: PayloadAction<TemplateType[]>) => {
+      state.templates = action.payload
+    }
   }
 })
 
-export const { setAtivosAction,setPendentesAction,setInativosAction  } = counterSlice.actions
+export const { setTemplatesAction } = counterSlice.actions
 
 export default counterSlice.reducer

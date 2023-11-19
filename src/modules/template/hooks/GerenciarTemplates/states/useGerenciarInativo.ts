@@ -1,29 +1,25 @@
 import { useEffect, useState } from "react";
 import { useTemplateAdminReducer } from "../../../../../store/reducers/templateAdminReducer/useTemplateAdminReducer";
 import { TemplateType } from "../../../types/TemplateType";
-import { useRequests } from "../../../../../shared/hooks/useRequests";
-import { MethodsEnum } from "../../../../../shared/enums/methods.enum";
-import { URL_TEMPLATEADMIN_INATIVO } from "../../../../../shared/constants/urls";
 
 export const useGerenciarInativos = () => {
-    const { templatesInativos,setTemplatesInativos} = useTemplateAdminReducer();
-    const [templatesFiltered, setTemplatesFiltered] = useState<TemplateType[]>(templatesInativos);
+    const { templates } = useTemplateAdminReducer();
+    const [templatesFiltered, setTemplatesFiltered] = useState<TemplateType[]>(templates);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [page, setPage] = useState(1);
     const [searchText, setSearchText] = useState('');
     const [searchBy, setSearchBy] = useState('nome');
     const [formatFilter, setFormatFilter] = useState('all');
-    const { request } = useRequests();
 
 
     useEffect(() => {
+        const templatesInativos = templates.filter(template => template.status === 'inativo');
+        
         setTemplatesFiltered(templatesInativos);
-      }, [templatesInativos]);
+      }, [templates]);
 
 
-    useEffect(() => {
-    request<TemplateType[]>(URL_TEMPLATEADMIN_INATIVO, MethodsEnum.GET, setTemplatesInativos);
-    }, []);
+      console.log(templatesFiltered)
 
     const handleChangePage = (event: any, newPage: number) => {
         setPage(newPage);
@@ -48,6 +44,7 @@ export const useGerenciarInativos = () => {
         setFormatFilter(event.target.value as string);
         setPage(1);
     };
+
 
     const filteredRows = templatesFiltered.filter((row) => {
         if (formatFilter !== 'all' && row.extensao !== formatFilter) return false;
@@ -78,6 +75,7 @@ export const useGerenciarInativos = () => {
         searchText,
         searchBy,
         formatFilter,
+        templatesFiltered,
         handleFormatFilterChange,
         handleChangeRowsPerPage,
         handleChangePage,

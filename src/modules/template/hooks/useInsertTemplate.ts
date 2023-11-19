@@ -4,6 +4,7 @@ import { useRequests } from "../../../shared/hooks/useRequests";
 import { useNavigate } from "react-router-dom";
 import { InsertTemplateType } from "../types/InsertTemplateType";
 import { TemplateRoutesEnum } from "../routes";
+import { useTemplateAdminReducer } from "../../../store/reducers/templateAdminReducer/useTemplateAdminReducer";
 
 const DEFAULT_PRODUCT = {
     name: '',
@@ -15,6 +16,8 @@ const DEFAULT_PRODUCT = {
 export const useTemplateInsert = () => {
     const navigate = useNavigate();
     const { request } = useRequests();
+    const { template: templateReducer, setTemplate: setTemplateReducer } = useTemplateAdminReducer();
+    const [isEdit, setIsEdit] = useState(false);
     const [disabledButton, setDisabledButton] = useState(true);
 
 

@@ -1,12 +1,12 @@
-import { Box, InputAdornment, MenuItem, Pagination, Select, Stack, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
+import { Box, IconButton, InputAdornment, Menu, MenuItem, Pagination, Select, Stack,Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import TPaper from "../../../../../components/common/TPaper";
 import SearchIcon from '@mui/icons-material/Search';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useMenu } from "../../../hooks/GerenciarTemplates/useMenu";
+import { DeleteConfirmationModal } from "../../../components/DeleteConfirmationModal";
 import { useGerenciarPendentes } from "../../../hooks/GerenciarTemplates/states/useGerenciarPendente";
-import { MethodsEnum } from "../../../../../shared/enums/methods.enum";
-import { useRequests } from "../../../../../shared/hooks/useRequests";
 
 export const GerenciarPendentes = () => {
-    const { request } = useRequests();
     const {
         totalPages,
         currentTemplates,
@@ -19,29 +19,30 @@ export const GerenciarPendentes = () => {
         handleChangeRowsPerPage,
         handleChangePage,
         handleSearchByChange,
-        handleSearch
+        handleSearch,
     } = useGerenciarPendentes();
-
-
-    
-    const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>, id: number) => {
-
-        const formData = {
-            status: event.target.checked ? 'ativo' : 'inativo'
-        }
-
-        request(`http://localhost:3000/template/${id}`, MethodsEnum.PATCH, undefined, formData)
-            .then((response: any) => {
-                console.log(response)
-            })
-            .catch((erro: any) => {
-                console.log(erro)
-            })
-    };
+    const {
+        anchorEl,
+        selectedItemId,
+        isDeleteDialogOpen,
+        handleDelete,
+        handleMenuClose,
+        handleMenuOpen,
+        handleActivate,
+        handleDeleteConfirm,
+        handleDeleteCancel,
+        handleDesactivate
+    } = useMenu();
 
 
     return (
         <>
+
+            <DeleteConfirmationModal
+                isOpen={isDeleteDialogOpen}
+                onConfirm={handleDeleteConfirm}
+                onCancel={handleDeleteCancel}
+            />
 
             <TableContainer component={TPaper}>
                 <Box sx={{
@@ -129,17 +130,36 @@ export const GerenciarPendentes = () => {
                                     <TableCell align="center"><Typography variant="subtitle2" sx=
                                         {{
                                             color: "#fff",
-                                            bgcolor: "#c59400", 
+                                            bgcolor: "#b37509",
                                             borderRadius: 1,
                                             width: "80px",
                                             margin: "auto"
                                         }}>
                                         {row.status}</Typography></TableCell>
                                     <TableCell align="center">
-                                        <Switch
-                                            defaultChecked={row.status === 'ativo'}
-                                            onChange={(event) => handleSwitchChange(event, row.id)}
-                                        />
+
+                                        <IconButton sx={{ color: "#8d8d8d" }} onClick={(event) => handleMenuOpen(event, row.id)}>
+                                            <MoreVertIcon />
+                                        </IconButton>
+
+                                        <Menu
+                                            anchorEl={anchorEl}
+                                            open={Boolean(anchorEl && selectedItemId === row.id)}
+                                            onClose={handleMenuClose}
+                                        >
+                                            <MenuItem onClick={() => handleActivate(row.id)}>
+                                                Ativar
+                                            </MenuItem>
+                                            <MenuItem onClick={() => handleDesactivate(row.id)}>
+                                                Desativar
+                                            </MenuItem>
+                                            {/* <MenuItem onClick={() => handleEdit(row.id)}>
+                                                Editar
+                                            </MenuItem> */}
+                                            <MenuItem onClick={() => handleDelete(row.id)}>
+                                                Excluir
+                                            </MenuItem>
+                                        </Menu>
                                     </TableCell>
                                 </TableRow>
                             ))}

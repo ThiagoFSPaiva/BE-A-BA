@@ -13,7 +13,7 @@ export const GerenciarAtivos = () => {
         isDeleteDialogOpen,
         handleEditTemplate,
         handleDelete,
-        handleDeactivate,
+        handleDesactivate,
         handleMenuClose,
         handleMenuOpen,
         handleDeleteConfirm,
@@ -27,7 +27,7 @@ export const GerenciarAtivos = () => {
         page,
         searchText,
         searchBy,
-        templatesAtivos,
+        templatesFiltered,
         handleFormatFilterChange,
         handleChangeRowsPerPage,
         handleChangePage,
@@ -101,7 +101,7 @@ export const GerenciarAtivos = () => {
                         >
                             <MenuItem value={10}>10</MenuItem>
                             <MenuItem value={100}>100</MenuItem>
-                            <MenuItem value={templatesAtivos.length}>Todos</MenuItem>
+                            <MenuItem value={templatesFiltered.length}>Todos</MenuItem>
                         </Select>
 
 
@@ -145,7 +145,7 @@ export const GerenciarAtivos = () => {
                                             open={Boolean(anchorEl && selectedItemId === row.id)}
                                             onClose={handleMenuClose}
                                         >
-                                            <MenuItem onClick={() => handleDeactivate(row.id)}>
+                                            <MenuItem onClick={() => handleDesactivate(row.id)}>
                                                 Desativar
                                             </MenuItem>
                                             <MenuItem onClick={() => handleEditTemplate(row.id)}>
