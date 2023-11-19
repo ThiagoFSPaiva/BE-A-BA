@@ -11,7 +11,6 @@ export class ReturnTemplateDto {
     campo: any[];
     autor: string;
     id: number;
-    categoryName: string;
     category?: ReturnCategory;
 
     constructor(template: TemplateEntity){
@@ -20,7 +19,6 @@ export class ReturnTemplateDto {
         this.status = template.status;
         this.campo = template.campo;
         this.id = template.id
-        this.categoryName = template.category.name
         this.createdAt = template.createdAt.toLocaleDateString('pt-BR') + ' ' + template.createdAt.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'});
         this.category = template.category
         ? new ReturnCategory(template.category)

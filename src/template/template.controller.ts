@@ -46,6 +46,12 @@ export class TemplateController {
     }
 
     @Roles(UserType.Admin)
+    @Get('all')
+    async findAllTemplatesWithAuthors(): Promise<ReturnTemplateAdminDto[]> {
+      return (await this.templateService.findAllTemplatesWithAuthors()).map(template => new ReturnTemplateAdminDto(template));
+    }
+
+    @Roles(UserType.Admin)
     @Get('pendentes')
     async findAllPendingTemplatesWithAuthors(): Promise<ReturnTemplateAdminDto[]> {
       return (await this.templateService.getTemplatesPendingWithAuthors()).map(template => new ReturnTemplateAdminDto(template));

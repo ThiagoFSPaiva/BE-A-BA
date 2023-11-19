@@ -80,6 +80,15 @@ export class TemplateService {
         })
     }
 
+    async findAllTemplatesWithAuthors(): Promise<TemplateEntity[]> {
+        return this.templateRepository.find({
+            relations: ['user','category'],
+            order: {
+                createdAt: "DESC"
+            }
+        })
+    }
+
 
     async getTemplatesPendingWithAuthors(): Promise<TemplateEntity[]> {
         return this.templateRepository.find({
