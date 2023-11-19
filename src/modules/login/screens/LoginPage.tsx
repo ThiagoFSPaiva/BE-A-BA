@@ -41,7 +41,6 @@ const LoginPage = () => {
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
-    console.log('testei')
   };
 
   return (

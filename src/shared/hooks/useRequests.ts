@@ -27,7 +27,8 @@ export const useRequests = () => {
 
             return result;
           })
-          .catch(() => {
+          .catch((erro) => {
+            alert(erro.message)
             return undefined;
           });
     
@@ -44,7 +45,6 @@ export const useRequests = () => {
                 return response
             })
             .catch((erro:Error) => {
-                console.log(erro)
                 alert(erro.message)
                 return undefined
             })

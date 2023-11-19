@@ -18,9 +18,6 @@ export const useGerenciarInativos = () => {
         setTemplatesFiltered(templatesInativos);
       }, [templates]);
 
-
-      console.log(templatesFiltered)
-
     const handleChangePage = (event: any, newPage: number) => {
         setPage(newPage);
     };

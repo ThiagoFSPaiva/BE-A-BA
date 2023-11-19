@@ -20,10 +20,6 @@ export const Templates = () => {
   const theme = useTheme();
 
 
-  const handleFileUpload = (file: File) => {
-    console.log('Arquivo enviado: ', file);
-  };
-
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
@@ -58,10 +54,7 @@ export const Templates = () => {
           </TabList>
         </Box>
         <TabPanel sx={{ p: 0, py: 2 }} value="1">
-    
           <TemplatesAtivos />
-
-
         </TabPanel>
         <TabPanel value="2">
           <TemplatePendente/>

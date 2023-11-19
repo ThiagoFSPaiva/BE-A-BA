@@ -58,7 +58,7 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
                             Categoria:{' '}
                         </Typography>
                         <Typography variant="body1" color={theme => theme.palette.primary.contrastText} >
-                            {template.categoryName}
+                            {template.category.name}
                         </Typography>
                         <Stack spacing={1} direction="row" alignItems="center">
                             <Typography variant="body1" color={theme => theme.palette.text.secondary}>
@@ -96,6 +96,7 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
                         Download
                     </Button>
                     <Button
+                        color="secondary"
                         component="label"
                         variant="contained"
                         startIcon={<CloudUploadIcon />}

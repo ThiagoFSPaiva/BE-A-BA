@@ -107,7 +107,6 @@ export const useTemplateInsert = () => {
             categoryId,
         }));
 
-        console.log(template);
     };
     const handleInsertTemplate = async () => {
         if (templateId) {

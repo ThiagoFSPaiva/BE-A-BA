@@ -6,7 +6,7 @@ import { GerenciarTemplateRoutesEnum } from "../../routes";
 import { useNavigate } from "react-router-dom";
 import { TemplateType } from "../../types/TemplateType";
 import { useTemplateAdminReducer } from "../../../../store/reducers/templateAdminReducer/useTemplateAdminReducer";
-import { URL_TEMPLATE, URL_TEMPLATEADMIN_ALL } from "../../../../shared/constants/urls";
+import { URL_TEMPLATE } from "../../../../shared/constants/urls";
 
 export const useMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -32,7 +32,7 @@ export const useMenu = () => {
     }
 
     await request(`${URL_TEMPLATE}/${id}`, MethodsEnum.PATCH, undefined, formData)
-    await request<TemplateType[]>(URL_TEMPLATEADMIN_ALL, MethodsEnum.GET, setTemplates);
+    await request<TemplateType[]>(URL_TEMPLATE, MethodsEnum.GET, setTemplates);
 
     handleMenuClose();
   };
@@ -44,7 +44,7 @@ export const useMenu = () => {
     }
 
     await request(`${URL_TEMPLATE}/${id}`, MethodsEnum.PATCH, undefined, formData)
-    await request<TemplateType[]>(URL_TEMPLATEADMIN_ALL, MethodsEnum.GET, setTemplates);
+    await request<TemplateType[]>(URL_TEMPLATE, MethodsEnum.GET, setTemplates);
 
     handleMenuClose();
 
@@ -60,10 +60,10 @@ export const useMenu = () => {
     setDeleteDialogOpen(true);
   };
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
 
-    request(`${URL_TEMPLATE}/${selectedItemId}`, MethodsEnum.DELETE)
-    request<TemplateType[]>(URL_TEMPLATEADMIN_ALL, MethodsEnum.GET, setTemplates);
+    await request(`${URL_TEMPLATE}/${selectedItemId}`, MethodsEnum.DELETE)
+    await request<TemplateType[]>(URL_TEMPLATE, MethodsEnum.GET, setTemplates);
     setSelectedItemId(null)
 
     setDeleteDialogOpen(false);

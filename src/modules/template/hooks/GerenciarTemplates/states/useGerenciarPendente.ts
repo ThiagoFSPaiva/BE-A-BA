@@ -18,9 +18,6 @@ export const useGerenciarPendentes = () => {
         setTemplatesFiltered(templatesPendentes);
       }, [templates]);
 
-
-      console.log(templatesFiltered)
-
     const handleChangePage = (event: any, newPage: number) => {
         setPage(newPage);
     };

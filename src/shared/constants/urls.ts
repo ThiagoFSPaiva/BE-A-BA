@@ -16,7 +16,5 @@ export const URL_UPLOAD_GET_ALL = `${servidorPython}/getAllUploads`;
 export const URL_UPLOAD_DOWNLOAD = `${servidorPython}/download`;
 export const URL_TEMPLATE = `${servidorJS}/template`
 export const URL_TEMPLATE_ID = `${servidorJS}/template/{templateId}`;
-export const URL_TEMPLATE_DELETE = `${servidorJS}`
-export const URL_TEMPLATEADMIN_ALL = `${servidorJS}/template/all`
 export const URL_CATEGORY = `${servidorJS}/category`;
 export const URL_CATEGORY_ID = `${servidorJS}/category/{categoryId}`;

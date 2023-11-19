@@ -76,7 +76,6 @@ export const useCategory = () => {
   };
 
   const handleOpenModalDelete = (categoryId: number) => {
-    console.log(categoryId)
     setCategoryIdDelete(categoryId);
   };
 

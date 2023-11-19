@@ -8,7 +8,7 @@ import { Header } from "../../../../components/common/Header";
 import { GerenciarAtivos } from "./tabs/GerenciarAtivos";
 import { GerenciarPendentes } from "./tabs/GerenciarPendentes";
 import { GerenciarInativos } from "./tabs/GerenciarInativos";
-import { URL_TEMPLATE, URL_TEMPLATEADMIN_ALL } from "../../../../shared/constants/urls";
+import { URL_TEMPLATE } from "../../../../shared/constants/urls";
 import { useRequests } from "../../../../shared/hooks/useRequests";
 import { TemplateType } from "../../types/TemplateType";
 import { useTemplateAdminReducer } from "../../../../store/reducers/templateAdminReducer/useTemplateAdminReducer";
