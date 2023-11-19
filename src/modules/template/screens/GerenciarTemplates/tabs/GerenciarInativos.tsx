@@ -33,6 +33,7 @@ export const GerenciarInativos = () => {
         handleActivate,
         handleDeleteConfirm,
         handleDeleteCancel,
+        handleEditTemplate
     } = useMenu();
 
 
@@ -151,9 +152,9 @@ export const GerenciarInativos = () => {
                                             <MenuItem onClick={() => handleActivate(row.id)}>
                                                 Ativar
                                             </MenuItem>
-                                            {/* <MenuItem onClick={() => handleEdit(row.id)}>
+                                            <MenuItem onClick={() => handleEditTemplate(row.id)}>
                                                 Editar
-                                            </MenuItem> */}
+                                            </MenuItem>
                                             <MenuItem onClick={() => handleDelete(row.id)}>
                                                 Excluir
                                             </MenuItem>

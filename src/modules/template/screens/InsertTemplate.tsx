@@ -27,6 +27,7 @@ export const InsertTemplate = () => {
 
   ];
   const {
+    isEdit,
     template,
     disabledButton,
     handleAddCampo,
@@ -158,7 +159,7 @@ export const InsertTemplate = () => {
           </Button>
 
           <Button disabled={disabledButton} onClick={handleInsertTemplate} variant="contained" color="primary">
-            Enviar
+            {isEdit ? 'Salvar' : 'Inserir produto'}
           </Button>
 
 

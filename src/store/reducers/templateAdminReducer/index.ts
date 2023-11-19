@@ -26,6 +26,6 @@ export const counterSlice = createSlice({
   }
 })
 
-export const { setTemplatesAction } = counterSlice.actions
+export const { setTemplatesAction,setTemplateAction } = counterSlice.actions
 
 export default counterSlice.reducer

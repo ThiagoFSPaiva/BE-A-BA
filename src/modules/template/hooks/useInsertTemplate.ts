@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { MethodsEnum } from "../../../shared/enums/methods.enum";
 import { useRequests } from "../../../shared/hooks/useRequests";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { InsertTemplateType } from "../types/InsertTemplateType";
-import { TemplateRoutesEnum } from "../routes";
+import { GerenciarTemplateRoutesEnum, TemplateRoutesEnum } from "../routes";
 import { useTemplateAdminReducer } from "../../../store/reducers/templateAdminReducer/useTemplateAdminReducer";
+import { URL_TEMPLATE, URL_TEMPLATE_ID } from "../../../shared/constants/urls";
 
 const DEFAULT_PRODUCT = {
     name: '',
@@ -15,6 +16,7 @@ const DEFAULT_PRODUCT = {
 
 export const useTemplateInsert = () => {
     const navigate = useNavigate();
+    const { templateId } = useParams<{ templateId: string }>();
     const { request } = useRequests();
     const { template: templateReducer, setTemplate: setTemplateReducer } = useTemplateAdminReducer();
     const [isEdit, setIsEdit] = useState(false);
@@ -33,11 +35,39 @@ export const useTemplateInsert = () => {
     }, [template]);
 
 
+    useEffect(() => {
+        if (templateReducer) {
+            setTemplate({
+                name: templateReducer.name,
+                extensao: templateReducer.extensao,
+                campo: templateReducer.campo,
+                categoryId: templateReducer.category?.id
+            });
+        }
+    }, [templateReducer]);
 
 
+    useEffect(() => {
+        const findProduct = async () => {
+            await request(
+                URL_TEMPLATE_ID.replace('{templateId}', templateId || ''),
+                MethodsEnum.GET,
+                setTemplateReducer,
+            );
+        };
 
-    const handleOnChangeInput = (event:any, name:string, index?:number) => {
-        
+        if (templateId) {
+            setIsEdit(true);
+            findProduct();
+        } else {
+            setTemplateReducer(undefined);
+            setTemplate(DEFAULT_PRODUCT);
+        }
+    }, [templateId]);
+
+
+    const handleOnChangeInput = (event: any, name: string, index?: number) => {
+
         if (name === 'name' || name === 'extensao') {
             setTemplate((currentTemplate) => ({
                 ...currentTemplate,
@@ -71,28 +101,37 @@ export const useTemplateInsert = () => {
 
     const handleChangeSelect = (event: any) => {
         const categoryId = event.target.value as number;
-      
+
         setTemplate((prevTemplate) => ({
-          ...prevTemplate,
-          categoryId,
+            ...prevTemplate,
+            categoryId,
         }));
-      
+
         console.log(template);
-      };
-
+    };
     const handleInsertTemplate = async () => {
-
-            request('http://localhost:3000/template/criar-template', MethodsEnum.POST, undefined, template)
-            .then((response) => {
-                if (response) {
-                  navigate(TemplateRoutesEnum.TEMPLATE);
-                }
-            }).catch((erro) => erro)
-          
-    }
+        if (templateId) {
+            await request(
+                URL_TEMPLATE_ID.replace('{templateId}', templateId),
+                MethodsEnum.PUT,
+                undefined,
+                template,
+            );
+            navigate(GerenciarTemplateRoutesEnum.TEMPLATE_GERENCIAR);
+        } else {
+            await request(URL_TEMPLATE, MethodsEnum.POST, undefined, template);
+            navigate(TemplateRoutesEnum.TEMPLATE);
+        }
+        
+    };
 
     const handleCancel = async () => {
-        navigate(TemplateRoutesEnum.TEMPLATE);
+        if (templateId) {
+            navigate(GerenciarTemplateRoutesEnum.TEMPLATE_GERENCIAR)
+        } else {
+            navigate(TemplateRoutesEnum.TEMPLATE);
+
+        }
     }
 
     const handleAddCampo = () => {
@@ -104,6 +143,7 @@ export const useTemplateInsert = () => {
 
 
     return {
+        isEdit,
         template,
         disabledButton,
         handleInsertTemplate,

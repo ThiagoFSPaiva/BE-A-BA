@@ -9,5 +9,5 @@ export interface TemplateType {
     templateId: number;
     campo: any[];
     autor: string;
-    categoryName: string;
+    category: CategoryType;
 }

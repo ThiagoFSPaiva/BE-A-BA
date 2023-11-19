@@ -31,7 +31,8 @@ export const GerenciarPendentes = () => {
         handleActivate,
         handleDeleteConfirm,
         handleDeleteCancel,
-        handleDesactivate
+        handleDesactivate,
+        handleEditTemplate
     } = useMenu();
 
 
@@ -153,9 +154,9 @@ export const GerenciarPendentes = () => {
                                             <MenuItem onClick={() => handleDesactivate(row.id)}>
                                                 Desativar
                                             </MenuItem>
-                                            {/* <MenuItem onClick={() => handleEdit(row.id)}>
+                                            <MenuItem onClick={() => handleEditTemplate(row.id)}>
                                                 Editar
-                                            </MenuItem> */}
+                                            </MenuItem>
                                             <MenuItem onClick={() => handleDelete(row.id)}>
                                                 Excluir
                                             </MenuItem>
