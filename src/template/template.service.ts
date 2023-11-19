@@ -201,7 +201,8 @@ export class TemplateService {
         const template = await this.templateRepository.findOne({
             where: {
                 id: templateId
-            }
+            },
+            relations: ['campo','category']
         });
 
         if (!template) {
