@@ -31,8 +31,8 @@ export class TemplateController {
   }
 
   @Get('meus-templates-pendentes')
-  async getTemplatePendingByUser(@UserId() userId: string): Promise<ReturnTemplateAdminDto[]> {
-    return (await this.templateService.getTemplatePendingByUser(userId)).map(template => new ReturnTemplateAdminDto(template));
+  async getTemplatePendingByUser(@UserId() userId: string): Promise<ReturnTemplateDto[]> {
+    return (await this.templateService.getTemplatePendingByUser(userId)).map(template => new ReturnTemplateDto(template));
   }
 
   @Get('meus-templates-inativos')
