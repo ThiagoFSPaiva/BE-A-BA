@@ -9,6 +9,10 @@ export enum UsuarioRoutesEnum {
     USUARIO_EDIT = '/user/:userId'
 }
 
+export enum UserSettingsEnum {
+    SETTINGS = '/settings'
+}
+
 export const usuarioScreen: RouteObject[] = [
     {
         element: <MainLayout />,
@@ -25,6 +29,20 @@ export const usuarioScreen: RouteObject[] = [
                 path: UsuarioRoutesEnum.USUARIO_EDIT,
                 element: <InsertUsuarioPage />,
             }
+        ]
+    }
+
+]
+
+
+export const settingsScreen: RouteObject[] = [
+    {
+        element: <MainLayout />,
+        children: [
+            {
+                path: UserSettingsEnum.SETTINGS,
+                element: <UsuariosPage />,
+            },
         ]
     }
 

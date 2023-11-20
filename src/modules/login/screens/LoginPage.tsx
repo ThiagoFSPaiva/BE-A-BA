@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, Stack, TextField, Typography} from "@mui/material";
+import { Box, Button, CircularProgress, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { images } from "../../../assets";
 import { Link, useNavigate } from "react-router-dom";
@@ -27,12 +27,12 @@ const LoginPage = () => {
   }
 
   const handleLogin = async () => {
- 
-    authRequest(navigate,{
+
+    authRequest(navigate, {
       identifier: username,
       password: password,
     });
-    
+
   };
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,9 +70,9 @@ const LoginPage = () => {
 
         }}>
           <Animate type="fade" delay={0.5}>
-            <img src={SVG} style={{ width: "500px",maxWidth: "100%", height: "auto" }} alt="logo"></img>
+            <img src={SVG} style={{ width: "500px", maxWidth: "100%", height: "auto" }} alt="logo"></img>
           </Animate>
-          <Typography  color={theme => theme.palette.text.primary} variant="h2" fontSize="1.2rem" fontWeight="bold">Sistema de templates</Typography>
+          <Typography color={theme => theme.palette.text.primary} variant="h2" fontSize="1.2rem" fontWeight="bold">Sistema de templates</Typography>
           <Typography color={theme => theme.palette.text.secondary} variant="body1">Otimize sua produtividade cadastrando templates para seus  arquivos.</Typography>
         </Box>
       </Box>
@@ -87,7 +87,7 @@ const LoginPage = () => {
         transition: "all 1s ease-in-out",
         bgcolor: theme => theme.palette.background.paper,
         border: theme => theme.palette.mode === 'dark' ? "1px solid #5a5a5a52" : 'none',
-        
+
       }}>
         <Box sx={{
           display: "flex",
@@ -98,13 +98,21 @@ const LoginPage = () => {
           height: "100%",
           "::-webkit-scrollbar": { display: "none" }
         }}>
+
+
           {/* logo */}
-          <Box sx={{ textAlign: "center", p: 5 }}>
+          <Box m="30px auto">
+
             <Animate type="fade" delay={0.5}>
-              <img src={images.logo} alt="logo" height={60}></img>
+              <Stack spacing={2} direction="row" alignItems="center">
+                <img src={images.logo} alt="logo" height={60}></img>
+                <Typography color={theme => theme.palette.text.primary} variant="h5" fontWeight="bold">Templates</Typography>
+              </Stack>
             </Animate>
           </Box>
+
           {/* logo */}
+
 
           {/* form */}
           <Box sx={{
@@ -123,29 +131,34 @@ const LoginPage = () => {
               <Box component="form" maxWidth={400} width="100%">
                 <Stack spacing={3}>
 
-          
+                  <div>
+                    <Typography color={theme => theme.palette.text.primary} variant="h6" fontWeight="bold">Acesse sua conta</Typography>
+                    <Typography color={theme => theme.palette.text.secondary} variant="subtitle2" maxWidth={300}>
+                      Acesse sua conta com sua matricula ou email e sua senha.
+                    </Typography>
+                  </div>
                   <TextField
                     onChange={handleUsernameChange}
                     value={username}
                     label="Email ou matricula"
                     fullWidth
                   />
-                                
-                                
-                    <TextField label="Senha" type="password" fullWidth 
+
+
+                  <TextField label="Senha" type="password" fullWidth
                     onChange={handlePasswordChange}
                     value={password}
-                    />
+                  />
 
-        
-                  <Button 
+
+                  <Button
                     disabled={loading}
-                    type="submit" size="large" 
-                    variant="contained" 
-                    color="primary" 
+                    type="submit" size="large"
+                    variant="contained"
+                    color="primary"
                     onClick={handleLogin}
                   >
-                    {loading ? <CircularProgress size={25} color="primary"  /> : 'Entrar'}
+                    {loading ? <CircularProgress size={25} color="primary" /> : 'Entrar'}
                   </Button>
                   {/* <Stack direction="row" justifyContent="space-between" alignItems="center">
                     <Typography color="primary">

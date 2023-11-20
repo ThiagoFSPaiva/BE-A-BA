@@ -3,13 +3,12 @@ import { Animate } from '../Animate';
 import { images } from '../../../assets';
 import MenuItem from './MenuItem';
 import { Link, useNavigate } from 'react-router-dom';
-import { getUserInfoByToken, logout } from '../../../shared/functions/connection/auth';
+import { logout } from '../../../shared/functions/connection/auth';
 import { UserTypeEnum } from '../../../shared/enums/userType.enum';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import { useAppThemeContext } from '../../../shared/contexts';
-import { useTheme } from '@emotion/react';
 import { useGlobalReducer } from '../../../store/reducers/globalReducer/useGlobalReducer';
-
+import SettingsIcon from '@mui/icons-material/Settings';
 
 interface DrawerContentProps {
     menus: any[];
@@ -89,11 +88,13 @@ const DrawerContent: React.FC<DrawerContentProps> = ({ menus, menuAdmin, activeS
             }}
         >
             {/* logo */}
-            <Box sx={{ textAlign: 'center', mb: 2 }}>
-                <Animate type="fade" delay={1}>
+            <Animate type="fade" delay={1}>
+                <Stack spacing={2} direction="row" justifyContent="center" alignItems="center" mb={2} >
                     <img src={images.logo} alt="logo" height={60} />
-                </Animate>
-            </Box>
+                    <Typography color={theme => theme.palette.text.primary} variant="h5" fontWeight="bold">Templates</Typography>
+                </Stack>
+            </Animate>
+
             {/* logo */}
             <Animate sx={{ flexGrow: 1 }}>
 
@@ -136,6 +137,14 @@ const DrawerContent: React.FC<DrawerContentProps> = ({ menus, menuAdmin, activeS
                                         />
                                     </Link>
                                 ))}
+
+                            <Link to={`/settings`}>
+                                <MenuItem
+                                    to='/settings'
+                                    item={{ icon: <SettingsIcon />, title: 'Configurações' }}
+                                    isActive={'/settings' === activeState}
+                                />
+                            </Link>
                         </List>
 
                         {/* menu group 2 */}
@@ -145,17 +154,17 @@ const DrawerContent: React.FC<DrawerContentProps> = ({ menus, menuAdmin, activeS
                                 width: 50,
                                 height: 50,
                                 borderRadius: "50%",
-                            
+
                                 backgroundImage: `url('https://criticalhits.com.br/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2022/04/spy-x-family-loid-forger-anime-768x402.jpg.webp')`, // Adiciona a URL da imagem como plano de fundo
                                 backgroundSize: 'cover', // Ajusta o tamanho da imagem para cobrir completamente o elemento
                                 backgroundPosition: 'center', // Centraliza a imagem no elemento
                             }}>
                             </Box>
                             <Typography
-                      
+
                                 color={theme => theme.palette.text.primary}
                                 sx={{
-                                    fontWeight: "700", 
+                                    fontWeight: "700",
                                 }}
                             >
                                 {user?.name ? `${user.name.split(' ')[0]} ${user.name.split(' ').pop()}` : 'Nome não disponível'}
@@ -163,16 +172,12 @@ const DrawerContent: React.FC<DrawerContentProps> = ({ menus, menuAdmin, activeS
                             <Typography color={theme => theme.palette.text.secondary} variant='subtitle2'>{user?.typeUser}</Typography>
                             <MaterialUISwitch onChange={toggleTheme} defaultChecked={themeName === 'dark'} />
                         </Stack>
-                        <Button sx={{color: theme => theme.palette.text.primary, fontWeight: "600"}} startIcon={<LogoutRoundedIcon sx={{color: theme => theme.palette.text.primary}} />} onClick={() => logout(navigate)}>
+                        <Button sx={{ color: theme => theme.palette.text.primary, fontWeight: "600" }} startIcon={<LogoutRoundedIcon sx={{ color: theme => theme.palette.text.primary }} />} onClick={() => logout(navigate)}>
                             Sair
                         </Button>
 
                     </Box>
 
-
-
-
-                    {/* menu group 1 */}
                 </Box>
             </Animate>
         </Box>

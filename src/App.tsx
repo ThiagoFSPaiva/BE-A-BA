@@ -11,7 +11,7 @@ import { MethodsEnum } from "./shared/enums/methods.enum";
 import { useGlobalReducer } from "./store/reducers/globalReducer/useGlobalReducer";
 import { dashboardRoute } from "./modules/Dashboard/routes";
 import { uploadsScreen } from "./modules/Uploads/routes";
-import { usuarioScreen } from "./modules/user/screens/routes";
+import { settingsScreen, usuarioScreen } from "./modules/user/screens/routes";
 import { categoryScreens } from "./modules/category/routes";
 import { NotificationComponent } from "./shared/hooks/useNotification";
 
@@ -34,6 +34,7 @@ const routes: RouteObject[] = [...loginRoutes];
 
 const routesLoggedIn: RouteObject[] =
   [
+    ...settingsScreen,
     ...templateScreens,
     ...firstScreenRoutes,
   ].map((route) => ({

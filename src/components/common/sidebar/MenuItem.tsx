@@ -2,7 +2,7 @@ import React from 'react';
 import { ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, colors } from '@mui/material';
 
 interface MenuItemProps {
-  index: number;
+  index?: number;
   isActive: boolean;
   item: {
     icon: React.ReactNode;

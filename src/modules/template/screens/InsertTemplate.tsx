@@ -174,7 +174,7 @@ export const InsertTemplate = () => {
           </Button>
 
           <Button disabled={disabledButton} onClick={handleInsertTemplate} variant="contained" color="primary">
-            {isEdit ? 'Salvar' : 'Inserir produto'}
+            {isEdit ? 'Salvar' : 'Inserir template'}
           </Button>
 
 

@@ -3,8 +3,11 @@ import { Header } from "../../../components/common/Header"
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import MPaper from "../../../components/common/MPaper";
 import { useUserInsert } from "./hooks/useInsertUser";
+import { useNavigate } from "react-router-dom";
+import { UsuarioRoutesEnum } from "./routes";
 
 export const InsertUsuarioPage = () => {
+    const navigate = useNavigate();
     const theme = useTheme();
     const {
         isEdit,
@@ -118,7 +121,7 @@ export const InsertUsuarioPage = () => {
                     gap: 2
                 }}>
 
-                    <Button variant="contained" color="secondary">
+                    <Button onClick={() => navigate(UsuarioRoutesEnum.Usuario)} variant="contained" color="secondary">
                         Cancelar
                     </Button>
 
