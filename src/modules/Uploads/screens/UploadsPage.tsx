@@ -36,7 +36,7 @@ export const UploadsPage = () => {
         <>
             <Header
                 title="Uploads"
-                description="Visualize e gerencie todos templates, podendo ativar ou desativar cada um."
+                description="Visualize todos os uploads realizados, podendo realizar download do arquivo"
                 icon={<UploadFileOutlinedIcon sx={{ color: theme.palette.primary.contrastText, fontSize: 60 }} />}></Header>
 
             <TableContainer component={TPaper}>

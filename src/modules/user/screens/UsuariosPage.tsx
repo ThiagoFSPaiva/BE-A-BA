@@ -47,7 +47,7 @@ export const UsuariosPage = () => {
 
       <Header
         title="Usuários"
-        description="Visualize e gerencie todos templates, podendo ativar ou desativar cada um."
+        description="Visualize e gerencie todos os usuários e seus respectivos dados"
         icon={<PersonOutlineOutlinedIcon sx={{ color: theme.palette.primary.contrastText, fontSize: 60 }} />}>
         <Button variant="contained" onClick={handleGoToInsertAdmin}>Cadastrar</Button>
       </Header>

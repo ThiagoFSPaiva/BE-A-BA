@@ -7,7 +7,7 @@ import { GerenciarTemplateRoutesEnum, TemplateRoutesEnum } from "../routes";
 import { useTemplateAdminReducer } from "../../../store/reducers/templateAdminReducer/useTemplateAdminReducer";
 import { URL_TEMPLATE, URL_TEMPLATE_ID } from "../../../shared/constants/urls";
 
-const DEFAULT_PRODUCT = {
+const DEFAULT_TEMPLATE = {
     name: '',
     extensao: '',
     campo: [{ name: '', tipo: '' }]
@@ -17,13 +17,13 @@ const DEFAULT_PRODUCT = {
 export const useTemplateInsert = () => {
     const navigate = useNavigate();
     const { templateId } = useParams<{ templateId: string }>();
-    const { request } = useRequests();
-    const { template: templateReducer, setTemplate: setTemplateReducer } = useTemplateAdminReducer();
     const [isEdit, setIsEdit] = useState(false);
+    const { template: templateReducer, setTemplate: setTemplateReducer } = useTemplateAdminReducer();
+    const { request } = useRequests();
     const [disabledButton, setDisabledButton] = useState(true);
 
 
-    const [template, setTemplate] = useState<InsertTemplateType>(DEFAULT_PRODUCT);
+    const [template, setTemplate] = useState<InsertTemplateType>(DEFAULT_TEMPLATE);
 
 
     useEffect(() => {
@@ -61,7 +61,7 @@ export const useTemplateInsert = () => {
             findProduct();
         } else {
             setTemplateReducer(undefined);
-            setTemplate(DEFAULT_PRODUCT);
+            setTemplate(DEFAULT_TEMPLATE);
         }
     }, [templateId]);
 

@@ -1,5 +1,5 @@
 import { Box, Tab, useTheme } from "@mui/material";
-import DashboardCustomizeOutlinedIcon from '@mui/icons-material/DashboardCustomizeOutlined';
+import BackupTableOutlinedIcon from '@mui/icons-material/BackupTableOutlined';
 import TabContext from "@mui/lab/TabContext";
 import TabPanel from "@mui/lab/TabPanel";
 import TabList from "@mui/lab/TabList";
@@ -37,8 +37,8 @@ export const GerenciarTemplatesPage = () => {
 
             <Header
                 title="Gerenciar Templates"
-                description="Visualize e gerencie todos templates, podendo ativar ou desativar cada um."
-                icon={<DashboardCustomizeOutlinedIcon sx={{ color: theme.palette.primary.contrastText, fontSize: 60 }} />}>
+                description="Visualize e gerencie todos templates, podendo ativar ou desativar."
+                icon={<BackupTableOutlinedIcon sx={{ color: theme.palette.primary.contrastText, fontSize: 60 }} />}>
             </Header>
 
             <TabContext value={value}>

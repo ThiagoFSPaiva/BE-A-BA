@@ -28,7 +28,7 @@ export const Templates = () => {
     <>
       <Header
         title="Meus templates"
-        description="Visualize e gerencie todos templates, podendo ativar ou desativar cada um."
+        description="Visualize todas as rotinas ativas, podenndo fazer download ou upload de um template"
         icon={<TableChartOutlinedIcon sx={{ color: theme.palette.primary.contrastText, fontSize: 60 }} />
         }>
         <Button variant="contained"

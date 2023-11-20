@@ -47,7 +47,7 @@ const ResponsiveDrawer: React.FC<Props> = (props) => {
       path: 'uploads',
     },
     {
-      title: 'Gerenciar Templates',
+      title: 'Gerenciar templates',
       icon: <BackupTableOutlinedIcon />,
       state: '/templates/gerenciar',
       path: 'templates/gerenciar',
@@ -55,8 +55,8 @@ const ResponsiveDrawer: React.FC<Props> = (props) => {
     {
       title: 'Usuários',
       icon: <PersonOutlineOutlinedIcon />,
-      state: '/usuarios',
-      path: 'usuarios',
+      state: '/user',
+      path: 'user',
     },
     {
       title: 'Categorias',

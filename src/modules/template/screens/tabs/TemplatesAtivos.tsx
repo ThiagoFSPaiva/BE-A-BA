@@ -8,7 +8,6 @@ import { getAuthorizationToken } from "../../../../shared/functions/connection/a
 import { TemplateCard } from "../../components/TemplateCard";
 import SearchIcon from '@mui/icons-material/Search';
 import { useTemplate } from "../../hooks/states/useTemplate";
-import { useGlobalReducer } from "../../../../store/reducers/globalReducer/useGlobalReducer";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Swal from 'sweetalert2'
 

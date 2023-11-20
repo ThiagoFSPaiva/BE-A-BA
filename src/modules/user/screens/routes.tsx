@@ -4,8 +4,9 @@ import { UsuariosPage } from "./UsuariosPage";
 import { InsertUsuarioPage } from "./InsertUsuarioPage";
 
 export enum UsuarioRoutesEnum {
-    Usuario = '/usuarios',
-    USUARIO_INSERT = '/usuarios/insert'
+    Usuario = '/user',
+    USUARIO_INSERT = '/user/insert',
+    USUARIO_EDIT = '/user/:userId'
 }
 
 export const usuarioScreen: RouteObject[] = [
@@ -18,6 +19,10 @@ export const usuarioScreen: RouteObject[] = [
             },
             {
                 path: UsuarioRoutesEnum.USUARIO_INSERT,
+                element: <InsertUsuarioPage />,
+            },
+            {
+                path: UsuarioRoutesEnum.USUARIO_EDIT,
                 element: <InsertUsuarioPage />,
             }
         ]

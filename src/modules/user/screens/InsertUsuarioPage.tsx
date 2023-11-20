@@ -3,22 +3,23 @@ import { Header } from "../../../components/common/Header"
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import MPaper from "../../../components/common/MPaper";
 import { useUserInsert } from "./hooks/useInsertUser";
-import React, { useState } from "react";
 
 export const InsertUsuarioPage = () => {
     const theme = useTheme();
     const {
+        isEdit,
+        matriculaError,
         user,
         disabledButton,
         emailError,
-        handleInsertAdmin,
+        handleInsertUser,
         handleOnChangeInput
     } = useUserInsert();
 
     return (
         <>
             <Header
-                title="Cadastrar Usuário"
+                title={isEdit ? 'Editar Usuário' : 'Cadastrar Usuário'}
                 description="Visualize e gerencie todos templates, podendo ativar ou desativar cada um."
                 icon={<PersonOutlineOutlinedIcon sx={{ color: theme.palette.primary.contrastText, fontSize: 60 }} />}>
             </Header>
@@ -50,6 +51,7 @@ export const InsertUsuarioPage = () => {
                                     onChange={(event) => handleOnChangeInput(event, 'email')}
                                     label="Email"
                                     variant="filled"
+                                    error={emailError}
                                 />
                                 {emailError && (
                                     <FormHelperText id="email-helper-text">Digite um endereço de e-mail válido.</FormHelperText>
@@ -64,6 +66,21 @@ export const InsertUsuarioPage = () => {
                                     label="CPF"
                                     variant="filled"
                                 />
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <FormControl fullWidth>
+                                <TextField
+                                    value={user.matricula}
+                                    onChange={(event) => handleOnChangeInput(event, 'matricula')}
+                                    label="Matricula"
+                                    variant="filled"
+                                    inputProps={{ maxLength: 6 }}
+                                    error={matriculaError}
+                                />
+                                {matriculaError && (
+                                    <FormHelperText id="matricula-helper-text">A matricula deve ter exatamente 6 caracteres</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
                         <Grid item xs={6}>
@@ -101,16 +118,13 @@ export const InsertUsuarioPage = () => {
                     gap: 2
                 }}>
 
-                    <Button variant="contained"  color="secondary">
+                    <Button variant="contained" color="secondary">
                         Cancelar
                     </Button>
 
-                    <Button disabled={disabledButton} onClick={handleInsertAdmin} variant="contained" color="primary">
-                        Enviar
+                    <Button disabled={disabledButton} onClick={handleInsertUser} variant="contained" color="primary">
+                        {isEdit ? 'Salvar' : 'Inserir usuário'}
                     </Button>
-
-
-
                 </Box>
             </MPaper>
 

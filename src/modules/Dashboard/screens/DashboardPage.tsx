@@ -15,7 +15,7 @@ const DashboardPage = () => {
     <>
       <Header
         title="Dashboard"
-        description="Visualize e gerencie todos templates, podendo ativar ou desativar cada um."
+        description="Explore estatísticas e dados detalhados da aplicação"
         icon={<DashboardCustomizeOutlinedIcon sx={{ color: theme.palette.primary.contrastText, fontSize: 60 }} />
         }>
       </Header>

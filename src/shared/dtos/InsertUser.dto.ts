@@ -4,6 +4,7 @@ export interface InsertUser {
     name: string;
     email: string;
     cpf: string;
-    password: string;
+    password: string | undefined;
+    matricula: string;
     typeUser: UserTypeEnum
 }

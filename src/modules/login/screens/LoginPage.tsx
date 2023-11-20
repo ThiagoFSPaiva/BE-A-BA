@@ -58,7 +58,7 @@ const LoginPage = () => {
         backgroundPosition: "center",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
-        backgroundColor: "#16171B"
+        backgroundColor: theme => theme.palette.background.default
       }}>
         <Box sx={{
           display: "flex",
@@ -72,8 +72,8 @@ const LoginPage = () => {
           <Animate type="fade" delay={0.5}>
             <img src={SVG} style={{ width: "500px",maxWidth: "100%", height: "auto" }} alt="logo"></img>
           </Animate>
-          <Typography color="white" variant="h2" fontSize="1.2rem" fontWeight="bold">Sistema de templates</Typography>
-          <Typography color="#767676" variant="body1">Otimize sua produtividade cadastrando templates para seus  arquivos.</Typography>
+          <Typography  color={theme => theme.palette.text.primary} variant="h2" fontSize="1.2rem" fontWeight="bold">Sistema de templates</Typography>
+          <Typography color={theme => theme.palette.text.secondary} variant="body1">Otimize sua produtividade cadastrando templates para seus  arquivos.</Typography>
         </Box>
       </Box>
       {/* background box */}
@@ -85,7 +85,8 @@ const LoginPage = () => {
         height: "100%",
         width: { xl: "40%", lg: "40%", md: "40%", xs: "100%" },
         transition: "all 1s ease-in-out",
-        bgcolor: "#202125",
+        bgcolor: theme => theme.palette.background.paper,
+        border: theme => theme.palette.mode === 'dark' ? "1px solid #5a5a5a52" : 'none',
         
       }}>
         <Box sx={{
@@ -126,52 +127,14 @@ const LoginPage = () => {
                   <TextField
                     onChange={handleUsernameChange}
                     value={username}
-                    label="Matrícula"
+                    label="Email ou matricula"
                     fullWidth
-                    sx={{
-                      '& label': {
-                        color: '#fff',
-                      },
-                      '& .MuiOutlinedInput-root': {
-                        '& fieldset': {
-                          borderColor: '#5a5a5aba',
-                        },
-                        '&:hover fieldset': {
-                          borderColor: '#5a5a5aba',
-                        },
-                        '&.Mui-focused fieldset': {
-                          borderColor: '#5a5a5aba',
-                        },
-                        '& input': {
-                          color: '#fff',
-                        },
-                      },
-                    }}
                   />
                                 
                                 
                     <TextField label="Senha" type="password" fullWidth 
                     onChange={handlePasswordChange}
                     value={password}
-                      sx={{
-                        '& label': {
-                          color: '#fff',
-                        },
-                        '& .MuiOutlinedInput-root': {
-                          '& fieldset': {
-                            borderColor: '#5a5a5aba',
-                          },
-                          '&:hover fieldset': {
-                            borderColor: '#5a5a5aba',
-                          },
-                          '&.Mui-focused fieldset': {
-                            borderColor: '#5a5a5aba',
-                          },
-                          '& input': {
-                            color: '#fff',
-                          },
-                        },
-                      }}
                     />
 
         
@@ -179,18 +142,18 @@ const LoginPage = () => {
                     disabled={loading}
                     type="submit" size="large" 
                     variant="contained" 
-                    color="success" 
+                    color="primary" 
                     onClick={handleLogin}
                   >
                     {loading ? <CircularProgress size={25} color="primary"  /> : 'Entrar'}
                   </Button>
-                  <Stack direction="row" justifyContent="space-between" alignItems="center">
-                    <Typography color="#2e7d32">
+                  {/* <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Typography color="primary">
                       <Link to="#">
                         Esqueceu a senha?
                       </Link>
                     </Typography>
-                  </Stack>
+                  </Stack> */}
                 </Stack>
               </Box>
             </Animate>

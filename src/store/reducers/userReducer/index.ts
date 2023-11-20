@@ -5,10 +5,12 @@ import { UserType } from '../../../modules/login/types/UserType';
 
 interface UserState {
   users: UserType[];
+  user?: UserType;
 }
 
 const initialState: UserState = {
   users: [],
+  user: undefined
 };
 
 export const counterSlice = createSlice({
@@ -18,9 +20,12 @@ export const counterSlice = createSlice({
     setUsersAction: (state, action: PayloadAction<UserType[]>) => {
       state.users = action.payload;
     },
+    setUserAction: (state, action: PayloadAction<UserType | undefined>) => {
+      state.user = action.payload;
+    },
   },
 });
 
-export const { setUsersAction } = counterSlice.actions;
+export const { setUsersAction, setUserAction } = counterSlice.actions;
 
 export default counterSlice.reducer;

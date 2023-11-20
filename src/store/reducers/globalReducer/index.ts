@@ -17,7 +17,7 @@ export const counterSlice = createSlice({
   name: 'globalReducer',
   initialState,
   reducers: {
-    setUserAction: (state, action: PayloadAction<UserType>) => {
+    setUserAction: (state, action: PayloadAction<UserType | undefined>) => {
       state.user = action.payload
     },
     setNotificationAction: (state, action: PayloadAction<NotificationType>) => {

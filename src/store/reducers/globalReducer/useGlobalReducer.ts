@@ -18,7 +18,7 @@ export const useGlobalReducer = () => {
           }),
         );
       };
-    const setUser = (user: UserType) => {
+    const setUser = (user: UserType | undefined) => {
         dispatch(setUserAction(user))
     }
 

@@ -1,25 +1,41 @@
-import { Box, InputAdornment, MenuItem, Pagination, Select, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
+import { Box, IconButton, InputAdornment, Menu, MenuItem, Pagination, Select, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import TPaper from "../../../../components/common/TPaper"
 import SearchIcon from '@mui/icons-material/Search';
 import { useEffect, useState } from "react";
 import { UserType } from "../../../login/types/UserType";
 import { useUserReducer } from "../../../../store/reducers/userReducer/useUserReducer";
 import { useUser } from "../hooks/useUser";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useActionsUser } from "../hooks/useActionsUser";
+import { DeleteConfirmationModal } from "../../../template/components/DeleteConfirmationModal";
 
 export const UsersInativos = () => {
+
     const { users } = useUserReducer();
     const [usersFiltered, setUsersFiltered] = useState<UserType[]>(users);
 
-
     useEffect(() => {
-        const usersInativos = users.filter(template => template.status === 'inativo');
-        
+        const usersInativos = users.filter(user => user.status === 'inativo');
+
         setUsersFiltered(usersInativos);
-      }, [users]);
+    }, [users]);
 
     const {
-        currentUsers,
+        anchorEl,
+        selectedItemId,
+        isDeleteDialogOpen,
+        handleEditUser,
+        handleDelete,
+        handleActivate,
+        handleMenuClose,
+        handleMenuOpen,
+        handleDeleteConfirm,
+        handleDeleteCancel,
+    } = useActionsUser();
+
+    const {
         totalPages,
+        currentUsers,
         rowsPerPage,
         page,
         searchText,
@@ -28,12 +44,24 @@ export const UsersInativos = () => {
         handleChangePage,
         handleSearchByChange,
         handleSearch,
-    } = useUser(usersFiltered);
 
+    } = useUser(usersFiltered);
 
 
     return (
         <>
+
+            <DeleteConfirmationModal
+                isOpen={isDeleteDialogOpen}
+                onConfirm={handleDeleteConfirm}
+                onCancel={handleDeleteCancel}
+            >
+                <Typography variant="subtitle1" color={theme => theme.palette.text.secondary}>
+                    Ao excluir um usuários, todos os seus templates associados serão apagados permanentemente.
+                </Typography>
+            </DeleteConfirmationModal>
+
+
             <TableContainer component={TPaper}>
                 <Box sx={{
                     display: "flex",
@@ -76,7 +104,7 @@ export const UsersInativos = () => {
                         >
                             <MenuItem value={10}>10</MenuItem>
                             <MenuItem value={100}>100</MenuItem>
-                            <MenuItem value={currentUsers.length}>Todos</MenuItem>
+                            <MenuItem value={usersFiltered.length}>Todos</MenuItem>
                         </Select>
                     </Stack>
                 </Box>
@@ -106,7 +134,28 @@ export const UsersInativos = () => {
                                 <TableCell align="center">{row.cpf}</TableCell>
                                 <TableCell align="center">{row.typeUser}</TableCell>
                                 <TableCell align="center">{row.status}</TableCell>
-                                <TableCell align="center"></TableCell>
+                                <TableCell align="center">
+
+                                    <IconButton sx={{ color: "#8d8d8d" }} onClick={(event) => handleMenuOpen(event, row.id)}>
+                                        <MoreVertIcon />
+                                    </IconButton>
+
+                                    <Menu
+                                        anchorEl={anchorEl}
+                                        open={Boolean(anchorEl && selectedItemId === row.id)}
+                                        onClose={handleMenuClose}
+                                    >
+                                        <MenuItem onClick={() => handleActivate(row.id)}>
+                                            Ativar
+                                        </MenuItem>
+                                        <MenuItem onClick={() => handleEditUser(row.id)}>
+                                            Editar
+                                        </MenuItem>
+                                        <MenuItem onClick={() => handleDelete(row.id)}>
+                                            Excluir
+                                        </MenuItem>
+                                    </Menu>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
@@ -119,8 +168,4 @@ export const UsersInativos = () => {
     )
 
 
-}
-
-function useUserAtivo() {
-    throw new Error("Function not implemented.");
 }

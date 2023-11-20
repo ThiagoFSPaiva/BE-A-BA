@@ -43,7 +43,7 @@ export const CategoryPage = () => {
 
             <Header
                 title="Categorias"
-                description="Visualize e gerencie todos templates, podendo ativar ou desativar cada um."
+                description="Visualize e gerencie todas categorias, com opção de criar,editar ou excluir."
                 icon={<LayersOutlinedIcon sx={{ color: theme => theme.palette.primary.contrastText, fontSize: 60 }} />}>
                 <Button variant="contained" onClick={handleOnClickCategory}>Cadastrar</Button>
             </Header>

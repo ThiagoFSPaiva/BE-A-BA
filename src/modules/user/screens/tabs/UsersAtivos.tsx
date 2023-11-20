@@ -1,10 +1,13 @@
-import { Box, InputAdornment, MenuItem, Pagination, Select, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
+import { Box, IconButton, InputAdornment, Menu, MenuItem, Pagination, Select, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import TPaper from "../../../../components/common/TPaper"
 import SearchIcon from '@mui/icons-material/Search';
 import { useEffect, useState } from "react";
 import { UserType } from "../../../login/types/UserType";
 import { useUserReducer } from "../../../../store/reducers/userReducer/useUserReducer";
 import { useUser } from "../hooks/useUser";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useActionsUser } from "../hooks/useActionsUser";
+import { DeleteConfirmationModal } from "../../../template/components/DeleteConfirmationModal";
 
 export const UsersAtivos = () => {
 
@@ -13,9 +16,23 @@ export const UsersAtivos = () => {
 
     useEffect(() => {
         const usersAtivos = users.filter(user => user.status === 'ativo');
-        
+
         setUsersFiltered(usersAtivos);
-      }, [users]);
+    }, [users]);
+
+    const {
+        anchorEl,
+        selectedItemId,
+        isDeleteDialogOpen,
+        handleEditUser,
+        handleDelete,
+        handleDesactivate,
+        handleMenuClose,
+        handleMenuOpen,
+        handleActivate,
+        handleDeleteConfirm,
+        handleDeleteCancel,
+    } = useActionsUser();
 
     const {
         totalPages,
@@ -31,8 +48,21 @@ export const UsersAtivos = () => {
 
     } = useUser(usersFiltered);
 
+
     return (
         <>
+            <DeleteConfirmationModal
+                isOpen={isDeleteDialogOpen}
+                onConfirm={handleDeleteConfirm}
+                onCancel={handleDeleteCancel}
+            >
+                <Typography variant="subtitle1" color={theme => theme.palette.text.secondary}>
+                    Ao excluir um usuários, todos os seus templates associados serão apagados permanentemente.
+                </Typography>
+            </DeleteConfirmationModal>
+
+
+
             <TableContainer component={TPaper}>
                 <Box sx={{
                     display: "flex",
@@ -105,7 +135,28 @@ export const UsersAtivos = () => {
                                 <TableCell align="center">{row.cpf}</TableCell>
                                 <TableCell align="center">{row.typeUser}</TableCell>
                                 <TableCell align="center">{row.status}</TableCell>
-                                <TableCell align="center"></TableCell>
+                                <TableCell align="center">
+
+                                    <IconButton sx={{ color: "#8d8d8d" }} onClick={(event) => handleMenuOpen(event, row.id)}>
+                                        <MoreVertIcon />
+                                    </IconButton>
+
+                                    <Menu
+                                        anchorEl={anchorEl}
+                                        open={Boolean(anchorEl && selectedItemId === row.id)}
+                                        onClose={handleMenuClose}
+                                    >
+                                        <MenuItem onClick={() => handleDesactivate(row.id)}>
+                                            Desativar
+                                        </MenuItem>
+                                        <MenuItem onClick={() => handleEditUser(row.id)}>
+                                            Editar
+                                        </MenuItem>
+                                        <MenuItem onClick={() => handleDelete(row.id)}>
+                                            Excluir
+                                        </MenuItem>
+                                    </Menu>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

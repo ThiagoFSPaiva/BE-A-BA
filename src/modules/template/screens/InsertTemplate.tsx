@@ -7,16 +7,17 @@ import {
   MenuItem,
   Button,
   Grid,
-  Stack,
+  useTheme,
 } from '@mui/material';
 import { useTemplateInsert } from '../hooks/useInsertTemplate';
 import MPaper from '../../../components/common/MPaper';
 import { useCategory } from '../../category/hooks/useCategory';
 import { CategoryType } from '../../category/types/CategoryType';
-
-
+import { Header } from '../../../components/common/Header';
+import BackupTableOutlinedIcon from '@mui/icons-material/BackupTableOutlined';
 
 export const InsertTemplate = () => {
+  const theme = useTheme();
 
   const tipos = [
     { value: 'object', label: 'texto' },
@@ -41,7 +42,15 @@ export const InsertTemplate = () => {
 
   return (
 
+
     <>
+      <Header
+        title={isEdit ? 'Editar template' : 'Cadastrar Template'}
+        description={isEdit ? 'Edite todo o conteundo do template' : '"Visualize e gerencie todos templates, podendo ativar,desativar,editar,excluir.'}
+        icon={<BackupTableOutlinedIcon sx={{ color: theme.palette.primary.contrastText, fontSize: 60 }} />}>
+      </Header>
+
+
       <MPaper>
         <Box
           component="form"
@@ -151,10 +160,6 @@ export const InsertTemplate = () => {
             ))}
 
           </Grid>
-
-
-
-
 
         </Box>
         <Box sx={{
