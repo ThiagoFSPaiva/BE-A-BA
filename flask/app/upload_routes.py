@@ -52,7 +52,7 @@ def upload_file():
 
         if not any(file.filename.lower().endswith(ext) for ext in template.extensao.split(',')):
             return jsonify({
-                'error': f'Formato de arquivo não condiz com o template. Esperado: {template.extensao}, Recebido: {file.filename}'
+                'error': f'Arquivo não condiz com o formato do template esperado: {template.extensao}, Recebido: {file.filename}'
             }), 400
 
         df = None
@@ -78,6 +78,9 @@ def upload_file():
 
         else:
             return jsonify({'error': 'Formato de arquivo não suportado'}), 400
+        
+        if any(df[column].empty for column in df.columns):
+            return jsonify({'error': 'O arquivo contém colunas vazias'}), 400
 
         if len(df.columns) != len(expected_columns):
             return jsonify({'error': 'Número de colunas não corresponde ao esperado'}), 400
@@ -97,6 +100,8 @@ def upload_file():
                 }), 400
 
         path = upload_file_to_s3(file, decoded_token['id'], template_category)
+
+
 
         new_upload = Upload(
             user_id=decoded_token['id'],
