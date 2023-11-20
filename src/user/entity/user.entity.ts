@@ -1,6 +1,7 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { TemplateEntity } from "src/template/entity/template.entity";
 import { UserType } from "../enum/user-type.enum";
+import { StatusType } from "../enum/status-type.enum";
 
 @Entity({name:'user'})
 export class UserEntity {
@@ -13,6 +14,9 @@ export class UserEntity {
     @Column({name:'matricula', nullable: false, unique: true})
     matricula: string;
 
+    @Column({name: 'status',type: 'enum', enum: StatusType, default: StatusType.Ativo})
+    status: StatusType;
+    
     @Column({name:'email', nullable: false, unique: true})
     email: string;
         

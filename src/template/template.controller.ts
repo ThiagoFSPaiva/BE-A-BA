@@ -45,9 +45,6 @@ export class TemplateController {
     return (await this.templateService.getTemplatesAtivos()).map(template => new ReturnTemplateDto(template));
   }
 
-
-
-
   @Patch(':id')
   async updateStatus(@Param('id') id: number, @Body() body: { status: StatusType }) {
     const { status } = body;
@@ -66,7 +63,7 @@ export class TemplateController {
   @Get('/:templateId')
   async findTemplateById(@Param('templateId') productId): Promise<ReturnTemplateDto> {
     return new ReturnTemplateDto(
-      await this.templateService.findTemplateById(productId),
+      await this.templateService.findTemplateById(productId,true),
     );
   }
 

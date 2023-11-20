@@ -12,6 +12,7 @@ import { UserType } from 'src/user/enum/user-type.enum';
 import { UpdateTemplateDto } from './dtos/update-template.dto';
 import { CategoryService } from 'src/category/category.service';
 import { CountTemplate } from './dtos/count-template.dto';
+import { CampoEntity } from 'src/campo/entity/campo.entity';
 
 @Injectable()
 export class TemplateService {
@@ -23,7 +24,7 @@ export class TemplateService {
         private readonly campoService: CampoService,
         @Inject(forwardRef(() => CategoryService))
         private readonly categoryService: CategoryService,
-    
+
     ) { }
 
     async createTemplate(createTemplate: CreateTemplateDto, userId: string): Promise<TemplateEntity> {
@@ -34,13 +35,13 @@ export class TemplateService {
         const userAdmin = await this.userService.getUserAdmin(userId).catch(
             () => undefined,
         );
-   
-        if ( !userAdmin || userAdmin.typeUser == UserType.User) {
+
+        if (!userAdmin || userAdmin.typeUser == UserType.User) {
             return this.templateRepository.save({
                 ...createTemplate,
                 userId,
             })
- 
+
         } else {
             return this.templateRepository.save({
                 ...createTemplate,
@@ -73,7 +74,7 @@ export class TemplateService {
             where: {
                 status: StatusType.Ativo
             },
-            relations: ['user','category'],
+            relations: ['user', 'category'],
             order: {
                 createdAt: "DESC"
             }
@@ -82,7 +83,7 @@ export class TemplateService {
 
     async findAllTemplatesWithAuthors(): Promise<TemplateEntity[]> {
         return this.templateRepository.find({
-            relations: ['user','category'],
+            relations: ['user', 'category'],
             order: {
                 createdAt: "DESC"
             }
@@ -90,30 +91,6 @@ export class TemplateService {
     }
 
 
-    async getTemplatesPendingWithAuthors(): Promise<TemplateEntity[]> {
-        return this.templateRepository.find({
-            where: {
-                status: StatusType.Pendente
-            },
-            relations: ['user','category'],
-            order: {
-                createdAt: "DESC"
-            }
-        })
-    }
-
-    async getTemplatesInactiveWithAuthors(): Promise<TemplateEntity[]> {
-        return this.templateRepository.find({
-            where: {
-                status: StatusType.Inativo
-            },
-            relations: ['user','category'],
-            order: {
-                createdAt: "DESC"
-            }
-        })
-
-    }
 
     async getTemplateInactiveByUser(id: string): Promise<TemplateEntity[]> {
 
@@ -124,7 +101,7 @@ export class TemplateService {
                 userId: id,
                 status: StatusType.Inativo
             },
-            relations: ['campo','category'],
+            relations: ['campo', 'category'],
             order: {
                 createdAt: "DESC"
             }
@@ -147,7 +124,7 @@ export class TemplateService {
                 userId: id,
                 status: StatusType.Pendente
             },
-            relations: ['campo','category'],
+            relations: ['campo', 'category'],
             order: {
                 createdAt: "DESC"
             }
@@ -174,7 +151,7 @@ export class TemplateService {
             where: {
                 status: StatusType.Ativo,
             },
-            relations: ['campo','category'],
+            relations: ['campo', 'category'],
             order: {
                 createdAt: "DESC"
             }
@@ -196,45 +173,69 @@ export class TemplateService {
 
         return true
     }
+    async findTemplateById(
+        templateId: number,
+        isRelations?: boolean,
+    ): Promise<TemplateEntity> {
+        const relations = isRelations
+            ? {
+                category: true,
+                campo: true
+            }
+            : undefined;
 
-    async findTemplateById (templateId: number): Promise<TemplateEntity> {
         const template = await this.templateRepository.findOne({
             where: {
-                id: templateId
+                id: templateId,
             },
-            relations: ['campo','category']
+            relations,
         });
 
         if (!template) {
-            throw new NotFoundException('Template não encontrado');
+            throw new NotFoundException(`Template id: ${templateId} not found`);
         }
 
-        return template
-
+        return template;
     }
 
-    async deleteTemplate(templateId: number) : Promise<DeleteResult> {
+    async deleteTemplate(templateId: number): Promise<DeleteResult> {
         const template = await this.findTemplateById(templateId)
 
-        return this.templateRepository.delete({id: template.id})
+        return this.templateRepository.delete({ id: template.id })
     }
 
-    async updateTemplate(updateTemplate: UpdateTemplateDto, templateId: number) : Promise<TemplateEntity> {
-        const template = await this.findTemplateById(templateId)
+    async updateTemplate(
+        updateTemplate: UpdateTemplateDto,
+        templateId: number,
+    ): Promise<TemplateEntity> {
+        const template = await this.findTemplateById(templateId);
 
-        return this.templateRepository.save({
-            ...template,
-            ...updateTemplate
-        })
+        // Mescla os dados existentes com os dados recebidos
+        const updatedTemplate = Object.assign(template, updateTemplate);
+
+        // Atualiza os campos
+        if (updateTemplate.campo && updateTemplate.campo.length > 0) {
+            updatedTemplate.campo.forEach(async (campo) => {
+                const existingCampo = template.campo.find((c) => c.id === campo.id);
+
+                if (existingCampo) {
+                    // Mescla os dados existentes do campo com os dados recebidos
+                    Object.assign(existingCampo, campo);
+                    // Salva o campo atualizado no banco de dados
+                    await this.campoService.updateCampo(existingCampo);
+                }
+            });
+        }
+
+        // Salva o template atualizado no banco de dados
+        return this.templateRepository.save(updatedTemplate);
     }
-
-
 
     async countProdutsByCategoryId(): Promise<CountTemplate[]> {
         return this.templateRepository
-          .createQueryBuilder('template')
-          .select('template.category_id, COUNT(*) as total')
-          .groupBy('template.category_id')
-          .getRawMany();
-      }
+            .createQueryBuilder('template')
+            .select('template.category_id, COUNT(*) as total')
+            .groupBy('template.category_id')
+            .getRawMany();
+    }
 }

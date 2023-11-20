@@ -16,7 +16,7 @@ export class CategoryController {
     private readonly categoryService: CategoryService
   ) { }
 
-  @Roles(UserType.Admin)
+  @Roles(UserType.Admin,UserType.User)
   @Get()
   async findAllCategories(): Promise<ReturnCategory[]> {
     return this.categoryService.findAllCategories();

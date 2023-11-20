@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsArray, IsNotEmpty, IsString, Length, ValidateNested } from "class-validator";
+import { IsArray, IsNotEmpty, IsNumber, IsString, Length, ValidateNested } from "class-validator";
 import { CreateCampoDto } from "src/campo/dtos/createCampo.dto";
 
 export class UpdateTemplateDto {
@@ -18,5 +18,8 @@ export class UpdateTemplateDto {
     @ValidateNested({ each: true })
     @Type(() => CreateCampoDto)
     campo: CreateCampoDto[];
+
+    @IsNumber()
+    categoryId: number;
 
 }
