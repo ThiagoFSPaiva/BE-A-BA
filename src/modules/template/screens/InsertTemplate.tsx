@@ -34,7 +34,8 @@ export const InsertTemplate = () => {
     handleInsertTemplate,
     handleOnChangeInput,
     handleCancel,
-    handleChangeSelect
+    handleChangeSelect,
+    handleRemoveCampo
   } = useTemplateInsert();
   const { categories } = useCategory();
 
@@ -65,7 +66,7 @@ export const InsertTemplate = () => {
             </Grid>
 
             {/* Linha 2: Categoria e Extensão */}
-            <Grid item xs={5}>
+            <Grid item xs={6}>
               <FormControl fullWidth variant="filled">
                 <InputLabel>Categoria</InputLabel>
                 <Select
@@ -81,7 +82,7 @@ export const InsertTemplate = () => {
               </FormControl>
             </Grid>
 
-            <Grid item xs={5}>
+            <Grid item xs={6}>
               <FormControl fullWidth variant="filled">
                 <InputLabel>Extensao</InputLabel>
                 <Select
@@ -99,7 +100,7 @@ export const InsertTemplate = () => {
             {/* Linha 3: Nome do Campo, Tipo e Botão + */}
             {template.campo.map((campo, index) => (
               <Grid container gap={2} key={index} alignItems="center">
-                <Grid item xs={6}>
+                <Grid item xs={5}>
                   <FormControl fullWidth>
                     <TextField
                       value={campo.name}
@@ -127,7 +128,7 @@ export const InsertTemplate = () => {
                   </FormControl>
                 </Grid>
 
-                <Grid item xs={1}>
+                <Grid item xs={2}>
                   <Button
                     onClick={handleAddCampo}
                     variant="contained"
@@ -135,6 +136,15 @@ export const InsertTemplate = () => {
                     style={{ marginTop: '16px' }}
                   >
                     +
+                  </Button>
+
+                  <Button
+                    onClick={() => handleRemoveCampo(index)}
+                    variant="contained"
+                    color="error"
+                    style={{ marginTop: '16px', marginLeft: '8px' }}
+                  >
+                    -
                   </Button>
                 </Grid>
               </Grid>

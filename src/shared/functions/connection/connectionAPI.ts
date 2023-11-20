@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { MethodsEnum } from "../../enums/methods.enum";
-import { ERROR_ACCESS_DENIED, ERROR_CONNECTION } from "../../constants/errosStatus";
+import { ERROR_CONNECTION } from "../../constants/errosStatus";
 import { getAuthorizationToken } from "./auth";
 
 export type MethodType = 'get' | 'post' | 'put' | 'patch' | 'delete';
@@ -10,7 +10,8 @@ export default class ConnectionAPI {
     const config: AxiosRequestConfig = {
       headers: {
         Authorization: getAuthorizationToken(),
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
+
       },
     };
 
@@ -30,10 +31,11 @@ export default class ConnectionAPI {
     return ConnectionAPI.call<T>(url, method, body).catch((error) => {
       if (error.response) {
         switch (error.response.status) {
+          case 400:
           case 401:
           case 403:
           case 404:
-            throw new Error(error.response.data.message || ERROR_ACCESS_DENIED);
+            throw new Error(error.response.data.message || error.response.data.message);
           default:
             throw new Error(ERROR_CONNECTION);
         }

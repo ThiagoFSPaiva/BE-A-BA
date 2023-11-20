@@ -9,13 +9,14 @@ import { useGlobalReducer } from "../../store/reducers/globalReducer/useGlobalRe
 
 export const useRequests = () => {
     const [loading,setLoading] = useState(false);
-    const {setUser} = useGlobalReducer();
+    const { setNotification, setUser } = useGlobalReducer();
 
     const request = async <T>(
         url: string,
         method: MethodType,
         saveGlobal?: (object: T) => void,
         body?: unknown,
+        message?: string
       ): Promise<T | undefined> => {
         setLoading(true);
     
@@ -24,11 +25,13 @@ export const useRequests = () => {
             if (saveGlobal) {
               saveGlobal(result);
             }
-
+            if (message) {
+              setNotification(message,'success');
+            }
             return result;
           })
-          .catch((erro) => {
-            alert(erro.message)
+          .catch((error: Error) => {
+            setNotification(error.message, 'error');
             return undefined;
           });
     

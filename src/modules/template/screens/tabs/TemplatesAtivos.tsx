@@ -1,5 +1,5 @@
 import { TemplateType } from "../../types/TemplateType";
-import { Box, Button, Grid, InputAdornment, MenuItem, Modal, Pagination, Select, TextField, Typography } from "@mui/material";
+import { Box, Button, Grid, InputAdornment, LinearProgress, MenuItem, Modal, Pagination, Select, Stack, TextField, Typography, useTheme } from "@mui/material";
 import axios from "axios";
 import { useCallback, useState } from "react";
 import React from "react";
@@ -8,6 +8,9 @@ import { getAuthorizationToken } from "../../../../shared/functions/connection/a
 import { TemplateCard } from "../../components/TemplateCard";
 import SearchIcon from '@mui/icons-material/Search';
 import { useTemplate } from "../../hooks/states/useTemplate";
+import { useGlobalReducer } from "../../../../store/reducers/globalReducer/useGlobalReducer";
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import Swal from 'sweetalert2'
 
 
 const style = {
@@ -36,14 +39,21 @@ export const TemplatesAtivos = () => {
         handleDownloadTemplate
     } = useTemplate();
 
+    const [uploadProgress, setUploadProgress] = useState<number>(0);
+
+
+    const onUploadProgress = (progressEvent: any) => {
+        const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        setUploadProgress(progress);
+    };
+
     const [selectedTemplate, setSelectedTemplate] = useState<TemplateType | null>(null);
-
-
     const allowedFileTypes = ['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv'];
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const theme = useTheme()
 
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -69,7 +79,6 @@ export const TemplatesAtivos = () => {
 
     const handleOnSubmit = (templateId: number, extensao: string) => {
         const token = getAuthorizationToken();
-
         if (selectedFile) {
             const formData = {
                 extensao,
@@ -80,17 +89,42 @@ export const TemplatesAtivos = () => {
             const config = {
                 headers: {
                     Authorization: token,
-                    'Content-Type': 'multipart/form-data',
+                    'Content-Type': 'multipart/form-data'
                 },
+                onUploadProgress: onUploadProgress,
             };
-
             axios.post(`http://127.0.0.1:5000/upload`, formData, config)
-                .then((response) => {
-                    console.log('File uploaded successfully', response.data);
+                .then(() => {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Arquivo enviado!",
+                        color: theme.palette.text.primary,
+                        background: theme.palette.background.paper,
+                        confirmButtonColor: `${theme.palette.primary.main}`,
+                        customClass: {
+                            popup: 'swal-popup',
+                        }
+                    });
                 })
                 .catch((error) => {
-                    console.error('Error uploading file', error);
+                    Swal.fire({
+                        background: theme.palette.background.paper,
+                        color: theme.palette.text.primary,
+                        icon: "error",
+                        title: `Arquivo inválido`,
+                        html: `<span style="color: ${theme.palette.text.secondary};">${error.response.data.error}</span>`,
+                        confirmButtonColor: "#f44336",
+                        customClass: {
+                            popup: 'swal-popup',
+                        },
+                    });
+                })
+                .finally(() => {
+                    setUploadProgress(0);
+                    setOpen(false);
+                    setSelectedFile(null);
                 });
+
         }
     };
 
@@ -160,18 +194,44 @@ export const TemplatesAtivos = () => {
                 }}
             >
                 <Box sx={style}>
-                    <div {...getRootProps()}>
-                        <input {...getInputProps()} name="file" />
-                        <p>Arraste e solte um arquivo aqui ou clique para selecionar um arquivo</p>
-                    </div>
-                    {selectedFile && <p>Arquivo selecionado: {selectedFile.name}</p>}
-                    <Button
-                        variant="contained"
-                        onClick={() => selectedTemplate && handleOnSubmit(selectedTemplate.id, selectedTemplate.extensao)}
-                        disabled={!selectedFile || !selectedTemplate?.id}
+                    <Typography pb={2} variant="h6" noWrap>{selectedTemplate?.name}</Typography>
+
+                    <div
+                        {...getRootProps()}
+                        style={{ border: `2px dashed ${theme.palette.primary.main}`, padding: '20px', borderRadius: '4px', position: 'relative' }}
                     >
-                        Enviar
-                    </Button>
+                        <input {...getInputProps()} name="file" style={{ display: 'none' }} />
+                        <Stack spacing={2} alignItems="center">
+                            <CloudUploadIcon sx={{ fontSize: 48, color: theme.palette.primary.main }} />
+                            <Typography variant="subtitle2">Arraste um arquivo aqui ou clique</Typography>
+                        </Stack>
+                    </div>
+                    {selectedFile && <p>Arquivo: {selectedFile.name}</p>}
+                    {uploadProgress > 0 && (
+                        <LinearProgress
+                            variant="determinate"
+                            value={uploadProgress}
+                            sx={{ width: '100%', marginTop: 2 }}
+                        />
+                    )}
+
+                    <Stack pt={2} spacing={2} direction="row" justifyContent="flex-end">
+                        <Button variant="contained" color="secondary" onClick={handleClose}>Cancelar</Button>
+
+                        <Button
+                            variant="contained"
+                            onClick={() => selectedTemplate && handleOnSubmit(selectedTemplate.id, selectedTemplate.extensao)}
+                            disabled={!selectedFile || !selectedTemplate?.id}
+                            sx={{
+                                marginTop: 2,
+                                backgroundColor: theme.palette.primary.main,
+                                color: theme.palette.common.white,
+                                float: 'right',
+                            }}
+                        >
+                            Enviar
+                        </Button>
+                    </Stack>
                 </Box>
             </Modal>
 

@@ -1,4 +1,4 @@
-import { CssBaseline, GlobalStyles } from "@mui/material";
+import { Alert, CssBaseline, GlobalStyles, Snackbar } from "@mui/material";
 import { RouteObject, RouterProvider, createBrowserRouter } from "react-router-dom";
 import { loginRoutes } from "./modules/login/routes";
 import { gerenciarScreen, templateScreens } from "./modules/template/routes";
@@ -13,8 +13,14 @@ import { dashboardRoute } from "./modules/Dashboard/routes";
 import { uploadsScreen } from "./modules/Uploads/routes";
 import { usuarioScreen } from "./modules/user/screens/routes";
 import { categoryScreens } from "./modules/category/routes";
+import { NotificationComponent } from "./shared/hooks/useNotification";
+
+
 
 const globalStyles = {
+  '.swal-popup': {
+    zIndex: '99999',
+  },
   span: {
     color: "#ccc",
   },
@@ -23,41 +29,40 @@ const globalStyles = {
     textDecoration: "none"
   }
 };
+
 const routes: RouteObject[] = [...loginRoutes];
 
-const routesLoggedIn: RouteObject[] = 
+const routesLoggedIn: RouteObject[] =
   [
-    ...templateScreens, 
+    ...templateScreens,
     ...firstScreenRoutes,
   ].map((route) => ({
-  ...route,
-  loader: verifyLoggedIn
-}));
+    ...route,
+    loader: verifyLoggedIn
+  }));
 
-const routesAdmin: RouteObject[] = 
+const routesAdmin: RouteObject[] =
   [
     ...usuarioScreen,
-    ...dashboardRoute, 
-    ...uploadsScreen, 
+    ...dashboardRoute,
+    ...uploadsScreen,
     ...gerenciarScreen,
     ...categoryScreens
   ].map((route) => ({
-  ...route,
-  loader: verifyAdmin
- 
-}));
+    ...route,
+    loader: verifyAdmin
+
+  }));
 
 const router = createBrowserRouter(
   [
-    ...routes, ...routesLoggedIn,...routesAdmin
+    ...routes, ...routesLoggedIn, ...routesAdmin
   ]);
 
 function App() {
 
-
   const { setUser } = useGlobalReducer();
   const { request } = useRequests();
-
 
   useEffect(() => {
     const token = getAuthorizationToken();
@@ -69,7 +74,7 @@ function App() {
 
   return (
     <>
-
+      <NotificationComponent />
       <CssBaseline />
       <GlobalStyles styles={globalStyles} />
       <RouterProvider router={router} />

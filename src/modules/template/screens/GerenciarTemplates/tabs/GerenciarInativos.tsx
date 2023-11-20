@@ -1,14 +1,26 @@
 import { Box, IconButton, InputAdornment, Menu, MenuItem, Pagination, Select, Stack, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import TPaper from "../../../../../components/common/TPaper";
 import SearchIcon from '@mui/icons-material/Search';
-import { useGerenciarInativos } from "../../../hooks/GerenciarTemplates/states/useGerenciarInativo";
-import { useRequests } from "../../../../../shared/hooks/useRequests";
-import { MethodsEnum } from "../../../../../shared/enums/methods.enum";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useMenu } from "../../../hooks/GerenciarTemplates/useMenu";
 import { DeleteConfirmationModal } from "../../../components/DeleteConfirmationModal";
+import { useTemplateAdminReducer } from "../../../../../store/reducers/templateAdminReducer/useTemplateAdminReducer";
+import { useEffect, useState } from "react";
+import { TemplateType } from "../../../types/TemplateType";
+import { useGerenciarTemplates } from "../../../hooks/GerenciarTemplates/states/useGerenciarTemplates";
 
 export const GerenciarInativos = () => {
+    const { templates } = useTemplateAdminReducer();
+    const [templatesFiltered, setTemplatesFiltered] = useState<TemplateType[]>(templates);
+
+
+    useEffect(() => {
+        const templatesInativos = templates.filter(template => template.status === 'inativo');
+        
+        setTemplatesFiltered(templatesInativos);
+      }, [templates]);
+
+      
     const {
         totalPages,
         currentTemplates,
@@ -22,7 +34,7 @@ export const GerenciarInativos = () => {
         handleChangePage,
         handleSearchByChange,
         handleSearch
-    } = useGerenciarInativos();
+    } = useGerenciarTemplates(templatesFiltered);
     const {
         anchorEl,
         selectedItemId,

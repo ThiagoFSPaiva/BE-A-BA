@@ -44,9 +44,10 @@ export const useInsertCategory = () => {
         MethodsEnum.PUT,
         undefined,
         { name },
+        'Categoria Atualizada!'
       );
     } else {
-      await request(URL_CATEGORY, MethodsEnum.POST, undefined, { name });
+      await request(URL_CATEGORY, MethodsEnum.POST, undefined, { name }, 'Categoria cadastrada!');
     }
     await request(URL_CATEGORY, MethodsEnum.GET, setCategories);
 

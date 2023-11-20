@@ -4,9 +4,23 @@ import SearchIcon from '@mui/icons-material/Search';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useMenu } from "../../../hooks/GerenciarTemplates/useMenu";
 import { DeleteConfirmationModal } from "../../../components/DeleteConfirmationModal";
-import { useGerenciarPendentes } from "../../../hooks/GerenciarTemplates/states/useGerenciarPendente";
+import { useGerenciarTemplates } from "../../../hooks/GerenciarTemplates/states/useGerenciarTemplates";
+import { useTemplateAdminReducer } from "../../../../../store/reducers/templateAdminReducer/useTemplateAdminReducer";
+import { useEffect, useState } from "react";
+import { TemplateType } from "../../../types/TemplateType";
 
 export const GerenciarPendentes = () => {
+
+    const { templates } = useTemplateAdminReducer();
+    const [templatesFiltered, setTemplatesFiltered] = useState<TemplateType[]>(templates);
+
+
+    useEffect(() => {
+        const templatesPendentes = templates.filter(template => template.status === 'pendente');
+        
+        setTemplatesFiltered(templatesPendentes);
+      }, [templates]);
+    
     const {
         totalPages,
         currentTemplates,
@@ -20,7 +34,7 @@ export const GerenciarPendentes = () => {
         handleChangePage,
         handleSearchByChange,
         handleSearch,
-    } = useGerenciarPendentes();
+    } = useGerenciarTemplates(templatesFiltered);
     const {
         anchorEl,
         selectedItemId,

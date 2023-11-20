@@ -1,12 +1,28 @@
-import { Box, IconButton, InputAdornment, Menu, MenuItem, Pagination, Select, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
-import { useGerenciarAtivos } from "../../../hooks/GerenciarTemplates/states/useGerenciarAtivo";
+import { Box, IconButton, InputAdornment, Menu, MenuItem, Pagination, Select, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
 import TPaper from "../../../../../components/common/TPaper";
 import SearchIcon from '@mui/icons-material/Search';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useMenu } from "../../../hooks/GerenciarTemplates/useMenu";
 import { DeleteConfirmationModal } from "../../../components/DeleteConfirmationModal";
+import { useEffect, useState } from "react";
+import { useTemplateAdminReducer } from "../../../../../store/reducers/templateAdminReducer/useTemplateAdminReducer";
+import { TemplateType } from "../../../types/TemplateType";
+import { useGerenciarTemplates } from "../../../hooks/GerenciarTemplates/states/useGerenciarTemplates";
 
 export const GerenciarAtivos = () => {
+
+    const { templates } = useTemplateAdminReducer();
+    const [templatesFiltered, setTemplatesFiltered] = useState<TemplateType[]>(templates);
+
+
+    useEffect(() => {
+        const templatesAtivos = templates.filter(template => template.status === 'ativo');
+        
+        setTemplatesFiltered(templatesAtivos);
+      }, [templates]);
+
+
+
     const {
         anchorEl,
         selectedItemId,
@@ -27,13 +43,12 @@ export const GerenciarAtivos = () => {
         page,
         searchText,
         searchBy,
-        templatesFiltered,
         handleFormatFilterChange,
         handleChangeRowsPerPage,
         handleChangePage,
         handleSearchByChange,
         handleSearch,
-    } = useGerenciarAtivos();
+    } = useGerenciarTemplates(templatesFiltered);
 
     return (
         <>
@@ -101,7 +116,7 @@ export const GerenciarAtivos = () => {
                         >
                             <MenuItem value={10}>10</MenuItem>
                             <MenuItem value={100}>100</MenuItem>
-                            <MenuItem value={templatesFiltered.length}>Todos</MenuItem>
+                            <MenuItem value={currentTemplates.length}>Todos</MenuItem>
                         </Select>
 
 

@@ -31,7 +31,7 @@ export const useMenu = () => {
       status: 'ativo'
     }
 
-    await request(`${URL_TEMPLATE}/${id}`, MethodsEnum.PATCH, undefined, formData)
+    await request(`${URL_TEMPLATE}/${id}`, MethodsEnum.PATCH, undefined, formData,'Status atualizado!')
     await request<TemplateType[]>(URL_TEMPLATE, MethodsEnum.GET, setTemplates);
 
     handleMenuClose();
@@ -43,7 +43,7 @@ export const useMenu = () => {
       status: 'inativo'
     }
 
-    await request(`${URL_TEMPLATE}/${id}`, MethodsEnum.PATCH, undefined, formData)
+    await request(`${URL_TEMPLATE}/${id}`, MethodsEnum.PATCH, undefined, formData,'Status atualizado!')
     await request<TemplateType[]>(URL_TEMPLATE, MethodsEnum.GET, setTemplates);
 
     handleMenuClose();
@@ -62,7 +62,7 @@ export const useMenu = () => {
 
   const handleDeleteConfirm = async () => {
 
-    await request(`${URL_TEMPLATE}/${selectedItemId}`, MethodsEnum.DELETE)
+    await request(`${URL_TEMPLATE}/${selectedItemId}`, MethodsEnum.DELETE,undefined,'Template deletado!')
     await request<TemplateType[]>(URL_TEMPLATE, MethodsEnum.GET, setTemplates);
     setSelectedItemId(null)
 

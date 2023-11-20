@@ -12,7 +12,7 @@ import App from './App.tsx'
 import { Provider } from 'react-redux'
 import { store } from './store/index.ts';
 import { AppThemeProvider } from './shared/contexts';
-
+import Swal from 'sweetalert2'
 ChartJS.register(
   CategoryScale,
   LinearScale,

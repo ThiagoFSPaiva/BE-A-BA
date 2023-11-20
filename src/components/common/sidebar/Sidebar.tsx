@@ -75,7 +75,7 @@ const ResponsiveDrawer: React.FC<Props> = (props) => {
       <AppHeader sidebarWidth={props.sidebarWidth} handleDrawerToggle={handleDrawerToggle} isMobile={isMobile}/>
       <Box
         component="nav"
-        sx={{ width: { sm: props.sidebarWidth }, flexShrink: { sm: 0 }, p: 0 }}
+        sx={{ width: { sm: props.sidebarWidth }, flexShrink: { sm: 0 }, p: 0 , zIndex:999}}
         aria-label="mailbox folders"
       >
         <Drawer

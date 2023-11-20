@@ -50,7 +50,7 @@ export const TemplateInativo = () => {
                   {template.name}
                 </Typography>
                 <Typography variant="subtitle2" align="center" mb={2} sx={{
-                  bgcolor: "#b37509",
+                  bgcolor: "#F44336",
                   borderRadius: 1,
                   width: "80px",
                   margin: "16px auto"

@@ -115,10 +115,11 @@ export const useTemplateInsert = () => {
                 MethodsEnum.PUT,
                 undefined,
                 template,
+                'Template atualizado!'
             );
             navigate(GerenciarTemplateRoutesEnum.TEMPLATE_GERENCIAR);
         } else {
-            await request(URL_TEMPLATE, MethodsEnum.POST, undefined, template);
+            await request(URL_TEMPLATE, MethodsEnum.POST, undefined, template, 'Template cadastrado!');
             navigate(TemplateRoutesEnum.TEMPLATE);
         }
         
@@ -140,6 +141,18 @@ export const useTemplateInsert = () => {
         }));
     };
 
+    const handleRemoveCampo = (index: number) => {
+        setTemplate((currentTemplate) => {
+          const updatedCampo = [...currentTemplate.campo];
+          updatedCampo.splice(index, 1);
+      
+          return {
+            ...currentTemplate,
+            campo: updatedCampo,
+          };
+        });
+      };
+
 
     return {
         isEdit,
@@ -149,6 +162,7 @@ export const useTemplateInsert = () => {
         handleAddCampo,
         handleOnChangeInput,
         handleCancel,
+        handleRemoveCampo,
         handleChangeSelect
     };
 }

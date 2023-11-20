@@ -18,9 +18,9 @@ export const useCategory = () => {
   const { request } = useRequests();
   
   useEffect(() => {
-    if (!categories || categories.length === 0) {
+    
       request(URL_CATEGORY, MethodsEnum.GET, setCategories);
-    }
+    
   }, []);
 
 

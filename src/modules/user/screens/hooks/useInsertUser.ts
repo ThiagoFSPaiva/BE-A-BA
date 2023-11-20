@@ -48,9 +48,7 @@ export const useUserInsert = () => {
 
       const handleInsertAdmin = async () => {
         
-   
-        
-        request(URL_USER, MethodsEnum.POST, undefined, user)
+        request(URL_USER, MethodsEnum.POST, undefined, user,'Usuário cadastrado')
         .then((response) => {
             if (response) {
               navigate(UsuarioRoutesEnum.Usuario);

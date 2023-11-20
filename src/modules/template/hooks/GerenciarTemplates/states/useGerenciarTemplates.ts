@@ -2,21 +2,13 @@ import { useEffect, useState } from "react";
 import { useTemplateAdminReducer } from "../../../../../store/reducers/templateAdminReducer/useTemplateAdminReducer";
 import { TemplateType } from "../../../types/TemplateType";
 
-export const useGerenciarPendentes = () => {
-    const { templates } = useTemplateAdminReducer();
-    const [templatesFiltered, setTemplatesFiltered] = useState<TemplateType[]>(templates);
+export const useGerenciarTemplates = (templatesFiltered: TemplateType[]) => {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [page, setPage] = useState(1);
     const [searchText, setSearchText] = useState('');
     const [searchBy, setSearchBy] = useState('nome');
     const [formatFilter, setFormatFilter] = useState('all');
 
-
-    useEffect(() => {
-        const templatesPendentes = templates.filter(template => template.status === 'pendente');
-        
-        setTemplatesFiltered(templatesPendentes);
-      }, [templates]);
 
     const handleChangePage = (event: any, newPage: number) => {
         setPage(newPage);
@@ -41,6 +33,10 @@ export const useGerenciarPendentes = () => {
         setFormatFilter(event.target.value as string);
         setPage(1);
     };
+
+
+    
+
 
 
     const filteredRows = templatesFiltered.filter((row) => {

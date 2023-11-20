@@ -7,5 +7,6 @@ export interface UserType {
     matricula: string;
     email: string;
     cpf: string;
+    status: string;
     typeUser: UserTypeEnum;
 }

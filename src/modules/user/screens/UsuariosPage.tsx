@@ -1,4 +1,4 @@
-import { Box, Button, InputAdornment, MenuItem, Pagination, Select, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, useTheme } from "@mui/material";
+import { Box, Button, InputAdornment, MenuItem, Pagination, Select, Stack, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, useTheme } from "@mui/material";
 import { Header } from "../../../components/common/Header";
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import SearchIcon from '@mui/icons-material/Search';
@@ -6,29 +6,40 @@ import { useUser } from "./hooks/useUser";
 import { UsuarioRoutesEnum } from "./routes";
 import { useNavigate } from "react-router-dom";
 import TPaper from "../../../components/common/TPaper";
+import { URL_UPLOAD_GET_ALL_USERS } from "../../../shared/constants/urls";
+import { MethodsEnum } from "../../../shared/enums/methods.enum";
+import { UserType } from "../../login/types/UserType";
+import { useEffect } from "react";
+import { useRequests } from "../../../shared/hooks/useRequests";
+import { useUserReducer } from "../../../store/reducers/userReducer/useUserReducer";
+import React from "react";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
+import { UsersAtivos } from "./tabs/UsersAtivos";
+import { UsersInativos } from "./tabs/UsersInativos";
 
 
 
 export const UsuariosPage = () => {
   const theme = useTheme();
+  const [value, setValue] = React.useState('1');
   const navigate = useNavigate();
+  const { setUsers } = useUserReducer();
+  const { request } = useRequests();
+
+  useEffect(() => {
+    request<UserType[]>(URL_UPLOAD_GET_ALL_USERS, MethodsEnum.GET, setUsers);
+  }, []);
 
   const handleGoToInsertAdmin = () => {
     navigate(UsuarioRoutesEnum.USUARIO_INSERT);
   };
 
-  const {
-    rowsPerPage,
-    totalPages,
-    usersFiltered,
-    page,
-    searchText,
-    searchBy,
-    handleChangeRowsPerPage,
-    handleChangePage,
-    handleSearch,
-    handleSearchByChange
-  } = useUser();
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
+
 
   return (
 
@@ -41,84 +52,28 @@ export const UsuariosPage = () => {
         <Button variant="contained" onClick={handleGoToInsertAdmin}>Cadastrar</Button>
       </Header>
 
-      <TableContainer component={TPaper}>
-        <Box sx={{
-          display: "flex",
-          justifyContent: 'space-between',
-          p: 2,
-          borderBottom: "1px solid white"
-        }}>
-          <Stack direction="row" spacing={2}>
-            <TextField
-              value={searchText}
-              onChange={handleSearch}
-              placeholder="Search"
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <SearchIcon sx={{ color: "white" }} />
-                  </InputAdornment>
-                ),
-              }}
 
-            />
-            <Select
-              value={searchBy}
-              onChange={handleSearchByChange}
-              style={{ marginLeft: 10 }}
-            >
-              <MenuItem value="nome">Nome</MenuItem>
-              <MenuItem value="matricula">Matricula</MenuItem>
-              <MenuItem value="cpf">CPF</MenuItem>
-              <MenuItem value="email">Email</MenuItem>
-            </Select>
-          </Stack>
-          <Stack direction="row" gap="10px" marginRight="10px" alignItems="center" spacing={2}>
-            Mostrar
-            <Select
-              labelId="rows-per-page-label"
-              id="rows-per-page"
-              value={rowsPerPage}
-              onChange={handleChangeRowsPerPage}
-            >
-              <MenuItem value={10}>10</MenuItem>
-              <MenuItem value={100}>100</MenuItem>
-              <MenuItem value={usersFiltered.length}>Todos</MenuItem>
-            </Select>
-          </Stack>
+      <TabContext value={value}>
+        <Box sx={{ borderColor: 'divider', display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <TabList onChange={handleChange} aria-label="lab API tabs example"
+            textColor="secondary"
+            sx={{
+              "& .MuiTabs-indicator": {
+                backgroundColor: "#43a047",
+              },
+            }}
+          >
+            <Tab label="Ativos" value="1" />
+            <Tab label="Inativos" value="2" />
+          </TabList>
         </Box>
-        <Table sx={{ minWidth: 300 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Nome</TableCell>
-              <TableCell align="center">Matricula</TableCell>
-              <TableCell align="center">Email</TableCell>
-              <TableCell align="center">CPF</TableCell>
-              <TableCell align="center">Cargo</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {usersFiltered.map((row, index) => (
-              <TableRow
-                key={index}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="center">{row.matricula}</TableCell>
-                <TableCell align="center">{row.email}</TableCell>
-                <TableCell align="center">{row.cpf}</TableCell>
-                <TableCell align="center">{row.typeUser}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
-        <Pagination color="secondary" siblingCount={0} count={totalPages} page={page} onChange={handleChangePage} />
-      </Box>
-
+        <TabPanel sx={{ p: 0, py: 2 }} value="1">
+          <UsersAtivos/>
+        </TabPanel>
+        <TabPanel sx={{ p: 0, py: 2 }} value="2">
+          <UsersInativos/>
+        </TabPanel>
+      </TabContext>
 
 
 
