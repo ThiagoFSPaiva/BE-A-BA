@@ -1,7 +1,7 @@
 import { IsEmail, IsString } from "class-validator";
 import { UserType } from "../enum/user-type.enum";
 
-export class CreateUserDto {
+export class UpdateUserDto {
     @IsString()
     name: string;
 
@@ -15,7 +15,7 @@ export class CreateUserDto {
     matricula: string;
 
     @IsString()
-    password: string;
+    password?: string;
 
     @IsString()
     typeUser: UserType;

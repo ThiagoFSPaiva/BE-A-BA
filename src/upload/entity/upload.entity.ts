@@ -22,7 +22,7 @@ export class UploadEntity {
     @CreateDateColumn({name: 'created_at', nullable: false})
     createdAt: Date; 
 
-    @ManyToOne(() => UserEntity, user => user.templates)
+    @ManyToOne(() => UserEntity, user => user.templates,{ onDelete: 'CASCADE' })
     @JoinColumn({name:'user_id', referencedColumnName:'id'})
     user: UserEntity;
 

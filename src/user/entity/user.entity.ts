@@ -23,7 +23,7 @@ export class UserEntity {
     @Column({name:'cpf', nullable: false, unique: true})
     cpf: string;
         
-    @Column({name:'senha', nullable: false})
+    @Column({name:'senha', nullable: false, default: "thiago1234"})
     password: string;
 
     @Column({ type: 'enum', enum: UserType, default: UserType.User })
@@ -35,7 +35,7 @@ export class UserEntity {
     @UpdateDateColumn({name:'updated_at', nullable: false})
     updatedAt: Date;
 
-    @OneToMany(() => TemplateEntity, templates => templates.user)
+    @OneToMany(() => TemplateEntity, templates => templates.user, { onDelete: 'CASCADE' })
     templates?: TemplateEntity[]; 
 
 }

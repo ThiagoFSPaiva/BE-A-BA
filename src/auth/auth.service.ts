@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { UserEntity } from 'src/user/entity/user.entity';
 import { LoginDto } from './dtos/login.dto';
 import { UserService } from 'src/user/user.service';
@@ -8,6 +8,7 @@ import { ReturnLogin } from './dtos/returnLogin.dto';
 import { JwtService } from '@nestjs/jwt';
 import { validatePassword } from 'src/utils/password';
 import { isEmail } from 'class-validator';
+import { StatusType } from 'src/user/enum/status-type.enum';
 
 @Injectable()
 export class AuthService {
@@ -20,28 +21,34 @@ export class AuthService {
 
 
     async login(loginDto: LoginDto): Promise<ReturnLogin> {
-        let user: UserEntity | undefined;
         const identifier = loginDto.identifier.toLowerCase();
-        
-        if (isEmail(identifier)) {
-            user = await this.userService.findUserByEmail(identifier).catch(() => undefined);
-        } else {
-            user = await this.userService.getUserByMatricula(identifier).catch(() => undefined);
+
+        let user: UserEntity | undefined;
+
+        try {
+            if (isEmail(identifier)) {
+                user = await this.userService.findUserByEmail(identifier);
+            } else {
+                user = await this.userService.getUserByMatricula(identifier);
+            }
+        } catch (error) {
+            user = undefined;
         }
 
-        const isMatch = await validatePassword(
-            loginDto.password,
-            user?.password || '',
-        );
+        if (user?.status === StatusType.Inativo) {
+            throw new UnauthorizedException('Usuário bloqueado. Acesso não autorizado.');
+        }
+        const isMatch = user && (await validatePassword(loginDto.password, user.password || ''));
 
-        if (!user || !isMatch) {
+        if (!isMatch) {
             throw new NotFoundException('Matricula ou senha incorreta');
         }
 
-        return {
-            accessToken: this.jwtService.sign({ ...new LoginPayload(user) }),
-            user: new ReturnUserDto(user)
-        };
+        const accessToken = this.jwtService.sign({ ...new LoginPayload(user) });
 
+        return {
+            accessToken,
+            user: new ReturnUserDto(user),
+        };
     }
 }

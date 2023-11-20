@@ -31,7 +31,7 @@ export class TemplateEntity {
     @UpdateDateColumn({name: 'updated_at', nullable: false})
     updatedAt: Date;
 
-    @ManyToOne(() => UserEntity, user => user.templates)
+    @ManyToOne(() => UserEntity, user => user.templates, { onDelete: 'CASCADE' })
     @JoinColumn({name:'user_id', referencedColumnName:'id'})
     user: UserEntity;
 

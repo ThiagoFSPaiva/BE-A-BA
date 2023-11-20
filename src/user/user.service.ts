@@ -1,11 +1,13 @@
 import { BadGatewayException, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateUserDto } from './dtos/createUser.dto'; 
+import { CreateUserDto } from './dtos/createUser.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { UserEntity } from './entity/user.entity';
 import { UserType } from './enum/user-type.enum';
 import { createPasswordHashed } from 'src/utils/password';
 import { EmailService } from 'src/email/email.service';
+import { StatusType } from './enum/status-type.enum';
+import { UpdateUserDto } from './dtos/updateUser.dto';
 
 @Injectable()
 export class UserService {
@@ -14,32 +16,30 @@ export class UserService {
         @InjectRepository(UserEntity)
         private readonly userRepository: Repository<UserEntity>,
         private readonly emailService: EmailService
-    ){}
+    ) { }
 
-    async createUser(createUserDto: CreateUserDto) : Promise<UserEntity> {
-        const matricula = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
+    async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
 
+        const matriculaExiste = await this.getUserByMatricula(createUserDto.matricula).catch(() => undefined);
 
-        const matriculaExiste = await this.getUserByMatricula(matricula.toString()).catch(() => undefined);
-
-        if(matriculaExiste) {
-            return this.createUser(createUserDto);
+        if (matriculaExiste) {
+            throw new BadGatewayException('Matricula já registrada no sistema');
         }
-        
+
         const passwordHashed = await createPasswordHashed(createUserDto.password);
 
         const existingUserByEmail = await this.findUserByEmail(createUserDto.email).catch(
             () => undefined,
         );
-    
+
         if (existingUserByEmail) {
             throw new BadGatewayException('E-mail já registrado no sistema');
         }
-    
+
         const existingUserByCpf = await this.findUserByCpf(createUserDto.cpf).catch(
             () => undefined,
         );
-    
+
         if (existingUserByCpf) {
             throw new BadGatewayException('CPF já registrado no sistema');
         }
@@ -50,17 +50,16 @@ export class UserService {
             ...createUserDto,
             email: lowercaseEmail,
             password: passwordHashed,
-            matricula: matricula.toString()
         })
 
         return createdUser
     }
 
-    async getAllUsers() : Promise<UserEntity[]> {
+    async getAllUsers(): Promise<UserEntity[]> {
         return this.userRepository.find();
     }
 
-    async getUserAdmin(userId:string) : Promise<UserEntity> {
+    async getUserAdmin(userId: string): Promise<UserEntity> {
         const user = await this.userRepository.findOne({
             where: {
                 id: userId,
@@ -68,7 +67,7 @@ export class UserService {
             },
         });
 
-        if(!user) {
+        if (!user) {
             throw new NotFoundException('Usuário não encontrado');
         }
 
@@ -76,28 +75,28 @@ export class UserService {
     }
 
 
-    async getUserById(userId:string) : Promise<UserEntity> {
+    async getUserById(userId: string): Promise<UserEntity> {
         const user = await this.userRepository.findOne({
             where: {
                 id: userId
             },
         });
 
-        if(!user) {
+        if (!user) {
             throw new NotFoundException('Usuário não encontrado');
         }
 
         return user;
     }
 
-    async getUserByMatricula(matricula:string) : Promise<UserEntity> {
+    async getUserByMatricula(matricula: string): Promise<UserEntity> {
         const user = await this.userRepository.findOne({
             where: {
                 matricula: matricula
             },
         });
 
-        if(!user) {
+        if (!user) {
             throw new NotFoundException('Usuário não encontrado');
         }
 
@@ -107,7 +106,7 @@ export class UserService {
     async findUserByCpf(cpf: string): Promise<UserEntity> {
         const user = await this.userRepository.findOne({
             where: {
-            cpf,
+                cpf,
             },
         });
 
@@ -122,7 +121,7 @@ export class UserService {
     async findUserByEmail(email: string): Promise<UserEntity> {
         const user = await this.userRepository.findOne({
             where: {
-            email,
+                email,
             },
         });
 
@@ -132,7 +131,50 @@ export class UserService {
 
         return user;
     }
+
+
+    async updateStatus(userId: string, status: StatusType): Promise<UserEntity> {
+        const user = await this.getUserById(userId)
+
+        return this.userRepository.save({
+            ...user,
+            status
+        });
+    }
+
+
+    async updateTemplate(
+        updateTemplate: UpdateUserDto,
+        userId: string,
+    ): Promise<UserEntity> {
+        const user = await this.getUserById(userId);
     
-    
+        // Verificar se a senha está presente e não é uma string vazia
+        if (updateTemplate.password) {
+            const passwordHashed = await createPasswordHashed(updateTemplate.password);
+            return this.userRepository.save({
+                ...user,
+                ...updateTemplate,
+                password: passwordHashed
+            });
+        } else {
+            // Se a senha estiver vazia, apenas atualize as outras informações sem alterar a senha
+            return this.userRepository.save({
+                ...user,
+                ...updateTemplate,
+                password: undefined
+            });
+        }
+    }
+
+    async deleteUser(userId: string): Promise<DeleteResult> {
+        const template = await this.getUserById(userId)
+
+
+        
+        return this.userRepository.delete({ id: template.id })
+    }
+
+
 }
 

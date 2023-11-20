@@ -12,7 +12,6 @@ import { UserType } from 'src/user/enum/user-type.enum';
 import { UpdateTemplateDto } from './dtos/update-template.dto';
 import { CategoryService } from 'src/category/category.service';
 import { CountTemplate } from './dtos/count-template.dto';
-import { CampoEntity } from 'src/campo/entity/campo.entity';
 
 @Injectable()
 export class TemplateService {
@@ -69,18 +68,6 @@ export class TemplateService {
         return template;
     }
 
-    async getTemplatesActiveWithAuthors(): Promise<TemplateEntity[]> {
-        return this.templateRepository.find({
-            where: {
-                status: StatusType.Ativo
-            },
-            relations: ['user', 'category'],
-            order: {
-                createdAt: "DESC"
-            }
-        })
-    }
-
     async findAllTemplatesWithAuthors(): Promise<TemplateEntity[]> {
         return this.templateRepository.find({
             relations: ['user', 'category'],
@@ -89,8 +76,6 @@ export class TemplateService {
             }
         })
     }
-
-
 
     async getTemplateInactiveByUser(id: string): Promise<TemplateEntity[]> {
 
@@ -145,7 +130,6 @@ export class TemplateService {
         })
     }
 
-
     async getTemplatesAtivos(): Promise<TemplateEntity[]> {
         const ativos = await this.templateRepository.find({
             where: {
@@ -173,6 +157,7 @@ export class TemplateService {
 
         return true
     }
+    
     async findTemplateById(
         templateId: number,
         isRelations?: boolean,
@@ -210,24 +195,19 @@ export class TemplateService {
     ): Promise<TemplateEntity> {
         const template = await this.findTemplateById(templateId);
 
-        // Mescla os dados existentes com os dados recebidos
         const updatedTemplate = Object.assign(template, updateTemplate);
 
-        // Atualiza os campos
         if (updateTemplate.campo && updateTemplate.campo.length > 0) {
             updatedTemplate.campo.forEach(async (campo) => {
                 const existingCampo = template.campo.find((c) => c.id === campo.id);
 
                 if (existingCampo) {
-                    // Mescla os dados existentes do campo com os dados recebidos
                     Object.assign(existingCampo, campo);
-                    // Salva o campo atualizado no banco de dados
                     await this.campoService.updateCampo(existingCampo);
                 }
             });
         }
 
-        // Salva o template atualizado no banco de dados
         return this.templateRepository.save(updatedTemplate);
     }
 
