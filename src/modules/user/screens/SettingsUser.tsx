@@ -126,7 +126,7 @@ export const SettingsUser = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            <TableRow>
+                            {/* <TableRow>
                                 <TableCell>
                                     <Typography variant="subtitle2" color={theme => theme.palette.text.secondary}>
                                         Foto de perfil
@@ -137,7 +137,7 @@ export const SettingsUser = () => {
                                         <ArrowForwardIosIcon fontSize="small" />
                                     </IconButton>
                                 </TableCell>
-                            </TableRow>
+                            </TableRow> */}
                             <TableRow>
                                 <TableCell sx={{ borderBottom: 'none' }}>
                                     <Typography variant="subtitle2" color={theme => theme.palette.text.secondary}>

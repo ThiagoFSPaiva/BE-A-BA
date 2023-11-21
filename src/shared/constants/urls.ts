@@ -5,6 +5,8 @@ const servidorPython = "http://localhost:5000"
 
 export const URL_USER = `${servidorJS}/user`;
 export const URL_AUTH = `${servidorJS}/auth`;
+export const URL_AUTH_RECOVERY = `${servidorJS}/auth/recovery`
+export const URL_AUTH_RESET_PASSWORD = `${servidorJS}/auth/reset-password`
 export const URL_TEMPLATE_ATIVO = `${servidorJS}/template/listar-templates-ativos`
 export const URL_MYTEMPLATES_PENDENTES = `${servidorJS}/template/meus-templates-pendentes`;
 export const URL_MYTEMPLATES_INATIVOS = `${servidorJS}/template/meus-templates-inativos`;

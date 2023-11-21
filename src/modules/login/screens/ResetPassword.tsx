@@ -1,17 +1,20 @@
 import { Box, Button, CircularProgress, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { images } from "../../../assets";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Animate } from "../../../components/common/Animate";
 import SVG from "../../../assets/images/login-template.svg";
 import { useRequests } from "../../../shared/hooks/useRequests";
 import { FirstScreenRoutesEnum } from "../../firstScreen/routes";
 import { getAuthorizationToken } from "../../../shared/functions/connection/auth";
+import axios from "axios";
+import { URL_AUTH_RECOVERY, URL_AUTH_RESET_PASSWORD } from "../../../shared/constants/urls";
+import { MethodsEnum } from "../../../shared/enums/methods.enum";
 
-const LoginPage = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const { authRequest, loading } = useRequests();
+export const ResetPassword = () => {
+  const [newPassword, setNewPassword] = useState('');
+  const { token } = useParams();
+  const { request, loading } = useRequests();
   const navigate = useNavigate();
 
 
@@ -26,22 +29,16 @@ const LoginPage = () => {
     return null;
   }
 
-  const handleLogin = async () => {
+  const handleRecovery = async () => {
 
-    authRequest(navigate, {
-      identifier: username,
-      password: password,
-    });
-
+    await request(URL_AUTH_RESET_PASSWORD,MethodsEnum.POST,undefined,{token,newPassword},"Senha alterada")
+    navigate(FirstScreenRoutesEnum.FIRST_SCREEN);
   };
 
-  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(e.target.value);
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewPassword(e.target.value);
   };
 
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
 
   return (
     <Box
@@ -128,26 +125,20 @@ const LoginPage = () => {
             "::-webkit-scrollbar": { display: "none" }
           }}>
             <Animate type="fade" sx={{ maxWidth: 400, width: "100%" }}>
-              <Box component="form" maxWidth={400} width="100%">
+              <Box maxWidth={400} width="100%">
                 <Stack spacing={3}>
 
                   <div>
-                    <Typography color={theme => theme.palette.text.primary} variant="h6" fontWeight="bold">Acesse sua conta</Typography>
+                    <Typography color={theme => theme.palette.text.primary} variant="h6" fontWeight="bold">Crie uma nova senha</Typography>
                     <Typography color={theme => theme.palette.text.secondary} variant="subtitle2" maxWidth={300}>
-                      Acesse sua conta com sua matricula ou email e sua senha.
+                      Digite sua nova senha
                     </Typography>
                   </div>
                   <TextField
-                    onChange={handleUsernameChange}
-                    value={username}
-                    label="Email ou matricula"
+                    onChange={handleEmailChange}
+                    value={newPassword}
+                    label="Nova senha"
                     fullWidth
-                  />
-
-
-                  <TextField label="Senha" type="password" fullWidth
-                    onChange={handlePasswordChange}
-                    value={password}
                   />
 
 
@@ -156,17 +147,10 @@ const LoginPage = () => {
                     type="submit" size="large"
                     variant="contained"
                     color="primary"
-                    onClick={handleLogin}
+                    onClick={handleRecovery}
                   >
-                    {loading ? <CircularProgress size={25} color="primary" /> : 'Entrar'}
+                    {loading ? <CircularProgress size={25} color="primary" /> : 'Enviar'}
                   </Button>
-                  <Stack direction="row" justifyContent="space-between" alignItems="center">
-                    <Typography color="primary">
-                      <Link to="/recovery">
-                        Esqueceu a senha?
-                      </Link>
-                    </Typography>
-                  </Stack>
                 </Stack>
               </Box>
             </Animate>
@@ -178,5 +162,3 @@ const LoginPage = () => {
     </Box>
   );
 };
-
-export default LoginPage;

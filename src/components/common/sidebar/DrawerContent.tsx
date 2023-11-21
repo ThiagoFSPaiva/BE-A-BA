@@ -1,4 +1,4 @@
-import { Box, Paper, List, Button, styled, Switch, Stack, Typography } from '@mui/material';
+import { Box, Paper, List, Button, styled, Switch, Stack, Typography, Avatar } from '@mui/material';
 import { Animate } from '../Animate';
 import { images } from '../../../assets';
 import MenuItem from './MenuItem';
@@ -9,6 +9,7 @@ import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import { useAppThemeContext } from '../../../shared/contexts';
 import { useGlobalReducer } from '../../../store/reducers/globalReducer/useGlobalReducer';
 import SettingsIcon from '@mui/icons-material/Settings';
+import { green } from '@mui/material/colors';
 
 interface DrawerContentProps {
     menus: any[];
@@ -150,16 +151,7 @@ const DrawerContent: React.FC<DrawerContentProps> = ({ menus, menuAdmin, activeS
                         {/* menu group 2 */}
 
                         <Stack spacing={2} direction="column" alignItems="center">
-                            <Box sx={{
-                                width: 50,
-                                height: 50,
-                                borderRadius: "50%",
-
-                                backgroundImage: `url('https://criticalhits.com.br/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2022/04/spy-x-family-loid-forger-anime-768x402.jpg.webp')`, // Adiciona a URL da imagem como plano de fundo
-                                backgroundSize: 'cover', // Ajusta o tamanho da imagem para cobrir completamente o elemento
-                                backgroundPosition: 'center', // Centraliza a imagem no elemento
-                            }}>
-                            </Box>
+                            <Avatar color={'#fff'} sx={{ bgcolor: green[500], color: "#fff" }}>{`${user?.name.split(' ')[0][0]}${user?.name.split(' ').pop()?.charAt(0)}`}</Avatar>
                             <Typography
 
                                 color={theme => theme.palette.text.primary}

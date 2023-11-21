@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Stack, TextField, Typography, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import { images } from "../../../assets";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,11 +7,18 @@ import SVG from "../../../assets/images/login-template.svg";
 import { useRequests } from "../../../shared/hooks/useRequests";
 import { FirstScreenRoutesEnum } from "../../firstScreen/routes";
 import { getAuthorizationToken } from "../../../shared/functions/connection/auth";
+import axios from "axios";
+import { URL_AUTH_RECOVERY } from "../../../shared/constants/urls";
+import { MethodsEnum } from "../../../shared/enums/methods.enum";
+import Swal from "sweetalert2";
+import { error } from "console";
+import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { LoginRoutesEnum } from "../routes";
 
-const LoginPage = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const { authRequest, loading } = useRequests();
+export const RecoveryPassword = () => {
+  const theme = useTheme();
+  const [email, setEmail] = useState('');
+  const { request, loading } = useRequests();
   const navigate = useNavigate();
 
 
@@ -26,22 +33,46 @@ const LoginPage = () => {
     return null;
   }
 
-  const handleLogin = async () => {
+  const handleRecovery = async () => {
 
-    authRequest(navigate, {
-      identifier: username,
-      password: password,
-    });
+    connectionAPIPost(URL_AUTH_RECOVERY, { email })
+      .then(response => {
+        Swal.fire({
+          icon: "success",
+          title: "Email enviado!",
+          text: "Verifique sua caixa de entrada",
+          color: theme.palette.text.primary,
+          background: theme.palette.background.paper,
+          confirmButtonColor: `${theme.palette.primary.main}`,
+          customClass: {
+            popup: 'swal-popup',
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+              navigate(LoginRoutesEnum.LOGIN)
+          }
+        })
+      })
+      .catch(error => {
+        Swal.fire({
+          background: theme.palette.background.paper,
+          color: theme.palette.text.primary,
+          icon: "error",
+          title: `Opps...`,
+          html: `<span style="color: ${theme.palette.text.secondary};">${error.message}</span>`,
+          confirmButtonColor: "#f44336",
+          customClass: {
+            popup: 'swal-popup',
+          },
+        })
+      })
 
   };
 
-  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(e.target.value);
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
   };
 
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
 
   return (
     <Box
@@ -128,26 +159,20 @@ const LoginPage = () => {
             "::-webkit-scrollbar": { display: "none" }
           }}>
             <Animate type="fade" sx={{ maxWidth: 400, width: "100%" }}>
-              <Box component="form" maxWidth={400} width="100%">
+              <Box maxWidth={400} width="100%">
                 <Stack spacing={3}>
 
                   <div>
-                    <Typography color={theme => theme.palette.text.primary} variant="h6" fontWeight="bold">Acesse sua conta</Typography>
+                    <Typography color={theme => theme.palette.text.primary} variant="h6" fontWeight="bold">Recuperar senha</Typography>
                     <Typography color={theme => theme.palette.text.secondary} variant="subtitle2" maxWidth={300}>
-                      Acesse sua conta com sua matricula ou email e sua senha.
+                      Digite o email associado a conta
                     </Typography>
                   </div>
                   <TextField
-                    onChange={handleUsernameChange}
-                    value={username}
-                    label="Email ou matricula"
+                    onChange={handleEmailChange}
+                    value={email}
+                    label="Email"
                     fullWidth
-                  />
-
-
-                  <TextField label="Senha" type="password" fullWidth
-                    onChange={handlePasswordChange}
-                    value={password}
                   />
 
 
@@ -156,17 +181,10 @@ const LoginPage = () => {
                     type="submit" size="large"
                     variant="contained"
                     color="primary"
-                    onClick={handleLogin}
+                    onClick={handleRecovery}
                   >
-                    {loading ? <CircularProgress size={25} color="primary" /> : 'Entrar'}
+                    {loading ? <CircularProgress size={25} color="primary" /> : 'Enviar'}
                   </Button>
-                  <Stack direction="row" justifyContent="space-between" alignItems="center">
-                    <Typography color="primary">
-                      <Link to="/recovery">
-                        Esqueceu a senha?
-                      </Link>
-                    </Typography>
-                  </Stack>
                 </Stack>
               </Box>
             </Animate>
@@ -178,5 +196,3 @@ const LoginPage = () => {
     </Box>
   );
 };
-
-export default LoginPage;
