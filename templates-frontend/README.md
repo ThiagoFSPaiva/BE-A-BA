@@ -18,8 +18,8 @@ $ yarn
 ## Running the app
 
 ```bash
-# development
 $ npm run dev
+```
 
 
 ## Expanding the ESLint configuration
