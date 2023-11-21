@@ -10,6 +10,8 @@ import { RolesGuard } from './guards/roles.guard';
 import { JwtModule} from '@nestjs/jwt';
 import { EmailModule } from './email/email.module';
 import { CategoryModule } from './category/category.module';
+import { PasswordResetTokenEntity } from './password-reset/entity/password-reset-token.entity';
+import { PasswordResetModule } from './password-reset/password-reset.module';
 
  
 @Module({
@@ -18,6 +20,7 @@ import { CategoryModule } from './category/category.module';
     ConfigModule.forRoot({
       envFilePath: ['.env.development.local'],
     }),
+    TypeOrmModule.forFeature([PasswordResetTokenEntity]),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -33,8 +36,8 @@ import { CategoryModule } from './category/category.module';
     CampoModule,
     JwtModule,
     EmailModule,
-    CategoryModule
-    
+    CategoryModule,
+    PasswordResetModule,
   ],
   controllers: [],
   providers: [

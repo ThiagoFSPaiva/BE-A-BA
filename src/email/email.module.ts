@@ -7,7 +7,7 @@ import { EmailService } from './email.service';
 
 
     imports: [  
-  
+        
         MailerModule.forRoot({
             transport: {
                 host: 'smtp.gmail.com',

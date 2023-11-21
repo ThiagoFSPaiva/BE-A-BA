@@ -187,6 +187,16 @@ export class UserService {
     }
 
 
+    async updatePassword (newPassword: string,user: UserEntity) {
+
+        const passwordHashed = await createPasswordHashed(newPassword);
+        return this.userRepository.save({
+            ...user,
+            password: passwordHashed
+        })
+    }
+
+
     async updatePasswordUser(
         updatePasswordDTO: UpdatePasswordDTO,
         userId: string,

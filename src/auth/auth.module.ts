@@ -1,12 +1,19 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { UserModule } from 'src/user/user.module';
 import { JwtModule } from '@nestjs/jwt';
+import { EmailModule } from 'src/email/email.module';
+import { PasswordResetModule } from 'src/password-reset/password-reset.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserEntity } from 'src/user/entity/user.entity';
 
 @Module({
   imports:[
+    TypeOrmModule.forFeature([UserEntity]),
+    EmailModule,
     UserModule,
+    PasswordResetModule,
     JwtModule.registerAsync({
       useFactory: () => ({
         secret: process.env.JWT_SECRET,
@@ -15,6 +22,6 @@ import { JwtModule } from '@nestjs/jwt';
     }),
   ],
   providers: [AuthService],
-  controllers: [AuthController]
+  controllers: [AuthController],
 })
 export class AuthModule {}
