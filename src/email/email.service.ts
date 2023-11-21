@@ -20,7 +20,7 @@ export class EmailService {
 
     async sendResetPasswordEmail(email: string, token: string): Promise<void> {
         await this.mailerService.sendMail({
-            to: 'thiagolipe151@gmail.com',
+            to: email,
             from: 'thiagofellipe151@gmail.com',
             subject: 'Token',
             text: `Seu token é: ${token}`,
