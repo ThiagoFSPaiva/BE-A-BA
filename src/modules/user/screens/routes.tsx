@@ -2,6 +2,7 @@ import { RouteObject } from "react-router-dom";
 import MainLayout from "../../../layout/MainLayout";
 import { UsuariosPage } from "./UsuariosPage";
 import { InsertUsuarioPage } from "./InsertUsuarioPage";
+import { SettingsUser } from "./SettingsUser";
 
 export enum UsuarioRoutesEnum {
     Usuario = '/user',
@@ -41,7 +42,7 @@ export const settingsScreen: RouteObject[] = [
         children: [
             {
                 path: UserSettingsEnum.SETTINGS,
-                element: <UsuariosPage />,
+                element: <SettingsUser />,
             },
         ]
     }

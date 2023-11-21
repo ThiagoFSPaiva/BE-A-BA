@@ -21,6 +21,7 @@ export const Dark = createTheme({
             },
         }
     },
+
     palette: {
         mode: "dark",
         primary: {
@@ -33,7 +34,9 @@ export const Dark = createTheme({
         },
         secondary: {
             main: "#00733B",
-            light: "#056f09"
+            light: "#056f09",
+            dark: "#898989",
+            contrastText: "#ebeef2",
         },
         background: {
             paper: "#1f2129",
@@ -43,6 +46,7 @@ export const Dark = createTheme({
             primary: "#efefef",
             secondary: "#929292"
         },
+        
     },
     shape: {
         borderRadius: 5

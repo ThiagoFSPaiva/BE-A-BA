@@ -9,4 +9,5 @@ export interface UserType {
     cpf: string;
     status: string;
     typeUser: UserTypeEnum;
+    createdAt?: string;
 }

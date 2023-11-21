@@ -1,4 +1,4 @@
-import { Alert, CssBaseline, GlobalStyles, Snackbar } from "@mui/material";
+import { CssBaseline, GlobalStyles } from "@mui/material";
 import { RouteObject, RouterProvider, createBrowserRouter } from "react-router-dom";
 import { loginRoutes } from "./modules/login/routes";
 import { gerenciarScreen, templateScreens } from "./modules/template/routes";
