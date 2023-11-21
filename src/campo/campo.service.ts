@@ -34,13 +34,10 @@ export class CampoService {
             throw new NotFoundException(`Campo id: ${campo.id} not found`);
         }
 
-        // Atualize os campos desejados do campo existente
+
         existingCampo.name = campo.name;
         existingCampo.tipo = campo.tipo;
-        // Adicione outros campos conforme necessário
-        // ...
 
-        // Salve o campo atualizado no banco de dados
         return this.campoRepository.save(existingCampo);
     }
 

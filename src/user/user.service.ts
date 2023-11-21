@@ -1,13 +1,14 @@
-import { BadGatewayException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadGatewayException, BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dtos/createUser.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 import { UserEntity } from './entity/user.entity';
 import { UserType } from './enum/user-type.enum';
-import { createPasswordHashed } from 'src/utils/password';
+import { createPasswordHashed, validatePassword } from 'src/utils/password';
 import { EmailService } from 'src/email/email.service';
 import { StatusType } from './enum/status-type.enum';
 import { UpdateUserDto } from './dtos/updateUser.dto';
+import { UpdatePasswordDTO } from './dtos/UpdatePassword.dto';
 
 @Injectable()
 export class UserService {
@@ -43,6 +44,8 @@ export class UserService {
         if (existingUserByCpf) {
             throw new BadGatewayException('CPF já registrado no sistema');
         }
+
+        this.emailService.sendMatriculaEmail(createUserDto.matricula)
 
         const lowercaseEmail = createUserDto.email.toLowerCase();
 
@@ -143,13 +146,22 @@ export class UserService {
     }
 
 
+    async recoveryPassword (){
+        
+    }
+
+
+
+
+
+
+
     async updateTemplate(
         updateTemplate: UpdateUserDto,
         userId: string,
     ): Promise<UserEntity> {
         const user = await this.getUserById(userId);
-    
-        // Verificar se a senha está presente e não é uma string vazia
+
         if (updateTemplate.password) {
             const passwordHashed = await createPasswordHashed(updateTemplate.password);
             return this.userRepository.save({
@@ -158,7 +170,6 @@ export class UserService {
                 password: passwordHashed
             });
         } else {
-            // Se a senha estiver vazia, apenas atualize as outras informações sem alterar a senha
             return this.userRepository.save({
                 ...user,
                 ...updateTemplate,
@@ -171,10 +182,35 @@ export class UserService {
         const template = await this.getUserById(userId)
 
 
-        
+
         return this.userRepository.delete({ id: template.id })
     }
 
+
+    async updatePasswordUser(
+        updatePasswordDTO: UpdatePasswordDTO,
+        userId: string,
+    ): Promise<UserEntity> {
+        const user = await this.getUserById(userId);
+
+        const passwordHashed = await createPasswordHashed(
+            updatePasswordDTO.newPassword,
+        );
+
+        const isMatch = await validatePassword(
+            updatePasswordDTO.password,
+            user.password || '',
+        );
+
+        if (!isMatch) {
+            throw new BadRequestException('Senha atual incorreta!');
+        }
+
+        return this.userRepository.save({
+            ...user,
+            password: passwordHashed,
+        });
+    }
 
 }
 

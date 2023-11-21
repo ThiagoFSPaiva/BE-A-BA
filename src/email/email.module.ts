@@ -9,12 +9,11 @@ import { EmailService } from './email.service';
     imports: [  
   
         MailerModule.forRoot({
-       
             transport: {
-                host:'email-smtp.sa-east-1.amazonaws.com',
+                host: 'smtp.gmail.com',
                 auth: {
-                    user: 'AKIAZFWLRVBFZ43GRN6M',
-                    pass: 'BCeVGnLIpSEFxa4vMZkY2eRHrr2LO4ORArM61728e7Xe'
+                    user: 'thiagofellipe151@gmail.com',
+                    pass: 'tlrmkpzscbgrjwyo',
                 }
             }
 

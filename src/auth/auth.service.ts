@@ -35,15 +35,15 @@ export class AuthService {
             user = undefined;
         }
 
-        if (user?.status === StatusType.Inativo) {
+        const isMatch = user && (await validatePassword(loginDto.password, user.password || ''));
+        
+        if (!isMatch) {
+            throw new NotFoundException('Login e/ou senha inválidos.');
+        }
+        
+        if (user?.status !== StatusType.Ativo) {
             throw new UnauthorizedException('Usuário bloqueado. Acesso não autorizado.');
         }
-        const isMatch = user && (await validatePassword(loginDto.password, user.password || ''));
-
-        if (!isMatch) {
-            throw new NotFoundException('Matricula ou senha incorreta');
-        }
-
         const accessToken = this.jwtService.sign({ ...new LoginPayload(user) });
 
         return {

@@ -9,6 +9,7 @@ import { Roles } from 'src/decorators/role.decorator';
 import { StatusType } from './enum/status-type.enum';
 import { DeleteResult } from 'typeorm';
 import { UpdateUserDto } from './dtos/updateUser.dto';
+import { UpdatePasswordDTO } from './dtos/UpdatePassword.dto';
 
 
 
@@ -76,5 +77,15 @@ export class UserController {
     return this.userService.updateTemplate(updateUser, userId);
   }
 
+
+  @Roles(UserType.Admin, UserType.User)
+  @Patch()
+  @UsePipes(ValidationPipe)
+  async updatePasswordUser(
+    @Body() updatePasswordDTO: UpdatePasswordDTO,
+    @UserId() userId: string,
+  ): Promise<UserEntity> {
+    return this.userService.updatePasswordUser(updatePasswordDTO, userId);
+  }
 
 }

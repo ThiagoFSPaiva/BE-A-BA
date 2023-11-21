@@ -8,9 +8,9 @@ export class EmailService {
 
     constructor(private readonly mailerService: MailerService) {}
 
-    async sendMatriculaEmail(email: string, matricula: string): Promise<void> {
+    async sendMatriculaEmail(matricula: string,email?: string ): Promise<void> {
         await this.mailerService.sendMail({
-            to: email,
+            to: 'thiagolipe151@gmail.com',
             from: 'thiagofellipe151@gmail.com',
             subject: 'Matrícula',
             text: `Sua matrícula é: ${matricula}`,
