@@ -6,5 +6,5 @@ $ cd flask
 ```
 
 ```bash
-$ npm run dev
+$ python run.py
 ```
