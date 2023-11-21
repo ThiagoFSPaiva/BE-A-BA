@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Stack, TextField, Typography, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import { images } from "../../../assets";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -10,8 +10,12 @@ import { getAuthorizationToken } from "../../../shared/functions/connection/auth
 import axios from "axios";
 import { URL_AUTH_RECOVERY, URL_AUTH_RESET_PASSWORD } from "../../../shared/constants/urls";
 import { MethodsEnum } from "../../../shared/enums/methods.enum";
+import Swal from "sweetalert2";
+import { LoginRoutesEnum } from "../routes";
+import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 
 export const ResetPassword = () => {
+  const theme = useTheme();
   const [newPassword, setNewPassword] = useState('');
   const { token } = useParams();
   const { request, loading } = useRequests();
@@ -31,8 +35,42 @@ export const ResetPassword = () => {
 
   const handleRecovery = async () => {
 
-    await request(URL_AUTH_RESET_PASSWORD,MethodsEnum.POST,undefined,{token,newPassword},"Senha alterada")
-    navigate(FirstScreenRoutesEnum.FIRST_SCREEN);
+    await connectionAPIPost(URL_AUTH_RESET_PASSWORD,{ token, newPassword })
+      .then((response) => {
+        Swal.fire({
+          icon: "success",
+          title: "Senha alterada com sucesso!",
+          text: "Faça login com sua nova senha",
+          color: theme.palette.text.primary,
+          background: theme.palette.background.paper,
+          confirmButtonColor: `${theme.palette.primary.main}`,
+          customClass: {
+            popup: 'swal-popup',
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate(LoginRoutesEnum.LOGIN)
+          }
+        })
+
+      })
+      .catch((error) => {
+        Swal.fire({
+          background: theme.palette.background.paper,
+          color: theme.palette.text.primary,
+          icon: "error",
+          title: `Opps...`,
+          html: `<span style="color: ${theme.palette.text.secondary};">${error.message} vá a tela de login e recupere sua senha</span>`,
+          confirmButtonColor: "#f44336",
+          customClass: {
+            popup: 'swal-popup',
+          },
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate(LoginRoutesEnum.LOGIN)
+          }
+        })
+      })
   };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
